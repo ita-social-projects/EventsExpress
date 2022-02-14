@@ -19,6 +19,7 @@ import EventHeader from './event-item-header';
 import { Roles } from '../../constants/userRoles';
 import PhotoService from '../../services/PhotoService';
 import { eventDefaultImage } from '../../constants/eventDefaultImage';
+import BookmarkButton from './bookmarks/bookmark-button';
 
 const useStyles = useStyle;
 const photoService = new PhotoService();
@@ -63,10 +64,10 @@ export default class EventCard extends Component {
             eventStatus,
             categories,
             countVisitor,
-            owners,
+            organizers,
             members,
         } = this.props.item;
-        
+
         const INT32_MAX_VALUE = null;
         const categoriesNotDisplayed = categories.length - 2;
         const restCategories = " ... " + categoriesNotDisplayed + " more";
@@ -84,7 +85,7 @@ export default class EventCard extends Component {
                     <EventHeader
                         members={members}
                         countVisitor={countVisitor}
-                        owners={owners}
+                        organizers={organizers}
                         dateFrom={dateFrom}
                         title={title}
                     />
@@ -128,14 +129,17 @@ export default class EventCard extends Component {
                             <div className="float-left">
                                 {categories.length <= 2
                                     ? displayedCategories
-                                    : [displayedCategories,
+                                    : <>
+                                        {displayedCategories}
                                         <Typography variant="body2" color="textSecondary" component="span">
                                             {restCategories}
-                                        </Typography>]
+                                        </Typography>
+                                    </>
                                 }
 
                             </div>
                             <div className='d-flex flex-row align-items-center justify-content-center float-right'>
+                                <BookmarkButton event={this.props.item} />
                                 {isOnlyForAdults &&
                                     <Tooltip title="Only for adults">
                                         <span className="age-icon">&#128286;</span>

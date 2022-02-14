@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using EventsExpress.Core.Enums;
 using EventsExpress.Db.Enums;
 
 namespace EventsExpress.Core.DTOs

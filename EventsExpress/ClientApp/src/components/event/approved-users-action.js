@@ -4,7 +4,7 @@ import Button from "@material-ui/core/Button";
 import Tooltip from '@material-ui/core/Tooltip';
 import IconButton from "@material-ui/core/IconButton";
 import { connect } from 'react-redux';
-import { promoteToOwner, approveUser } from '../../actions/event/event-item-view-action';
+import { promoteToOrganizer, approveUser } from '../../actions/event/event-item-view-action';
 
 const ApprovedUsersActions = (props) => {
     const { user, isMyEvent, isMyPrivateEvent } = props;
@@ -15,10 +15,10 @@ const ApprovedUsersActions = (props) => {
                 <div>
                     <SimpleModal
                         id={user.id}
-                        action={() => props.promoteToOwner(user.id, props.eventId)}
-                        data={'Are you sure, that you wanna approve ' + user.username + ' to owner?'}
+                        action={() => props.promoteToOrganizer(user.id, props.eventId)}
+                        data={'Are you sure, that you wanna approve ' + user.username + ' to organizer?'}
                         button={
-                            <Tooltip title="Approve as an owner">
+                            <Tooltip title="Approve as an organizer">
                                 <IconButton aria-label="delete">
                                     <i className="fas fa-plus-circle" />
                                 </IconButton>
@@ -46,7 +46,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
     approveUser: (userId, eventId, buttonAction) => dispatch(approveUser(userId, eventId, buttonAction)),
-    promoteToOwner: (userId, eventId) => dispatch(promoteToOwner(userId, eventId))
+    promoteToOrganizer: (userId, eventId) => dispatch(promoteToOrganizer(userId, eventId))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ApprovedUsersActions);

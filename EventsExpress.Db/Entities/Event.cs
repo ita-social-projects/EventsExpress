@@ -37,7 +37,7 @@ namespace EventsExpress.Db.Entities
 
         public virtual EventAudience EventAudience { get; set; }
 
-        public virtual ICollection<EventOwner> Owners { get; set; }
+        public virtual ICollection<EventOrganizer> Organizers { get; set; }
 
         public virtual ICollection<UserEvent> Visitors { get; set; }
 
@@ -48,5 +48,7 @@ namespace EventsExpress.Db.Entities
         public virtual ICollection<Inventory> Inventories { get; set; }
 
         public virtual ICollection<EventStatusHistory> StatusHistory { get; set; }
+
+        public virtual ICollection<EventBookmark> EventBookmarks { get; set; }
     }
 }

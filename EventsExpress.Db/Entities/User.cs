@@ -18,7 +18,7 @@ namespace EventsExpress.Db.Entities
 
         public Gender Gender { get; set; }
 
-        public IEnumerable<EventOwner> Events { get; set; }
+        public IEnumerable<EventOrganizer> Events { get; set; }
 
         public virtual IEnumerable<UserEvent> EventsToVisit { get; set; }
 
@@ -33,5 +33,7 @@ namespace EventsExpress.Db.Entities
         public virtual ICollection<EventStatusHistory> ChangedStatusEvents { get; set; }
 
         public virtual IEnumerable<UserNotificationType> NotificationTypes { get; set; }
+
+        public virtual IEnumerable<EventBookmark> EventBookmarks { get; set; }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using EventsExpress.Core.Enums;
 using EventsExpress.Db.Enums;
 
 namespace EventsExpress.Core.DTOs
@@ -18,7 +19,7 @@ namespace EventsExpress.Core.DTOs
 
         public Guid? VisitorId { get; set; }
 
-        public Guid? OwnerId { get; set; }
+        public Guid? OrganizerId { get; set; }
 
         public double? X { get; set; }
 
@@ -28,14 +29,18 @@ namespace EventsExpress.Core.DTOs
 
         public bool? IsOnlyForAdults { get; set; }
 
+        public bool Bookmarked { get; set; }
+
         public LocationType? LocationType { get; set; }
 
         public List<string> Categories { get; set; }
 
-        public SortBy SortBy { get; set; }
+        public UserToEventRelation? DisplayUserEvents { get; set; }
+
+        public EventOrderCriteria Order { get; set; }
 
         public List<EventStatus> Statuses { get; set; }
 
-        public List<Guid> Owners { get; set; }
+        public List<Guid> Organizers { get; set; }
     }
 }

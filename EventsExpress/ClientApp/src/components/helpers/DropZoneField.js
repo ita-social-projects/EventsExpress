@@ -6,9 +6,11 @@ import Placeholder from "./Placeholder";
 import ImageResizer from '../event/image-resizer';
 import Button from "@material-ui/core/Button";
 import renderFieldError from './form-helpers/render-field-error';
+import { setErrorAlert } from "../../actions/alert-action";
+import { connect } from 'react-redux';
+import ValidateImage from '../helpers/validators/ValidateImage';
 
-
-export default class DropZoneField extends Component {
+class DropZoneField extends Component {
 
     state = {
         imagefile: [],
@@ -48,12 +50,21 @@ export default class DropZoneField extends Component {
 
     handleOnDrop = (file) => {
         if (file.length > 0) {
+
+            let validationMessage = ValidateImage(file[0]);
+            if(validationMessage)
+            {
+                this.props.setErrorAlert(validationMessage);
+            }
+            else
+            {
             const imagefile = {
                 file: file[0],
                 name: file[0].name,
                 preview: URL.createObjectURL(file[0])
             };
             this.setState({ imagefile: [imagefile] });
+        }
         }
     }
 
@@ -96,7 +107,6 @@ export default class DropZoneField extends Component {
                     ) : (
                             <div>
                                 <DropZone
-                                    accept="image/jpeg, image/png, image/gif, image/bmp"
                                     className="upload-container"
                                     onDrop={file => handleOnDrop(file)}
                                     multiple={false}
@@ -124,6 +134,7 @@ export default class DropZoneField extends Component {
                     </Button>
                 </div>
                 {renderFieldError({ touched, error})}
+
             </Fragment>
         )
     }
@@ -140,3 +151,11 @@ DropZoneField.propTypes = {
     onChange: PropTypes.func,
     touched: PropTypes.bool
 };
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        setErrorAlert: msg => dispatch(setErrorAlert(msg)),
+    }
+};
+
+export default connect(null, mapDispatchToProps)(DropZoneField);

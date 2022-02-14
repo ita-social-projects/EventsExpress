@@ -30,7 +30,7 @@ namespace EventsExpress.ViewModels.Base
 
         public IEnumerable<CategoryViewModel> Categories { get; set; }
 
-        public IEnumerable<UserPreviewViewModel> Owners { get; set; }
+        public IEnumerable<UserPreviewViewModel> Organizers { get; set; }
 
         public IEnumerable<UserPreviewViewModel> Members { get; set; }
     }

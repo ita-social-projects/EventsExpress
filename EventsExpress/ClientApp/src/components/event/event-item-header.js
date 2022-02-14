@@ -11,7 +11,6 @@ import IconButton from '@material-ui/core/IconButton';
 import { getAttitudeClassName } from './attitude';
 import './event-item-header.css';
 
-
 export default class EventHeader extends Component {
 
     constructor(props) {
@@ -19,40 +18,39 @@ export default class EventHeader extends Component {
 
         this.state = {
             anchorElO: null,
-            anchorElM: null,
-        }
+            anchorElM: null
+        };
     }
 
     handleClickOnMember = (event) => {
         this.setState({ anchorElM: event.currentTarget });
-    }
+    };
 
     handleCloseOnMember = () => {
         this.setState({ anchorElM: null });
-    }
+    };
 
-    handleClickOnOwners = (event) => {
+    handleClickOnOrganizers = (event) => {
         this.setState({ anchorElO: event.currentTarget });
-    }
+    };
 
-    handleCloseOnOwners = () => {
+    handleCloseOnOrganizers = () => {
         this.setState({ anchorElO: null });
-    }
+    };
 
-    renderOwners = (owners , avatar) => {
+    renderOrganizers = (organizers, avatar) => {
         return (
-            <Button title={owners[0].username} className="btn-custom" onClick={this.handleClickOnOwners}>
-                <Badge overlap="circle" badgeContent={owners.length} color="primary">
+            <Button title={organizers[0].username} className="btn-custom" onClick={this.handleClickOnOrganizers}>
+                <Badge overlap="circular" badgeContent={organizers.length} color="primary">
                     <CustomAvatar
                         className={avatar}
-                        userId={owners[0].id}
-                        name={owners[0].username}
+                        userId={organizers[0].id}
+                        name={organizers[0].username}
                     />
                 </Badge>
             </Button>
-            );
-    }
-
+        );
+    };
 
 
     renderMembers = (first, visitorsCount, avatar) => {
@@ -67,42 +65,38 @@ export default class EventHeader extends Component {
                         />
                     </Badge>
                 </Button>
-            )
-        }
-        else {
+            );
+        } else {
             return (
                 <Tooltip title="Visitors">
                     <IconButton>
-                        <Badge badgeContent={ visitorsCount} color="primary">
+                        <Badge badgeContent={visitorsCount} color="primary">
                             <i className="fa fa-users" />
                         </Badge>
                     </IconButton>
                 </Tooltip>
-            )
-
+            );
         }
-    }
-    
+    };
+
     render() {
         const classes = useStyle;
 
         const {
             members,
             countVisitor,
-            owners,
+            organizers,
             dateFrom,
-            title,
+            title
         } = this.props;
         const { anchorElM, anchorElO } = this.state;
 
         const firstMember = members ? members[0] : null;
 
-
-
         const PrintMenuMembers = members.map(user => (
-            <MenuItem onClick={this.handleCloseOnMember} style={{ overflow: "visible"}}>
-                <div className={"d-flex align-items-center border-bottom w-100 " + getAttitudeClassName(user.attitude)} >
-                    <div className="flex-grow-1" >
+            <MenuItem key={user.id} onClick={this.handleCloseOnMember} style={{ overflow: "visible" }}>
+                <div className={"d-flex align-items-center border-bottom w-100 " + getAttitudeClassName(user.attitude)}>
+                    <div className="flex-grow-1">
                         <Link to={'/user/' + user.id} className="btn-custom">
                             <div className="d-flex align-items-center border-bottom">
                                 <CustomAvatar
@@ -117,10 +111,10 @@ export default class EventHeader extends Component {
                     </div>
                 </div>
             </MenuItem>
-        ))
+        ));
 
-        const PrintMenuItems = owners.map(user => (
-            <MenuItem onClick={this.handleCloseOnOwners}>
+        const PrintMenuItems = organizers.map(user => (
+            <MenuItem key={user.id} onClick={this.handleCloseOnOrganizers}>
                 <div className="d-flex align-items-center border-bottom">
                     <div className="flex-grow-1">
                         <Link to={'/user/' + user.id} className="btn-custom">
@@ -137,7 +131,7 @@ export default class EventHeader extends Component {
                     </div>
                 </div>
             </MenuItem>
-        ))
+        ));
 
         return (
             <>
@@ -146,7 +140,7 @@ export default class EventHeader extends Component {
                     anchorEl={anchorElO}
                     keepMounted
                     open={Boolean(anchorElO)}
-                    onClose={this.handleCloseOnOwners}
+                    onClose={this.handleCloseOnOrganizers}
                 >
                     {
                         PrintMenuItems
@@ -164,8 +158,8 @@ export default class EventHeader extends Component {
                     }
                 </Menu>
                 <CardHeader
-                    avatar={ this.renderOwners(owners, classes.avatar) }
-                    action={ this.renderMembers(firstMember, countVisitor, classes.avatar) }
+                    avatar={this.renderOrganizers(organizers, classes.avatar)}
+                    action={this.renderMembers(firstMember, countVisitor, classes.avatar)}
                     title={title}
                     subheader={<Moment format="D MMM YYYY" withTitle>{dateFrom}</Moment>}
                     classes={{ title: 'title' }}

@@ -82,6 +82,7 @@ namespace EventsExpress.Core.Services
             var userId = _securityContext.GetCurrentUserId();
 
             var user = Context.Users
+                .Include(u => u.EventBookmarks)
                 .Include(u => u.Account)
                     .ThenInclude(a => a.AccountRoles)
                         .ThenInclude(ar => ar.Role)
@@ -156,6 +157,12 @@ namespace EventsExpress.Core.Services
             var result = Mapper.Map<IEnumerable<UserDto>>(usersList);
 
             return result;
+        }
+
+        public IEnumerable<UserDto> GetUsersInformationByIds(IEnumerable<Guid> ids)
+        {
+            var users = Context.Users.Where(user => ids.Contains(user.Id));
+            return Mapper.Map<IEnumerable<UserDto>>(users.ToList());
         }
 
         public IEnumerable<UserDto> GetUsersByRole(Role role)
@@ -282,7 +289,7 @@ namespace EventsExpress.Core.Services
 
         public double GetRating(Guid userId)
         {
-            var ownEventsIds = Context.EventOwners
+            var ownEventsIds = Context.EventOrganizers
                 .Where(e => e.UserId == userId).Select(e => e.EventId).ToList();
             try
             {

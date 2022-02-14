@@ -23,7 +23,7 @@ namespace EventsExpress.Mapping
         {
             CreateMap<Event, EventDto>()
                .ForMember(dest => dest.Location, opts => opts.MapFrom(src => MapLocation(src)))
-               .ForMember(dest => dest.Owners, opt => opt.MapFrom(x => x.Owners.Select(z => z.User)))
+               .ForMember(dest => dest.Organizers, opt => opt.MapFrom(x => x.Organizers.Select(z => z.User)))
                .ForMember(
                     dest => dest.Categories,
                     opts => opts.MapFrom(src =>
@@ -35,12 +35,12 @@ namespace EventsExpress.Mapping
                .ForMember(dest => dest.EventStatus, opts => opts.MapFrom(src => src.StatusHistory.LastOrDefault().EventStatus))
                .ForMember(dest => dest.Inventories, opt => opt.MapFrom(src =>
                     src.Inventories.Select(x => MapInventoryDtoFromInventory(x))))
-               .ForMember(dest => dest.OwnerIds, opts => opts.Ignore())
+               .ForMember(dest => dest.OrganizerIds, opts => opts.Ignore())
                .ForMember(dest => dest.Photo, opts => opts.Ignore());
 
             CreateMap<EventDto, Event>()
-                .ForMember(dest => dest.Owners, opt => opt.MapFrom(src => src.Owners.Select(x =>
-                   new EventOwner
+                .ForMember(dest => dest.Organizers, opt => opt.MapFrom(src => src.Organizers.Select(x =>
+                   new EventOrganizer
                    {
                        UserId = x.Id,
                        EventId = src.Id,
@@ -55,7 +55,8 @@ namespace EventsExpress.Mapping
                 .ForMember(dest => dest.EventAudience, opts => opts.Ignore())
                 .ForMember(dest => dest.EventSchedule, opts => opts.Ignore())
                 .ForMember(dest => dest.Rates, opts => opts.Ignore())
-                .ForMember(dest => dest.StatusHistory, opts => opts.Ignore());
+                .ForMember(dest => dest.StatusHistory, opts => opts.Ignore())
+                .ForMember(dest => dest.EventBookmarks, opts => opts.Ignore());
 
             CreateMap<EventDto, EventPreviewViewModel>()
                 .ForMember(dest => dest.Categories, opts => opts.MapFrom(src => src.Categories.Select(x => MapCategoryViewModelFromCategoryDto(x))))
@@ -63,7 +64,7 @@ namespace EventsExpress.Mapping
                 .ForMember(dest => dest.CountVisitor, opts => opts.MapFrom(src => src.Visitors.Count(x => x.UserStatusEvent == 0)))
                 .ForMember(dest => dest.MaxParticipants, opts => opts.MapFrom(src => src.MaxParticipants))
                 .ForMember(dest => dest.EventStatus, opts => opts.MapFrom(src => src.EventStatus))
-                .ForMember(dest => dest.Owners, opts => opts.MapFrom(src => src.Owners.Select(x => MapUserToUserPreviewViewModel(x))))
+                .ForMember(dest => dest.Organizers, opts => opts.MapFrom(src => src.Organizers.Select(x => MapUserToUserPreviewViewModel(x))))
                 .ForMember(dest => dest.Members, opts => opts.MapFrom<EventDtoToVisitorsResolver>());
 
             CreateMap<EventDto, EventViewModel>()
@@ -72,7 +73,7 @@ namespace EventsExpress.Mapping
                     src.Inventories.Select(x => MapInventoryViewModelFromInventoryDto(x))))
                 .ForMember(dest => dest.Location, opts => opts.MapFrom(src => MapLocation(src)))
                 .ForMember(dest => dest.Visitors, opts => opts.MapFrom<EventDtoToVisitorsResolver>())
-                .ForMember(dest => dest.Owners, opts => opts.MapFrom<EventDtoToOwnersResolver>())
+                .ForMember(dest => dest.Organizers, opts => opts.MapFrom<EventDtoToOrganizersResolver>())
                 .ForMember(dest => dest.Frequency, opts => opts.MapFrom(src => src.Frequency))
                 .ForMember(dest => dest.Periodicity, opts => opts.MapFrom(src => src.Periodicity))
                 .ForMember(dest => dest.IsReccurent, opts => opts.MapFrom(src => src.IsReccurent))
@@ -83,16 +84,16 @@ namespace EventsExpress.Mapping
                 .ForMember(dest => dest.Categories, opts => opts.MapFrom(src => src.Categories.Select(x => MapCategoryViewModelToCategoryDto(x))))
                 .ForMember(dest => dest.Inventories, opts => opts.MapFrom(src =>
                     src.Inventories.Select(x => MapInventoryDtoFromInventoryViewModel(x))))
-                .ForMember(dest => dest.Owners, opts => opts.Ignore())
-                .ForMember(dest => dest.OwnerIds, opts => opts.MapFrom(src => src.Owners.Select(x => x.Id)))
+                .ForMember(dest => dest.Organizers, opts => opts.Ignore())
+                .ForMember(dest => dest.OrganizerIds, opts => opts.MapFrom(src => src.Organizers.Select(x => x.Id)))
                 .ForMember(dest => dest.Location, opts => opts.MapFrom(src => MapLocation(src)))
                 .ForMember(dest => dest.Photo, opts => opts.Ignore())
                 .ForMember(dest => dest.Visitors, opts => opts.Ignore());
 
             CreateMap<EventCreateViewModel, EventDto>()
                 .ForMember(dest => dest.Categories, opts => opts.MapFrom(src => src.Categories.Select(x => MapCategoryViewModelToCategoryDto(x))))
-                .ForMember(dest => dest.Owners, opts => opts.Ignore())
-                .ForMember(dest => dest.OwnerIds, opts => opts.MapFrom(src => src.Owners.Select(x => x.Id)))
+                .ForMember(dest => dest.Organizers, opts => opts.Ignore())
+                .ForMember(dest => dest.OrganizerIds, opts => opts.MapFrom(src => src.Organizers.Select(x => x.Id)))
                 .ForMember(dest => dest.Location, opts => opts.MapFrom(src => MapLocation(src)))
                 .ForMember(dest => dest.Periodicity, opts => opts.MapFrom(src => src.Periodicity))
                 .ForMember(dest => dest.IsReccurent, opts => opts.MapFrom(src => src.IsReccurent))

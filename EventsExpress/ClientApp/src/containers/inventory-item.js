@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import OwnerSeeItem from '../components/inventory/ownerSeeItem';
-import OwnerEditItemForm from '../components/inventory/ownerEditItem';
+import OrganizerSeeItem from '../components/inventory/organizerSeeItem';
+import OrganizerEditItemForm from '../components/inventory/organizerEditItemForm';
 import VisitorSeeItem from '../components/inventory/VisitorSeeItem';
 import VisitorEditItemForm from '../components/inventory/visitorTakeItem';
 import { get_inventories_by_event_id } from '../actions/inventory/inventory-list-action';
@@ -127,7 +127,7 @@ class InventoryItemWrapper extends Component {
         return(
             <div className="row p-1 d-flex align-items-center" key={item.id}>
             {this.state.isEdit && isMyEvent && 
-                <OwnerEditItemForm
+                <OrganizerEditItemForm
                     onSubmit={this.onSubmit} 
                     onCancel={this.onCancel}
                     unitOfMeasuringState={this.props.unitOfMeasuringState}
@@ -145,7 +145,7 @@ class InventoryItemWrapper extends Component {
             }
 
             {!this.state.isEdit && isMyEvent &&
-                <OwnerSeeItem
+                <OrganizerSeeItem
                     item={item}
                     disabledEdit={disabledEdit}
                     showAlreadyGetDetailed={this.state.showAlreadyGetDetailed}

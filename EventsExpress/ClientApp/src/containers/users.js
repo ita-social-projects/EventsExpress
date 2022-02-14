@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { get_users, reset_users } from "../actions/users/users-action";
 import { connect } from "react-redux";
+import get_roles from '../actions/roles';
 import Users from "../components/users";
 import SpinnerWrapper from "./spinner";
 import UsersFilterWrapper from "../containers/user-filter";
@@ -8,6 +9,7 @@ import UsersFilterWrapper from "../containers/user-filter";
 class UsersWrapper extends Component {
   componentDidMount() {
     this.getUsers(this.props.location.search);
+    this.props.get_roles();
   }
 
   componentWillUnmount = () => {
@@ -21,7 +23,6 @@ class UsersWrapper extends Component {
       users: { data },
       location,
     } = this.props;
-
     return (
       <div className="row">
         <div className="col-9">
@@ -50,6 +51,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     get_users: (page) => dispatch(get_users(page)),
     reset_users: () => dispatch(reset_users()),
+    get_roles: () => dispatch(get_roles()),
   };
 };
 

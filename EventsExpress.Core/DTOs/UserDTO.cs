@@ -38,5 +38,7 @@ namespace EventsExpress.Core.DTOs
         public IEnumerable<Rate> MyRates { get; set; }
 
         public IEnumerable<UserNotificationType> NotificationTypes { get; set; }
+
+        public IEnumerable<Guid> BookmarkedEvents { get; set; }
     }
 }
