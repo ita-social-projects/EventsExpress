@@ -41,7 +41,7 @@ namespace EventsExpress.NotificationHandlers
         {
             try
             {
-                var eventOwnersIds = _eventService.EventById(notification.EventId).Owners.Select(it => it.Id);
+                var eventOwnersIds = _eventService.EventById(notification.EventId).Organizers.Select(it => it.Id);
                 var usersEmails = _userService.GetUsersByNotificationTypes(_nameNotification, eventOwnersIds)
                     .Select(x => x.Email);
 

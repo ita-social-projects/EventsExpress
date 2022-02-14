@@ -334,7 +334,6 @@ namespace EventsExpress.Test.ServiceTests
             var statusHistory = Context.Events.Find(EventTestData.SecondEventId)?.StatusHistory.Last();
 
             Assert.AreEqual(EventStatus.Active, statusHistory?.EventStatus);
-            mockMediator.Verify(m => m.Publish(It.IsAny<EventCreatedMessage>(), default), Times.Once());
         }
 
         [Test]

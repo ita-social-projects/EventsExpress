@@ -96,7 +96,7 @@ namespace EventsExpress.Test.HandlerTests
             _eventDto = new EventDto
             {
                 Id = _idEvent,
-                Owners = new[]
+                Organizers = new[]
                 {
                     firstUser, secondUser, thirdUser,
                 },

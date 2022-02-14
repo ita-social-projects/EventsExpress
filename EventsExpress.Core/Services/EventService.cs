@@ -207,7 +207,7 @@ namespace EventsExpress.Core.Services
             eventDto.Id = result.Id;
 
             await Context.SaveChangesAsync();
-            await _photoService.ChangeTempToImagePhoto(eventDTO.Id);
+            await _photoService.ChangeTempToImagePhoto(eventDto.Id);
 
             return result.Id;
         }
@@ -299,9 +299,9 @@ namespace EventsExpress.Core.Services
 
             ev.Categories = eventCategories;
             await Context.SaveChangesAsync();
-            await _photoService.ChangeTempToImagePhoto(e.Id);
-            await _mediator.Publish(new OwnEventMessage(e.Id));
-            await _mediator.Publish(new JoinedEventMessage(e.Id));
+            await _photoService.ChangeTempToImagePhoto(eventDto.Id);
+            await _mediator.Publish(new OwnEventMessage(eventDto.Id));
+            await _mediator.Publish(new JoinedEventMessage(eventDto.Id));
 
             return ev.Id;
         }
