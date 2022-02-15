@@ -5,6 +5,7 @@ import EventList from '../components/event/event-list';
 import SpinnerWrapper from './spinner';
 import { get_events } from '../actions/event/event-list-action';
 import { useFilterActions } from '../components/event/filter/filter-hooks';
+import { CarouselLayout } from '../components/layouts/carousel-layout';
 
 const EventListWrapper = ({ history, events, data, currentUser, getEvents }) => {
     const [prevQuery, setPrevQuery] = useState(null);
@@ -20,8 +21,11 @@ const EventListWrapper = ({ history, events, data, currentUser, getEvents }) => 
         }
     });
 
-    return (
-        <SpinnerWrapper showContent={data !== undefined}>
+    const layouts = {
+        list: (
+            <span>List</span>
+        ),
+        matrix: (
             <EventList
                 current_user={currentUser.id !== null ? currentUser : {}}
                 data_list={data.items}
@@ -30,6 +34,15 @@ const EventListWrapper = ({ history, events, data, currentUser, getEvents }) => 
                 totalPages={data.pageViewModel.totalPages}
                 customNoResultsMessage="No events meet the specified criteria. Please make another choice."
             />
+        ),
+        carousel: (
+            <CarouselLayout>Example</CarouselLayout>
+        )
+    };
+
+    return (
+        <SpinnerWrapper showContent={data !== undefined}>
+            {layouts[events.layout ?? 'matrix']}
         </SpinnerWrapper>
     );
 };
@@ -37,11 +50,11 @@ const EventListWrapper = ({ history, events, data, currentUser, getEvents }) => 
 const mapStateToProps = state => ({
     events: state.events,
     data: state.events.data,
-    currentUser: state.user,
+    currentUser: state.user
 });
 
 const mapDispatchToProps = dispatch => ({
-    getEvents: query => dispatch(get_events(query)),
+    getEvents: query => dispatch(get_events(query))
 });
 
 export default withRouter(connect(
