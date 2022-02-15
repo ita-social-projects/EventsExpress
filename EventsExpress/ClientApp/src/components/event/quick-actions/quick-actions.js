@@ -4,9 +4,9 @@ import { useFilterActions } from '../filter/filter-hooks';
 import { OrderEvents } from './order/order-events';
 import { JoinedEventsFilter } from './joined-events/joined-events-filter';
 import { get_events } from '../../../actions/event/event-list-action';
-import { MatrixLayout } from './page-layouts/matrix-layout';
+import MatrixLayout from './page-layouts/matrix-layout';
 import ListLayout from './page-layouts/list-layout';
-import { CarouselLayout } from './page-layouts/carousel-layout';
+import CarouselLayout from './page-layouts/carousel-layout';
 
 export const RefreshEventsContext = createContext();
 
