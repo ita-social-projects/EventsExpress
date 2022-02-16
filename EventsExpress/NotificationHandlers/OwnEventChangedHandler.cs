@@ -3,25 +3,20 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
 using EventsExpress.Core.Notifications;
-using EventsExpress.Core.NotificationTemplateModels;
 using EventsExpress.Db.Enums;
 using MediatR;
 using Microsoft.Extensions.Options;
 
 namespace EventsExpress.NotificationHandlers
 {
-    public class OwnEventChangedHandler : INotificationHandler<OwnEventMessage>
+    public class OwnEventChangedHandler : EventChangedHandler, INotificationHandler<OwnEventMessage>
     {
-        private readonly IEmailService _sender;
-        private readonly IUserService _userService;
         private readonly NotificationChange _nameNotification = NotificationChange.OwnEvent;
-        private readonly INotificationTemplateService _notificationTemplateService;
+        private readonly IUserService _userService;
         private readonly IEventService _eventService;
-        private readonly IOptions<AppBaseUrlModel> _urlOptions;
 
         public OwnEventChangedHandler(
             IEmailService sender,
@@ -29,12 +24,13 @@ namespace EventsExpress.NotificationHandlers
             IEventService eventService,
             INotificationTemplateService notificationTemplateService,
             IOptions<AppBaseUrlModel> urlOptions)
+            : base(
+                sender,
+                notificationTemplateService,
+                urlOptions)
         {
-            _sender = sender;
             _userService = userService;
-            _notificationTemplateService = notificationTemplateService;
             _eventService = eventService;
-            _urlOptions = urlOptions;
         }
 
         public async Task Handle(OwnEventMessage notification, CancellationToken cancellationToken)
@@ -44,21 +40,8 @@ namespace EventsExpress.NotificationHandlers
                 var eventOwnersIds = _eventService.EventById(notification.EventId).Organizers.Select(it => it.Id);
                 var usersEmails = _userService.GetUsersByNotificationTypes(_nameNotification, eventOwnersIds)
                     .Select(x => x.Email);
-
                 const NotificationProfile templateId = NotificationProfile.OwnEventChanged;
-                var templateDto = await _notificationTemplateService.GetByIdAsync(templateId);
-                var model = _notificationTemplateService.GetModelByTemplateId<EventChangeNotificationTemplateModel>(templateId);
-                foreach (string email in usersEmails)
-                {
-                    model.UserEmail = email;
-                    model.EventLink = $"{_urlOptions.Value.Host}/event/{notification.EventId}/1";
-                    await _sender.SendEmailAsync(new EmailDto
-                    {
-                        Subject = _notificationTemplateService.PerformReplacement(templateDto.Subject, model),
-                        RecepientEmail = email,
-                        MessageText = _notificationTemplateService.PerformReplacement(templateDto.Message, model),
-                    });
-                }
+                await SendEmail(templateId, usersEmails, notification.EventId);
             }
             catch (Exception ex)
             {
