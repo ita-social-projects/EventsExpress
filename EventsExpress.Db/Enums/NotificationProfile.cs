@@ -4,7 +4,6 @@
     {
         BlockedUser = 1,
         CreateEventVerification,
-        EventCreated,
         RegisterVerification,
         UnblockedUser,
         OwnEventChanged,

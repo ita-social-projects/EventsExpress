@@ -603,28 +603,28 @@ namespace EventsExpress.Db.Migrations
                         },
                         new
                         {
-                            Id = 4,
+                            Id = 3,
                             Message = "For confirm your email please follow the <a href='{{EmailLink}}'>link</a>",
                             Subject = "EventExpress registration",
                             Title = "RegisterVerification"
                         },
                         new
                         {
-                            Id = 5,
+                            Id = 4,
                             Message = "Dear {{UserEmail}}, congratulations, your account was Unblocked, so you can come back and enjoy spending your time in EventsExpress",
                             Subject = "Your account was Unblocked",
                             Title = "UnblockedUser"
                         },
                         new
                         {
-                            Id = 6,
+                            Id = 5,
                             Message = "Dear {{UserEmail}}, your <a href='{{EventLink}}'>event</a> has been changed.",
                             Subject = "Your event was changed",
                             Title = "OwnEventChanged"
                         },
                         new
                         {
-                            Id = 7,
+                            Id = 6,
                             Message = "Dear {{UserEmail}}, your joined <a href='{{EventLink}}'>event</a> has been changed.",
                             Subject = "Joined event was changed",
                             Title = "JoinedEventChanged"
