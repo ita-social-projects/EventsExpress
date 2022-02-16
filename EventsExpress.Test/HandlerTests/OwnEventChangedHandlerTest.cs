@@ -111,25 +111,25 @@ namespace EventsExpress.Test.HandlerTests
         }
 
         [Test]
-        public void Handle_ThreeOwnersByNotificationTypes_ThreeOwnersReceiveNotification()
+        public async Task Handle_ThreeOwnersByNotificationTypes_ThreeOwnersReceiveNotification()
         {
             _userService.Setup(item => item.GetUsersByNotificationTypes(
                 It.IsAny<NotificationChange>(),
                 It.IsAny<IEnumerable<Guid>>())).Returns(new[] { firstUserDto, secondUserDto, thirdUserDto });
 
-            var result = _ownEventChangedHandler.Handle(_ownEventMessage, CancellationToken.None);
+            await _ownEventChangedHandler.Handle(_ownEventMessage, CancellationToken.None);
 
             _emailService.Verify(e => e.SendEmailAsync(It.IsAny<EmailDto>()), Times.Exactly(3));
         }
 
         [Test]
-        public void Handle_NoOwnersByNotificationTypes_NobodyReceivesNotification()
+        public async Task Handle_NoOwnersByNotificationTypes_NobodyReceivesNotification()
         {
             _userService.Setup(item => item.GetUsersByNotificationTypes(
                 It.IsAny<NotificationChange>(),
                 It.IsAny<IEnumerable<Guid>>())).Returns(Enumerable.Empty<UserDto>());
 
-            var result = _ownEventChangedHandler.Handle(_ownEventMessage, CancellationToken.None);
+            await _ownEventChangedHandler.Handle(_ownEventMessage, CancellationToken.None);
 
             _emailService.Verify(e => e.SendEmailAsync(It.IsAny<EmailDto>()), Times.Exactly(0));
         }
@@ -140,6 +140,19 @@ namespace EventsExpress.Test.HandlerTests
             // Arrange
             _emailService.Setup(s => s.SendEmailAsync(It.IsAny<EmailDto>()))
                 .ThrowsAsync(new Exception("Some reason!"));
+
+            // Act
+            var actual = _ownEventChangedHandler.Handle(_ownEventMessage, CancellationToken.None);
+
+            // Assert
+            Assert.AreEqual(Task.CompletedTask.Status, actual.Status);
+        }
+
+        [Test]
+        public void Handle_GetUserByNotificationType_ThrowsException()
+        {
+            // Arrange
+            _eventService.Setup(s => s.EventById(It.IsAny<Guid>())).Throws(new Exception());
 
             // Act
             var actual = _ownEventChangedHandler.Handle(_ownEventMessage, CancellationToken.None);

@@ -108,25 +108,25 @@ namespace EventsExpress.Test.HandlerTests
         }
 
         [Test]
-        public void Handle_ThreeVisitorsHaveTurnedOnNotification_ThreeVisitorsReceiveNotification()
+        public async Task Handle_ThreeVisitorsHaveTurnedOnNotification_ThreeVisitorsReceiveNotification()
         {
             _userService.Setup(item => item.GetUsersByNotificationTypes(
                 It.IsAny<NotificationChange>(),
                 It.IsAny<IEnumerable<Guid>>())).Returns(new[] { firstUserDto, secondUserDto, thirdUserDto });
 
-            var result = _joinedEventChangedHandler.Handle(_joinedEventMessage, CancellationToken.None);
+            await _joinedEventChangedHandler.Handle(_joinedEventMessage, CancellationToken.None);
 
             _emailService.Verify(e => e.SendEmailAsync(It.IsAny<EmailDto>()), Times.Exactly(3));
         }
 
         [Test]
-        public void Handle_NoVisitorsHaveTurnedOnNotification_NobodyReceivesNotification()
+        public async Task Handle_NoVisitorsHaveTurnedOnNotification_NobodyReceivesNotification()
         {
             _userService.Setup(item => item.GetUsersByNotificationTypes(
                 It.IsAny<NotificationChange>(),
                 It.IsAny<IEnumerable<Guid>>())).Returns(Enumerable.Empty<UserDto>());
 
-            var result = _joinedEventChangedHandler.Handle(_joinedEventMessage, CancellationToken.None);
+            await _joinedEventChangedHandler.Handle(_joinedEventMessage, CancellationToken.None);
 
             _emailService.Verify(e => e.SendEmailAsync(It.IsAny<EmailDto>()), Times.Exactly(0));
         }
@@ -137,6 +137,22 @@ namespace EventsExpress.Test.HandlerTests
             // Arrange
             _emailService.Setup(s => s.SendEmailAsync(It.IsAny<EmailDto>()))
                 .ThrowsAsync(new Exception("Some reason!"));
+
+            // Act
+            var actual = _joinedEventChangedHandler.Handle(_joinedEventMessage, CancellationToken.None);
+
+            // Assert
+            Assert.AreEqual(Task.CompletedTask.Status, actual.Status);
+        }
+
+        [Test]
+        public void Handle_GetUserByNotificationType_ThrowsException()
+        {
+            // Arrange
+            _userService.Setup(s => s.GetUsersByNotificationTypes(
+                    NotificationChange.JoinedEvent,
+                    It.IsAny<IEnumerable<Guid>>()))
+                .Throws(new Exception());
 
             // Act
             var actual = _joinedEventChangedHandler.Handle(_joinedEventMessage, CancellationToken.None);
