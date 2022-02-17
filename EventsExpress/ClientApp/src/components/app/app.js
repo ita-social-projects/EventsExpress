@@ -37,6 +37,7 @@ import AuthUser from '../../actions/login/auth-user-action';
 import getConfig from '../../actions/config/get-config-action';
 import RegistrationForm from '../RegistrationForm';
 import MainLayout from '../MainLayout';
+import privacy from '../privacy/privacy.js';
 
 class App extends Component {
     constructor(props) {
@@ -94,7 +95,9 @@ class App extends Component {
                                 <Route path='/drafts' component={this.UserRoleSecurity(EventDraftListWrapper)} />
                                 <Route path='/unauthorized' component={Unauthorized} />
                                 <Route path='/forbidden' component={Forbidden} />
+                                <Route path='/privacy' component = {privacy}/>
                                 <Route component={NotFound} />
+                                
                             </Switch>
                         </Layout>
                     </Route>
