@@ -110,7 +110,6 @@ namespace EventsExpress.Core.Services
 
             Context.UserEvent.Update(userEvent);
             await Context.SaveChangesAsync();
-            await _mediator.Publish(new ParticipationMessage(userEvent.UserId, userEvent.EventId, status));
         }
 
         public async Task DeleteUserFromEvent(Guid userId, Guid eventId)
@@ -208,7 +207,6 @@ namespace EventsExpress.Core.Services
             eventDto.Id = result.Id;
 
             await Context.SaveChangesAsync();
-            await _mediator.Publish(new EventCreatedMessage(eventDto));
             await _photoService.ChangeTempToImagePhoto(eventDto.Id);
 
             return result.Id;
@@ -302,6 +300,8 @@ namespace EventsExpress.Core.Services
             ev.Categories = eventCategories;
             await Context.SaveChangesAsync();
             await _photoService.ChangeTempToImagePhoto(eventDto.Id);
+            await _mediator.Publish(new OwnEventMessage(eventDto.Id));
+            await _mediator.Publish(new JoinedEventMessage(eventDto.Id));
 
             return ev.Id;
         }
@@ -325,7 +325,6 @@ namespace EventsExpress.Core.Services
                     });
             await Context.SaveChangesAsync();
             EventDto dtos = Mapper.Map<Event, EventDto>(ev);
-            await _mediator.Publish(new EventCreatedMessage(dtos));
             return ev.Id;
         }
 
