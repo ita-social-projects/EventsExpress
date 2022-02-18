@@ -31,10 +31,10 @@ const EventListWrapper = ({ history, events, data, currentUser, getEvents }) => 
     };
 
     const layouts = {
-        list: (
+        list: () => (
             <span>List</span>
         ),
-        matrix: (
+        matrix: () => (
             <EventList
                 current_user={currentUser.id !== null ? currentUser : {}}
                 data_list={data.items}
@@ -44,7 +44,7 @@ const EventListWrapper = ({ history, events, data, currentUser, getEvents }) => 
                 customNoResultsMessage="No events meet the specified criteria. Please make another choice."
             />
         ),
-        carousel: (
+        carousel: () => (
             <CarouselLayout
                 onNext={nextPage}
                 onPrevious={previousPage}
@@ -60,7 +60,7 @@ const EventListWrapper = ({ history, events, data, currentUser, getEvents }) => 
 
     return (
         <SpinnerWrapper showContent={data !== undefined}>
-            {layouts[events.layout ?? 'matrix']}
+            {layouts[events.layout ?? 'matrix']()}
         </SpinnerWrapper>
     );
 };
