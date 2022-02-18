@@ -7,7 +7,6 @@ import get_categories from '../../../../actions/category/category-list-action';
 import TileGroup from '../../../../containers/TileGroup';
 import { RegisterStepContext } from '../../RegistrationForm';
 
-// TODO: extract styles
 const ChooseActivities = ({
     categories,
     categoryGroups,

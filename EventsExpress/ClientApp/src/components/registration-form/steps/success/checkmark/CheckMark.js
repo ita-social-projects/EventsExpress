@@ -1,7 +1,6 @@
 import React from 'react';
 import './CheckMarkAnimation.css';
 
-// TODO: consider rewriting styles to hooks
 const CheckMark = () => {
     return (
         <>

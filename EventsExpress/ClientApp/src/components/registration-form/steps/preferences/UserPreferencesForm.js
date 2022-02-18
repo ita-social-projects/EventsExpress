@@ -28,139 +28,136 @@ const eventPreferencesOptions = [
     { value: eventTypeEnum.Paid, text: 'Paid' },
 ];
 
-// TODO: rewrite styles with hooks
 const UserPreferencesForm = () => {
     const { goBack, goToNext } = useContext(RegisterStepContext);
 
     return (
-        <div className="Step4">
-            <form onSubmit={goToNext}>
-                <h1 className="text-left">
-                    Step 4: Tell us more about yourself
-                </h1>
-                <Grid container spacing={2} className="text-left">
-                    <Grid item xs={4}>
-                        <div className="stepper-tellusmore-block">
-                            <Field
-                                name="parentstatus"
-                                component={radioButton}
-                                parse={parseInt}
-                            >
-                                <label className="font-weight-bold">
-                                    Parental status
-                                </label>
-                                <FormControlLabel
-                                    value={parentStatusEnum.Kids}
-                                    control={<Radio />}
-                                    label={'With kids'}
-                                />
-                                <FormControlLabel
-                                    value={parentStatusEnum.NoKids}
-                                    control={<Radio />}
-                                    label={'No kids'}
-                                />
-                            </Field>
-                        </div>
-                        <div className="stepper-tellusmore-block">
+        <form onSubmit={goToNext}>
+            <h1 className="text-left">
+                Step 4: Tell us more about yourself
+            </h1>
+            <Grid container spacing={2} className="text-left">
+                <Grid item xs={4}>
+                    <div className="stepper-tellusmore-block">
+                        <Field
+                            name="parentstatus"
+                            component={radioButton}
+                            parse={parseInt}
+                        >
                             <label className="font-weight-bold">
-                                Reasons for using the site
+                                Parental status
                             </label>
-                            <Field
-                                options={reasonsOptions}
-                                component={MultiCheckbox}
-                                name="reasonsForUsingTheSite"
-                                className="form-control mt-2"
-                                placeholder="reasonsForUsingTheSiteEnum"
+                            <FormControlLabel
+                                value={parentStatusEnum.Kids}
+                                control={<Radio />}
+                                label={'With kids'}
                             />
-                        </div>
-                    </Grid>
-                    <Grid item xs={4}>
-                        <div className="stepper-tellusmore-block">
-                            <label className="font-weight-bold">
-                                Event preferences
-                            </label>
-                            <Field
-                                options={eventPreferencesOptions}
-                                component={MultiCheckbox}
-                                name="eventType"
-                                className="form-control mt-2"
-                                placeholder="eventType"
+                            <FormControlLabel
+                                value={parentStatusEnum.NoKids}
+                                control={<Radio />}
+                                label={'No kids'}
                             />
-                        </div>
-                    </Grid>
-                    <Grid item xs={4}>
-                        <div className="stepper-tellusmore-block">
-                            <Field
-                                name="relationshipstatus"
-                                component={radioButton}
-                                parse={parseInt}
-                            >
-                                <label className="font-weight-bold">
-                                    Relationship status
-                                </label>
-                                <FormControlLabel
-                                    value={relationShipStatusEnum.Single}
-                                    control={<Radio />}
-                                    label={'Single'}
-                                />
-                                <FormControlLabel
-                                    value={relationShipStatusEnum.InARelationship}
-                                    control={<Radio />}
-                                    label={'In a relationship'}
-                                />
-                            </Field>
-                        </div>
-                        <div className="stepper-tellusmore-block">
-                            <Field
-                                name="thetypeofleisure"
-                                component={radioButton}
-                                parse={parseInt}
-                            >
-                                <label className="font-weight-bold">
-                                    Preffered type of leisure
-                                </label>
-                                <FormControlLabel
-                                    value={theTypeOfLeisureEnum.Active}
-                                    control={<Radio />}
-                                    label={'Active'}
-                                />
-                                <FormControlLabel
-                                    value={theTypeOfLeisureEnum.Passive}
-                                    control={<Radio />}
-                                    label={'Passive'}
-                                />
-                            </Field>
-                        </div>
-                    </Grid>
-                    <Grid item xs={4}></Grid>
+                        </Field>
+                    </div>
+                    <div className="stepper-tellusmore-block">
+                        <label className="font-weight-bold">
+                            Reasons for using the site
+                        </label>
+                        <Field
+                            options={reasonsOptions}
+                            component={MultiCheckbox}
+                            name="reasonsForUsingTheSite"
+                            className="form-control mt-2"
+                            placeholder="reasonsForUsingTheSiteEnum"
+                        />
+                    </div>
                 </Grid>
-                <div className="stepper-submit">
-                    <Grid container spacing={3}>
-                        <Grid item sm={12}>
-                            <Button
-                                type="button"
-                                className="previous"
-                                onClick={goBack}
-                                color="primary"
-                                variant="text"
-                                size="large"
-                            >
-                                Back
-                            </Button>
-                            <Button
-                                type="submit"
-                                className="next"
-                                color="primary"
-                                variant="contained"
-                                size="large"
-                            >
-                                Continue
-                            </Button>
-                        </Grid>
+                <Grid item xs={4}>
+                    <div className="stepper-tellusmore-block">
+                        <label className="font-weight-bold">
+                            Event preferences
+                        </label>
+                        <Field
+                            options={eventPreferencesOptions}
+                            component={MultiCheckbox}
+                            name="eventType"
+                            className="form-control mt-2"
+                            placeholder="eventType"
+                        />
+                    </div>
+                </Grid>
+                <Grid item xs={4}>
+                    <div className="stepper-tellusmore-block">
+                        <Field
+                            name="relationshipstatus"
+                            component={radioButton}
+                            parse={parseInt}
+                        >
+                            <label className="font-weight-bold">
+                                Relationship status
+                            </label>
+                            <FormControlLabel
+                                value={relationShipStatusEnum.Single}
+                                control={<Radio />}
+                                label={'Single'}
+                            />
+                            <FormControlLabel
+                                value={relationShipStatusEnum.InARelationship}
+                                control={<Radio />}
+                                label={'In a relationship'}
+                            />
+                        </Field>
+                    </div>
+                    <div className="stepper-tellusmore-block">
+                        <Field
+                            name="thetypeofleisure"
+                            component={radioButton}
+                            parse={parseInt}
+                        >
+                            <label className="font-weight-bold">
+                                Preffered type of leisure
+                            </label>
+                            <FormControlLabel
+                                value={theTypeOfLeisureEnum.Active}
+                                control={<Radio />}
+                                label={'Active'}
+                            />
+                            <FormControlLabel
+                                value={theTypeOfLeisureEnum.Passive}
+                                control={<Radio />}
+                                label={'Passive'}
+                            />
+                        </Field>
+                    </div>
+                </Grid>
+                <Grid item xs={4}></Grid>
+            </Grid>
+            <div className="stepper-submit">
+                <Grid container spacing={3}>
+                    <Grid item sm={12}>
+                        <Button
+                            type="button"
+                            className="previous"
+                            onClick={goBack}
+                            color="primary"
+                            variant="text"
+                            size="large"
+                        >
+                            Back
+                        </Button>
+                        <Button
+                            type="submit"
+                            className="next"
+                            color="primary"
+                            variant="contained"
+                            size="large"
+                        >
+                            Continue
+                        </Button>
                     </Grid>
-                </div>
-            </form>
-        </div>
+                </Grid>
+            </div>
+        </form>
     );
 };
 

@@ -3,7 +3,6 @@ import { Button, Grid } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import CheckMark from './checkmark/CheckMark';
 
-// TODO: extract styles to hooks
 const SuccessPage = () => (
     <>
         <Grid item sm={12}>

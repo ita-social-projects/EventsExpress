@@ -12,12 +12,11 @@ import {
     parseEuDate
 } from '../../../helpers/form-helpers';
 
-// TODO: extract styles
 const CompleteProfileForm = () => {
     const { goToNext } = useContext(RegisterStepContext);
 
     return (
-        <div style={{ width: '97%', padding: '10px' }}>
+        <div className="step-wrapper">
             <form onSubmit={goToNext}>
                 <Grid container spacing={3}>
                     <Grid item sm={6}>

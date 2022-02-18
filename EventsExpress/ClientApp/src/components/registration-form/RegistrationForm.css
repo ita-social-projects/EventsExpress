@@ -4,7 +4,7 @@
     font-size: 14px;
 }
 
-.stepper-submit {
+.stepper-submit, .step-wrapper {
     width: 97%;
     padding: 10px;
 }
@@ -44,7 +44,6 @@
 
 h1 {
     font-size: 20px;
-    
 }
 
 .next {
@@ -53,5 +52,4 @@ h1 {
     padding: 4px;
     background-color: rgb(255, 153, 0);
     border: none;
-    
 }

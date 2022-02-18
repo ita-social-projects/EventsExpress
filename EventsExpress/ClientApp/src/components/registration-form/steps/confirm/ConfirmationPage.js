@@ -25,7 +25,6 @@ const eventPreferencesMap = new Map([
     [eventTypeEnum.Paid, 'Paid'],
 ]);
 
-// TODO: extract styles
 const ConfirmationPage = ({
     formValues,
     pristine,
@@ -62,7 +61,7 @@ const ConfirmationPage = ({
     };
 
     return (
-        <div style={{ width: '97%', padding: '10px' }}>
+        <div className="step-wrapper">
             <form onSubmit={goToNext}>
                 <Grid container spacing={3}>
                     <Grid item sm={7}>
