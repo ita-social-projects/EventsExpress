@@ -33,7 +33,7 @@ namespace EventsExpress.Test.ControllerTests
             IEnumerable<NotificationTemplateDto> templates = new List<NotificationTemplateDto>()
             {
                 new NotificationTemplateDto { Id = NotificationProfile.BlockedUser, Title = "BlockedUser" },
-                new NotificationTemplateDto { Id = NotificationProfile.EventCreated, Title = "EventCreated" },
+                new NotificationTemplateDto { Id = NotificationProfile.JoinedEventChanged, Title = "JoinedEventChanged" },
             };
 
             MockMapper.Setup(m => m.Map<NotificationTemplateDto>(It.IsAny<EditNotificationTemplateViewModel>()))
