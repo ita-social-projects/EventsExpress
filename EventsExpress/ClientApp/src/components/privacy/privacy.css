@@ -1,25 +1,17 @@
 .privacy{
    margin:20px 0; 
-   font-size: 18px;
 }
-.privacy p{
+.privacy p, a,ol,li,b{
     font-size:18px;
 }
 
 .privacy h1{
     margin:20px 0;
+    font-weight: 500;
 }
-.privacy a{
-    font-size: 18px;
-}
-.privacy ol{
-    font-size: 18px;
-}
+
 .privacy li {
-    font-size: 18px;
     margin: 10px 0 10px 30px;
-    
-   
 }
 .privacy h4{
     margin-top:30px;
@@ -27,6 +19,4 @@
     font-weight:800;
 }
 
-.privacy p b{
-    font-size:18px;
-}
+
