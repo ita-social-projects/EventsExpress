@@ -6,11 +6,12 @@ import SpinnerWrapper from './spinner';
 import { get_events } from '../actions/event/event-list-action';
 import { useFilterActions } from '../components/event/filter/filter-hooks';
 import { CarouselLayout } from '../components/layouts/carousel-layout';
+import { EventCarouselCard } from '../components/event/layouts/carousel/event-carousel-card';
 
 const EventListWrapper = ({ history, events, data, currentUser, getEvents }) => {
     const [prevQuery, setPrevQuery] = useState(null);
 
-    const { getQueryWithRequestFilters } = useFilterActions();
+    const { getQueryWithRequestFilters, appendFilters } = useFilterActions();
 
     useEffect(() => {
         const query = history.location.search;
@@ -20,6 +21,14 @@ const EventListWrapper = ({ history, events, data, currentUser, getEvents }) => 
             setPrevQuery(query);
         }
     });
+
+    const nextPage = () => {
+        appendFilters({ page: data.pageViewModel.pageNumber + 1 });
+    };
+
+    const previousPage = () => {
+        appendFilters({ page: data.pageViewModel.pageNumber - 1 });
+    };
 
     const layouts = {
         list: (
@@ -36,7 +45,16 @@ const EventListWrapper = ({ history, events, data, currentUser, getEvents }) => 
             />
         ),
         carousel: (
-            <CarouselLayout>Example</CarouselLayout>
+            <CarouselLayout
+                onNext={nextPage}
+                onPrevious={previousPage}
+                hasNext={data.pageViewModel.hasNextPage}
+                hasPrevious={data.pageViewModel.hasPreviousPage}
+            >
+                {data.items.map(event => (
+                    <EventCarouselCard key={event.id} event={event} />
+                ))}
+            </CarouselLayout>
         )
     };
 

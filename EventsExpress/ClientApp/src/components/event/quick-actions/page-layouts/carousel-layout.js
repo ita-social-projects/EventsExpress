@@ -3,9 +3,15 @@ import { QuickActionButton } from '../quick-action-button';
 import React from 'react';
 import { SetEventsLayout } from '../../../../actions/events-layout';
 import { connect } from 'react-redux';
+import { useFilterActions } from '../../filter/filter-hooks';
 
 const CarouselLayout = (props) => {
-    const setCarouselLayout = () => props.setLayout('carousel');
+    const { appendFilters } = useFilterActions();
+
+    const setCarouselLayout = () => {
+        appendFilters({ pageSize: 4 });
+        props.setLayout('carousel');
+    };
 
     return (
         <QuickActionButton
