@@ -1,5 +1,6 @@
 import React from 'react'
 import '../terms/terms.css'
+
 function privacy() {
     return (
         <div className="terms">
