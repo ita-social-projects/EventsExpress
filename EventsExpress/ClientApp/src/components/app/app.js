@@ -37,6 +37,7 @@ import AuthUser from '../../actions/login/auth-user-action';
 import getConfig from '../../actions/config/get-config-action';
 import RegistrationForm from '../RegistrationForm';
 import MainLayout from '../MainLayout';
+import About from "../about/about.js"
 
 class App extends Component {
     constructor(props) {
@@ -92,6 +93,7 @@ class App extends Component {
                                 <Route path='/registerSuccess' component={RegisterSuccess} />
                                 <Route path='/editEvent/:id' component={this.UserRoleSecurity(EventEditWrapper)} />
                                 <Route path='/drafts' component={this.UserRoleSecurity(EventDraftListWrapper)} />
+                                <Route path='/about' component={About} />
                                 <Route path='/unauthorized' component={Unauthorized} />
                                 <Route path='/forbidden' component={Forbidden} />
                                 <Route component={NotFound} />

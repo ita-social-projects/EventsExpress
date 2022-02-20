@@ -1,0 +1,14 @@
+﻿.about{
+    margin:20px 30px; 
+    font-size: 20px;
+}
+
+.about h1{
+    margin:20px 0;
+ }
+
+ .about p{
+     text-align: justify;
+     width: 60%;
+     font-size: 17px;
+ }
