@@ -56,7 +56,7 @@ function privacy() {
         <h4>Enforcement</h4>
         <p>We regularly review our own compliance with our Privacy Policy. If you submit a formal written complaint with your contact information, we will try our best to resolve the issue.</p>
         <h4>Contact Us</h4>
-        <p>If you have any questions about this Privacy Policy or notice activity against it, please contact us.    
+        <p>If you have any questions about this Privacy Policy or notice activity against it, please contact us. 
         </p>
     </div>
   )
