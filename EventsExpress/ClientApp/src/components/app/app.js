@@ -38,6 +38,9 @@ import getConfig from '../../actions/config/get-config-action';
 import RegistrationForm from '../RegistrationForm';
 import MainLayout from '../MainLayout';
 import privacy from '../privacy/privacy';
+import About from "../about/about.js";
+import Terms from '../terms/terms.js';
+
 
 class App extends Component {
     constructor(props) {
@@ -93,10 +96,11 @@ class App extends Component {
                                 <Route path='/registerSuccess' component={RegisterSuccess} />
                                 <Route path='/editEvent/:id' component={this.UserRoleSecurity(EventEditWrapper)} />
                                 <Route path='/drafts' component={this.UserRoleSecurity(EventDraftListWrapper)} />
+                                <Route path='/about' component={About} />
                                 <Route path='/unauthorized' component={Unauthorized} />
                                 <Route path='/forbidden' component={Forbidden} />
                                 <Route path ='/privacy' component ={privacy}/>
-                            
+                                <Route path='/terms' component={Terms}/>
                                 <Route component={NotFound} />
                             </Switch>
                         </Layout>

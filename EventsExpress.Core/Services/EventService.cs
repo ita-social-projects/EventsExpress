@@ -571,7 +571,6 @@ namespace EventsExpress.Core.Services
 
         private IQueryable<Event> ApplyEventFilters(IQueryable<Event> events, EventFilterViewModel model)
         {
-            var currentUserId = CurrentUserId();
             var eventsFilters = events
                 .Filters()
                     .AddFilter(e => e.StatusHistory.OrderBy(h => h.CreatedOn)
@@ -624,7 +623,7 @@ namespace EventsExpress.Core.Services
                     .AddFilter(e => e.DateTo <= DateTime.Today)
                 .Then()
                     .If(model.Bookmarked)
-                    .AddFilter(e => e.EventBookmarks.Any(b => b.UserFromId == currentUserId));
+                    .AddFilter(e => e.EventBookmarks.Any(b => b.UserFromId == CurrentUserId()));
 
             return eventsFilters.Apply();
         }
