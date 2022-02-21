@@ -47,13 +47,9 @@ namespace EventsExpress.Test.ServiceTests
                     Id = _notificationTemplate.Id,
                 });
 
-            Context.NotificationTemplates.Add(_notificationTemplate);
-
             _service = new NotificationTemplateService(
                 Context,
                 MockMapper.Object);
-
-            Context.SaveChanges();
         }
 
         [Test]

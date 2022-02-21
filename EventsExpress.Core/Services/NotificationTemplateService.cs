@@ -25,15 +25,11 @@ namespace EventsExpress.Core.Services
             new Dictionary<NotificationProfile, Func<INotificationTemplateModel>>
             {
                 { NotificationProfile.BlockedUser, () => new AccountStatusNotificationTemplateModel() },
-                { NotificationProfile.EventCreated, () => new EventCreatedNotificationTemplateModel() },
-                { NotificationProfile.ParticipationApproved, () => new ParticipationNotificationTemplateModel() },
-                { NotificationProfile.ParticipationDenied, () => new ParticipationNotificationTemplateModel() },
                 { NotificationProfile.RegisterVerification, () => new RegisterVerificationNotificationTemplateModel() },
                 { NotificationProfile.UnblockedUser, () => new AccountStatusNotificationTemplateModel() },
                 { NotificationProfile.CreateEventVerification, () => new CreateEventVerificationNotificationTemplateModel() },
-                { NotificationProfile.EventStatusActivated, () => new EventStatusNotificationTemplateModel() },
-                { NotificationProfile.EventStatusBlocked, () => new EventStatusNotificationTemplateModel() },
-                { NotificationProfile.EventStatusCanceled, () => new EventStatusNotificationTemplateModel() },
+                { NotificationProfile.OwnEventChanged, () => new EventChangeNotificationTemplateModel() },
+                { NotificationProfile.JoinedEventChanged, () => new EventChangeNotificationTemplateModel() },
             };
 
         private static string AddBraces(string property)

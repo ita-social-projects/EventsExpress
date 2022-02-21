@@ -195,7 +195,7 @@ namespace EventsExpress
                 configuration.RootPath = "ClientApp/build";
             });
 
-            services.AddMediatR(typeof(EventCreatedHandler).Assembly);
+            services.AddMediatR(typeof(OwnEventChangedHandler).Assembly);
 
             services.AddAutoMapper(typeof(UserMapperProfile).GetTypeInfo().Assembly);
 

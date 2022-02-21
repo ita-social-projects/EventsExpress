@@ -23,7 +23,7 @@ namespace EventsExpress.Test.ServiceTests
         [Category("Get by id")]
         [TestCase(NotificationChange.OwnEvent)]
         [TestCase(NotificationChange.Profile)]
-        [TestCase(NotificationChange.VisitedEvent)]
+        [TestCase(NotificationChange.JoinedEvent)]
         public void Get_ExistingId_ReturnEntity(NotificationChange id)
         {
             NotificationType assert = _notificationTypeService.GetById(id);
@@ -43,7 +43,7 @@ namespace EventsExpress.Test.ServiceTests
 
         [Test]
         [Category("Get All")]
-        [TestCase(new object[] { NotificationChange.OwnEvent, NotificationChange.Profile, NotificationChange.VisitedEvent })]
+        [TestCase(new object[] { NotificationChange.OwnEvent, NotificationChange.Profile, NotificationChange.JoinedEvent })]
         public void Get_ALL_CorrectData(object[] notificationTypes)
         {
             var res = _notificationTypeService.GetAllNotificationTypes();

@@ -53,7 +53,7 @@ namespace EventsExpress.Test.MapperTests
        [Test]
        [TestCase(NotificationChange.OwnEvent)]
        [TestCase(NotificationChange.Profile)]
-       [TestCase(NotificationChange.VisitedEvent)]
+       [TestCase(NotificationChange.JoinedEvent)]
        public void EventMapperProfile_NotificationTypeToNotificationTypeDTO(NotificationChange notificationChange)
         {
             NotificationType notificationType = GetNotificationType(notificationChange);
@@ -66,7 +66,7 @@ namespace EventsExpress.Test.MapperTests
        [Test]
        [TestCase(NotificationChange.OwnEvent, 8)]
        [TestCase(NotificationChange.Profile, 7)]
-       [TestCase(NotificationChange.VisitedEvent, 5)]
+       [TestCase(NotificationChange.JoinedEvent, 5)]
        public void EventMapperProfile_NotificationTypeDtoToNotificationType(NotificationChange notificationChange, int countOfUser)
         {
             NotificationTypeDto notificationTypeDTO = GetNotificationTypeDto(notificationChange, countOfUser);
@@ -80,7 +80,7 @@ namespace EventsExpress.Test.MapperTests
        [Test]
        [TestCase(NotificationChange.OwnEvent, 8)]
        [TestCase(NotificationChange.Profile, 7)]
-       [TestCase(NotificationChange.VisitedEvent, 5)]
+       [TestCase(NotificationChange.JoinedEvent, 5)]
        public void EventMapperProfile_NotificationTypeDtoToNotificationTypeViewModel(NotificationChange notificationChange, int countOfUser)
         {
             NotificationTypeDto notificationTypeDTO = GetNotificationTypeDto(notificationChange, countOfUser);
@@ -93,7 +93,7 @@ namespace EventsExpress.Test.MapperTests
        [Test]
        [TestCase(NotificationChange.OwnEvent, 8)]
        [TestCase(NotificationChange.Profile, 7)]
-       [TestCase(NotificationChange.VisitedEvent, 5)]
+       [TestCase(NotificationChange.JoinedEvent, 5)]
        public void EventMapperProfile_NotificationTypeViewModelToNotificationTypeDto(NotificationChange notificationChange, int countOfUser)
         {
             NotificationTypeViewModel notificationTypeViewModel = GetNotificationTypeViewModel(notificationChange, countOfUser);
