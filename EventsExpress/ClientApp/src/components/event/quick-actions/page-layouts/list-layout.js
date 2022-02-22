@@ -13,6 +13,7 @@ const ListLayout = (props) => {
 
     return (
         <QuickActionButton
+            active={props.currentLayout === 'list'}
             title="List layout"
             icon={<ViewListIcon />}
             onClick={SetListLayout}
@@ -20,8 +21,12 @@ const ListLayout = (props) => {
     );
 }
 
+const mapStateToProps = (state) => ({
+    currentLayout: state.events.layout
+});
+
 const mapDispatchToProps = (dispatch) => ({
     setLayout: (data) => dispatch(SetEventsLayout(data))
 });
 
-export default connect(null, mapDispatchToProps)(ListLayout)
+export default connect(mapStateToProps, mapDispatchToProps)(ListLayout)

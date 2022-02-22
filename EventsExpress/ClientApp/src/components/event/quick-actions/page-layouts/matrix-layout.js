@@ -9,6 +9,7 @@ const MatrixLayout = (props) => {
 
     return (
         <QuickActionButton
+            active={props.currentLayout === 'matrix'}
             title="Matrix layout"
             icon={<ViewModuleIcon />}
             onClick={setMatrixLayout}
@@ -16,8 +17,12 @@ const MatrixLayout = (props) => {
     );
 };
 
+const mapStateToProps = (state) => ({
+    currentLayout: state.events.layout
+});
+
 const mapDispatchToProps = (dispatch) => ({
     setLayout: (data) => dispatch(SetEventsLayout(data))
 });
 
-export default connect(null, mapDispatchToProps)(MatrixLayout);
+export default connect(mapStateToProps, mapDispatchToProps)(MatrixLayout);

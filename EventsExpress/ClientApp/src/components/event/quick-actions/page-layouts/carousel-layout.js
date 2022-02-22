@@ -15,6 +15,7 @@ const CarouselLayout = (props) => {
 
     return (
         <QuickActionButton
+            active={props.currentLayout === 'carousel'}
             title="Carousel layout"
             icon={<ViewCarouselIcon />}
             onClick={setCarouselLayout}
@@ -22,8 +23,12 @@ const CarouselLayout = (props) => {
     );
 };
 
+const mapStateToProps = (state) => ({
+    currentLayout: state.events.layout
+});
+
 const mapDispatchToProps = (dispatch) => ({
     setLayout: (data) => dispatch(SetEventsLayout(data))
 });
 
-export default connect(null, mapDispatchToProps)(CarouselLayout);
+export default connect(mapStateToProps, mapDispatchToProps)(CarouselLayout);
