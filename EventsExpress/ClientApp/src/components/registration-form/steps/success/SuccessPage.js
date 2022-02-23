@@ -6,14 +6,14 @@ import CheckMark from './checkmark/CheckMark';
 const SuccessPage = () => (
     <>
         <Grid item sm={12}>
-            <h1 style={{ fontSize: 25 }}>Successful registration!</h1>
+            <h1>Successful registration!</h1>
         </Grid>
         <CheckMark />
-        <Grid container spacing={3}>
-            <Grid item sm={3} />
-            <Grid item sm={3}>
+        <div className="stepper-submit">
+            <Grid item sm={12}>
                 <Button
                     component={Link}
+                    className="mx-4"
                     to="/profile"
                     color="primary"
                     variant="contained"
@@ -21,10 +21,9 @@ const SuccessPage = () => (
                 >
                     Profile
                 </Button>
-            </Grid>
-            <Grid item sm={3}>
                 <Button
                     component={Link}
+                    className="mx-4"
                     to="/home/events"
                     color="primary"
                     variant="contained"
@@ -33,8 +32,7 @@ const SuccessPage = () => (
                     Events
                 </Button>
             </Grid>
-            <Grid item sm={3} />
-        </Grid>
+        </div>
     </>
 );
 

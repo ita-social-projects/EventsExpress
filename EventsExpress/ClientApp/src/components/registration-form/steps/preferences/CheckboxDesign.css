@@ -2,11 +2,6 @@
     margin: 0 10px;
 }
 
-h2 {
-    margin: 5px auto 10px 15px;
-    text-align: left;
-}
-
 .checkbox-group > div {
     margin: 15px;
     display: flex;
@@ -28,7 +23,7 @@ h2 {
   text-decoration: underline;
 }
 
-label > input[type="checkbox"] {
+.checkbox > label > input[type="checkbox"] {
   appearance: none;
   background-color: #fff;
   margin: 0 0.25vw 0 0;
@@ -42,12 +37,12 @@ label > input[type="checkbox"] {
   place-content: center;
 }
 
-label > input[type="checkbox"]:hover {
+.checkbox > label > input[type="checkbox"]:hover {
   cursor: pointer;
   border-color: rgb(255, 153, 0);
 }
 
-label > input[type="checkbox"]::before {
+.checkbox > label > input[type="checkbox"]::before {
   content: "";
   width: 0.65em;
   height: 0.65em;
@@ -58,11 +53,11 @@ label > input[type="checkbox"]::before {
   box-shadow: inset 1em 1em #fff;
 }
 
-label > input[type="checkbox"]:checked {
+.checkbox > label > input[type="checkbox"]:checked {
   background-color: rgb(255, 153, 0);
   border-color: rgb(255, 153, 0);
 }
 
-label > input[type="checkbox"]:checked::before {
+.checkbox > label > input[type="checkbox"]:checked::before {
   transform: scale(1);
 }

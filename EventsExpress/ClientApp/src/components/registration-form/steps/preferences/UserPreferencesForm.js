@@ -1,70 +1,39 @@
 ﻿import React, { useContext } from 'react';
 import { reduxForm, Field } from 'redux-form';
-import { Grid, Button } from '@material-ui/core';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Radio from '@material-ui/core/Radio';
-import parentStatusEnum from '../../../../constants/parentStatusEnum';
-import relationShipStatusEnum from '../../../../constants/relationShipStatusEnum';
-import theTypeOfLeisureEnum from '../../../../constants/theTypeOfLeisureEnum';
-import reasonsForUsingTheSiteEnum from '../../../../constants/reasonsForUsingTheSiteEnum';
-import eventTypeEnum from '../../../../constants/eventTypeEnum';
-import { radioButton, MultiCheckbox } from '../../../helpers/form-helpers';
+import { Grid } from '@material-ui/core';
+import { MultiCheckbox } from '../../../helpers/form-helpers';
 import { RegisterStepContext } from '../../RegistrationForm';
+import RadioGroup from './RadioGroup';
+import StepperNavigation from '../../StepperNavigation';
+import maps from '../../maps'
 import '../../RegistrationForm.css';
 import './CheckboxDesign.css';
 
-const reasonsOptions = [
-    { value: reasonsForUsingTheSiteEnum.BeMoreActive, text: 'Be more active' },
-    { value: reasonsForUsingTheSiteEnum.DevelopASkill, text: 'Develop a skill' },
-    { value: reasonsForUsingTheSiteEnum.MeetPeopleLikeMe, text: 'Meet people like me' },
-];
-
-const eventPreferencesOptions = [
-    { value: eventTypeEnum.AnyDistance, text: 'Any distance' },
-    { value: eventTypeEnum.Free, text: 'Free' },
-    { value: eventTypeEnum.NearMe, text: 'Near me' },
-    { value: eventTypeEnum.Offline, text: 'Offline' },
-    { value: eventTypeEnum.Online, text: 'Online' },
-    { value: eventTypeEnum.Paid, text: 'Paid' },
-];
-
 const UserPreferencesForm = () => {
-    const { goBack, goToNext } = useContext(RegisterStepContext);
+    const { goToNext } = useContext(RegisterStepContext);
+    
+    const mapToOptions = sourceMap => {
+        return Array.from(sourceMap).map(([key, value]) => ({ value: key, text: value }));
+    };
 
     return (
         <form onSubmit={goToNext}>
-            <h1 className="text-left">
-                Step 4: Tell us more about yourself
-            </h1>
-            <Grid container spacing={2} className="text-left">
+            <h1>Step 4: Tell us more about yourself</h1>
+            <Grid container spacing={2}>
                 <Grid item xs={4}>
                     <div className="stepper-tellusmore-block">
-                        <Field
-                            name="parentstatus"
-                            component={radioButton}
-                            parse={parseInt}
-                        >
-                            <label className="font-weight-bold">
-                                Parental status
-                            </label>
-                            <FormControlLabel
-                                value={parentStatusEnum.Kids}
-                                control={<Radio />}
-                                label={'With kids'}
-                            />
-                            <FormControlLabel
-                                value={parentStatusEnum.NoKids}
-                                control={<Radio />}
-                                label={'No kids'}
-                            />
-                        </Field>
+                        <RadioGroup
+                            name="parentalStatus"
+                            label="Parental status"
+                            source={maps.parenting}
+                        />
                     </div>
                     <div className="stepper-tellusmore-block">
                         <label className="font-weight-bold">
                             Reasons for using the site
                         </label>
                         <Field
-                            options={reasonsOptions}
+                            options={mapToOptions(maps.reasons)}
                             component={MultiCheckbox}
                             name="reasonsForUsingTheSite"
                             className="form-control mt-2"
@@ -78,7 +47,7 @@ const UserPreferencesForm = () => {
                             Event preferences
                         </label>
                         <Field
-                            options={eventPreferencesOptions}
+                            options={mapToOptions(maps.eventPreferences)}
                             component={MultiCheckbox}
                             name="eventType"
                             className="form-control mt-2"
@@ -88,74 +57,23 @@ const UserPreferencesForm = () => {
                 </Grid>
                 <Grid item xs={4}>
                     <div className="stepper-tellusmore-block">
-                        <Field
-                            name="relationshipstatus"
-                            component={radioButton}
-                            parse={parseInt}
-                        >
-                            <label className="font-weight-bold">
-                                Relationship status
-                            </label>
-                            <FormControlLabel
-                                value={relationShipStatusEnum.Single}
-                                control={<Radio />}
-                                label={'Single'}
-                            />
-                            <FormControlLabel
-                                value={relationShipStatusEnum.InARelationship}
-                                control={<Radio />}
-                                label={'In a relationship'}
-                            />
-                        </Field>
+                        <RadioGroup
+                            name="relationshipStatus"
+                            label="Relationship status"
+                            source={maps.relationshipStatuses}
+                        />
                     </div>
                     <div className="stepper-tellusmore-block">
-                        <Field
-                            name="thetypeofleisure"
-                            component={radioButton}
-                            parse={parseInt}
-                        >
-                            <label className="font-weight-bold">
-                                Preffered type of leisure
-                            </label>
-                            <FormControlLabel
-                                value={theTypeOfLeisureEnum.Active}
-                                control={<Radio />}
-                                label={'Active'}
-                            />
-                            <FormControlLabel
-                                value={theTypeOfLeisureEnum.Passive}
-                                control={<Radio />}
-                                label={'Passive'}
-                            />
-                        </Field>
+                        <RadioGroup
+                            name="leisureType"
+                            label="Preferred type of leisure"
+                            source={maps.leisureTypes}
+                        />
                     </div>
                 </Grid>
-                <Grid item xs={4}></Grid>
             </Grid>
-            <div className="stepper-submit">
-                <Grid container spacing={3}>
-                    <Grid item sm={12}>
-                        <Button
-                            type="button"
-                            className="previous"
-                            onClick={goBack}
-                            color="primary"
-                            variant="text"
-                            size="large"
-                        >
-                            Back
-                        </Button>
-                        <Button
-                            type="submit"
-                            className="next"
-                            color="primary"
-                            variant="contained"
-                            size="large"
-                        >
-                            Continue
-                        </Button>
-                    </Grid>
-                </Grid>
+            <div className="stepper-submit mt-0">
+                <StepperNavigation />
             </div>
         </form>
     );

@@ -48,6 +48,7 @@ const RegistrationForm = () => {
                     value={{
                         goBack: () => adjustStep(-1),
                         goToNext: () => adjustStep(1),
+                        skipToLast: () => setCurrentStep(6),
                     }}
                 >
                     {renderStep()}
