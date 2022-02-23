@@ -9,19 +9,14 @@ namespace EventsExpress.Core.GraphQL.Types
     {
         protected override void Configure(IObjectTypeDescriptor<EventLocation> descriptor)
         {
-            descriptor.Field(f => f.Point)
+            descriptor
+                .Field(f => f.Point)
                 .Description("Point coordinates")
                 .UseDbContext<AppDbContext>()
                 .Resolve(resolver =>
                 {
                     Point point = resolver.Parent<EventLocation>()?.Point;
 
-                    // if (point != null)
-                    // {
-                    //    return new double[] { point.X, point.Y };
-                    // }
-
-                    // return null;
                     if (point != null)
                     {
                         return new CustomPoint(point.X, point.Y) { SRID = 4326 };
@@ -31,7 +26,6 @@ namespace EventsExpress.Core.GraphQL.Types
                 });
 
             descriptor.Field(f => f.OnlineMeeting);
-
             descriptor.Field(f => f.Type);
         }
     }

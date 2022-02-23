@@ -1,21 +1,12 @@
-﻿using AutoMapper;
-using AutoMapper.QueryableExtensions;
-using EventsExpress.Core.DTOs;
-using EventsExpress.Core.GraphQL.Extensions;
-using EventsExpress.Core.GraphQL.SortInputTypes;
-using EventsExpress.Db.EF;
-using EventsExpress.Db.Entities;
+﻿using EventsExpress.Db.EF;
 using HotChocolate.Data;
-using HotChocolate.Data.Filters.Spatial;
 using HotChocolate.Types;
-using HotChocolate.Types.Spatial;
-using Microsoft.EntityFrameworkCore;
 
 namespace EventsExpress.Core.GraphQL.Types
 {
-    public class QueryType : ObjectType<Query>
+    public class QueryType : ObjectType
     {
-        protected override void Configure(IObjectTypeDescriptor<Query> descriptor)
+        protected override void Configure(IObjectTypeDescriptor descriptor)
         {
             descriptor
                 .Field("events")

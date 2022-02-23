@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using EventsExpress.Core.GraphQL.SortInputTypes;
+﻿using EventsExpress.Core.GraphQL.SortInputTypes;
 using EventsExpress.Core.GraphQL.Types;
 using HotChocolate;
 using HotChocolate.Execution.Configuration;
