@@ -33,52 +33,62 @@ const ConfirmationPage = ({ formValues, categories, categoryGroups }) => {
                 <Grid item sm={12}>
                     <h1>Step 5: Confirm your user data</h1>
                 </Grid>
-                <Grid item xs={3}>
-                    <List>
+                <Grid item container xs={6}>
+                    <Grid item xs={6}>
+                        <List>
+                            <ListItem>
+                                <ListItemText
+                                    primary="First Name"
+                                    secondary={formValues.firstName}
+                                />
+                            </ListItem>
+                            <ListItem>
+                                <ListItemText
+                                    primary="Country"
+                                    secondary={formValues.country}
+                                />
+                            </ListItem>
+                            <ListItem>
+                                <ListItemText
+                                    primary="Birth Date"
+                                    secondary={
+                                        formValues.birthDate
+                                            && moment(formValues.birthDate).format('DD-MM-YYYY')
+                                    }
+                                />
+                            </ListItem>
+                        </List>
+                    </Grid>
+                    <Grid item xs={6}>
+                        <List>
+                            <ListItem>
+                                <ListItemText
+                                    primary="Last Name"
+                                    secondary={formValues.lastName}
+                                />
+                            </ListItem>
+                            <ListItem>
+                                <ListItemText
+                                    primary="City"
+                                    secondary={formValues.city}
+                                />
+                            </ListItem>
+                            <ListItem>
+                                <ListItemText
+                                    primary="Gender"
+                                    secondary={genders[formValues.gender]}
+                                />
+                            </ListItem>
+                        </List>
+                    </Grid>
+                    <Grid item xs={12}>
                         <ListItem>
                             <ListItemText
-                                primary="First Name"
-                                secondary={formValues.firstName}
+                                primary="Additional information"
+                                secondary={formValues.additionalInfo}
                             />
                         </ListItem>
-                        <ListItem>
-                            <ListItemText
-                                primary="Country"
-                                secondary={formValues.country}
-                            />
-                        </ListItem>
-                        <ListItem>
-                            <ListItemText
-                                primary="Birth Date"
-                                secondary={
-                                    formValues.birthDate
-                                        && moment(formValues.birthDate).format('DD-MM-YYYY')
-                                }
-                            />
-                        </ListItem>
-                    </List>
-                </Grid>
-                <Grid item xs={3}>
-                    <List>
-                        <ListItem>
-                            <ListItemText
-                                primary="Last Name"
-                                secondary={formValues.lastName}
-                            />
-                        </ListItem>
-                        <ListItem>
-                            <ListItemText
-                                primary="City"
-                                secondary={formValues.city}
-                            />
-                        </ListItem>
-                        <ListItem>
-                            <ListItemText
-                                primary="Gender"
-                                secondary={genders[formValues.gender]}
-                            />
-                        </ListItem>
-                    </List>
+                    </Grid>
                 </Grid>
                 <Grid item xs={6}>
                     <PreferencesList formValues={formValues} />

@@ -17,10 +17,10 @@ const reasons = new Map([
 
 const eventPreferences = new Map([
     [eventTypeEnum.AnyDistance, 'Any distance'],
-    [eventTypeEnum.Free, 'Free'],
     [eventTypeEnum.NearMe, 'Near me'],
     [eventTypeEnum.Offline, 'Offline'],
     [eventTypeEnum.Online, 'Online'],
+    [eventTypeEnum.Free, 'Free'],
     [eventTypeEnum.Paid, 'Paid'],
 ]);
 

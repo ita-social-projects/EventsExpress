@@ -5,6 +5,7 @@ import { MultiCheckbox } from '../../../helpers/form-helpers';
 import { RegisterStepContext } from '../../RegistrationForm';
 import RadioGroup from './RadioGroup';
 import StepperNavigation from '../../StepperNavigation';
+import { renderTextArea } from '../../../helpers/form-helpers'
 import maps from '../../maps'
 import '../../RegistrationForm.css';
 import './CheckboxDesign.css';
@@ -71,8 +72,18 @@ const UserPreferencesForm = () => {
                         />
                     </div>
                 </Grid>
+                <Grid item xs={12}>
+                    <h5>Additional information:</h5>
+                </Grid>
+                <Grid item xs={12}>
+                    <Field
+                        name="additionalInfo"
+                        component={renderTextArea}
+                        type="input"
+                    />
+                </Grid>
             </Grid>
-            <div className="stepper-submit mt-0">
+            <div className="stepper-submit">
                 <StepperNavigation />
             </div>
         </form>
