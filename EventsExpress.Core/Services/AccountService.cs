@@ -15,6 +15,8 @@ using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using Role = EventsExpress.Db.Enums.Role;
 
 namespace EventsExpress.Core.Services
 {
@@ -58,6 +60,7 @@ namespace EventsExpress.Core.Services
 
             Update(account);
             await Context.SaveChangesAsync();
+            await _mediator.Publish(new RoleChangeMessage(account, newRoles));
         }
 
         public async Task AddAuth(Guid accountId, string email, AuthExternalType type)
