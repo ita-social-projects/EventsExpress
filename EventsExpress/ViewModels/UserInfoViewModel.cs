@@ -25,6 +25,8 @@ namespace EventsExpress.ViewModels
 
         public double Rating { get; set; }
 
+        public IEnumerable<Guid> BookmarkedEvents { get; set; }
+
         public bool CanChangePassword { get; set; }
     }
 }

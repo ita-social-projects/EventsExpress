@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using EventsExpress.Core.DTOs;
+using EventsExpress.Core.Enums;
 using EventsExpress.Core.Exceptions;
 using EventsExpress.Core.IServices;
 using EventsExpress.Core.Notifications;
@@ -96,6 +97,28 @@ namespace EventsExpress.Test.ServiceTests
             service.GetAll(filterModel, out int actualCount);
 
             Assert.That(actualCount, Is.EqualTo(expectedCount));
+        }
+
+        [Test]
+        public void GetAll_DifferentOrderApplied_ReturnsElementsInCorrectOrder()
+        {
+            MockMapper.Setup(m => m.Map<IEnumerable<EventDto>>(It.IsAny<IEnumerable<Event>>()))
+                .Returns<IEnumerable<Event>>(ev => ev.Select(EventTestHelpers.MapEventDtoFromEvent));
+            var expectedIds = new[]
+            {
+                EventTestData.ThirdEventId,
+                EventTestData.VisitedEventId,
+                EventTestData.FirstEventId,
+            };
+            var filterModel = new EventFilterViewModel
+            {
+                Order = EventOrderCriteria.RecentlyPublished,
+            };
+
+            var events = service.GetAll(filterModel, out _);
+            var actualIds = events.Select(e => e.Id).ToArray();
+
+            CollectionAssert.AreEqual(expectedIds, actualIds);
         }
 
         [Test]
@@ -311,7 +334,6 @@ namespace EventsExpress.Test.ServiceTests
             var statusHistory = Context.Events.Find(EventTestData.SecondEventId)?.StatusHistory.Last();
 
             Assert.AreEqual(EventStatus.Active, statusHistory?.EventStatus);
-            mockMediator.Verify(m => m.Publish(It.IsAny<EventCreatedMessage>(), default), Times.Once());
         }
 
         [Test]

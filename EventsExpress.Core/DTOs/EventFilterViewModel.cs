@@ -29,13 +29,15 @@ namespace EventsExpress.Core.DTOs
 
         public bool? IsOnlyForAdults { get; set; }
 
+        public bool Bookmarked { get; set; }
+
         public LocationType? LocationType { get; set; }
 
         public List<string> Categories { get; set; }
 
         public UserToEventRelation? DisplayUserEvents { get; set; }
 
-        public SortBy SortBy { get; set; }
+        public EventOrderCriteria Order { get; set; }
 
         public List<EventStatus> Statuses { get; set; }
 

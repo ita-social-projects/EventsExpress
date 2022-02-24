@@ -110,7 +110,6 @@ namespace EventsExpress.Core.Services
 
             Context.UserEvent.Update(userEvent);
             await Context.SaveChangesAsync();
-            await _mediator.Publish(new ParticipationMessage(userEvent.UserId, userEvent.EventId, status));
         }
 
         public async Task DeleteUserFromEvent(Guid userId, Guid eventId)
@@ -208,7 +207,6 @@ namespace EventsExpress.Core.Services
             eventDto.Id = result.Id;
 
             await Context.SaveChangesAsync();
-            await _mediator.Publish(new EventCreatedMessage(eventDto));
             await _photoService.ChangeTempToImagePhoto(eventDto.Id);
 
             return result.Id;
@@ -302,6 +300,8 @@ namespace EventsExpress.Core.Services
             ev.Categories = eventCategories;
             await Context.SaveChangesAsync();
             await _photoService.ChangeTempToImagePhoto(eventDto.Id);
+            await _mediator.Publish(new OwnEventMessage(eventDto.Id));
+            await _mediator.Publish(new JoinedEventMessage(eventDto.Id));
 
             return ev.Id;
         }
@@ -325,7 +325,6 @@ namespace EventsExpress.Core.Services
                     });
             await Context.SaveChangesAsync();
             EventDto dtos = Mapper.Map<Event, EventDto>(ev);
-            await _mediator.Publish(new EventCreatedMessage(dtos));
             return ev.Id;
         }
 
@@ -390,7 +389,19 @@ namespace EventsExpress.Core.Services
             events = ApplyEventFilters(events, model);
             count = events.Count();
 
-            var eventPage = GetPageOfSortedEventList(events, model.Page, model.PageSize);
+            if (model.Order == EventOrderCriteria.StartSoon)
+            {
+                events = events.OrderBy(e => e.DateFrom);
+            }
+            else if (model.Order == EventOrderCriteria.RecentlyPublished)
+            {
+                events = events.OrderByDescending(e => e.StatusHistory
+                    .OrderBy(sh => sh.CreatedOn)
+                    .First(sh => sh.EventStatus != EventStatus.Draft)
+                    .CreatedOn);
+            }
+
+            var eventPage = events.Page(model.Page, model.PageSize).ToList();
             return Mapper.Map<IEnumerable<EventDto>>(eventPage);
         }
 
@@ -609,7 +620,10 @@ namespace EventsExpress.Core.Services
                     .AddFilter(e => e.DateFrom >= DateTime.Today)
                 .Then()
                     .If(model.DisplayUserEvents == UserToEventRelation.Visited)
-                    .AddFilter(e => e.DateTo <= DateTime.Today);
+                    .AddFilter(e => e.DateTo <= DateTime.Today)
+                .Then()
+                    .If(model.Bookmarked)
+                    .AddFilter(e => e.EventBookmarks.Any(b => b.UserFromId == CurrentUserId()));
 
             return eventsFilters.Apply();
         }

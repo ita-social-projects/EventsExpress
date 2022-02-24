@@ -146,6 +146,7 @@ namespace EventsExpress
             services.AddScoped<INotificationTemplateService, NotificationTemplateService>();
             services.AddScoped<IContactAdminService, ContactAdminService>();
             services.AddScoped<IIpProviderService, IpProviderService>();
+            services.AddScoped<IBookmarkService, BookmarkService>();
 
             services.AddSingleton<ICacheHelper, CacheHelper>();
             services.AddScoped<IPhotoService, PhotoService>();
@@ -197,7 +198,7 @@ namespace EventsExpress
                 configuration.RootPath = "ClientApp/build";
             });
 
-            services.AddMediatR(typeof(EventCreatedHandler).Assembly);
+            services.AddMediatR(typeof(OwnEventChangedHandler).Assembly);
 
             services.AddAutoMapper(typeof(UserMapperProfile).GetTypeInfo().Assembly);
 

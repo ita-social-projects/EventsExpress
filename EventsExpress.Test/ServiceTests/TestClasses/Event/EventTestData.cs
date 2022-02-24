@@ -135,7 +135,7 @@ namespace EventsExpress.Test.ServiceTests.TestClasses.Event
                     new EventStatusHistory
                     {
                         EventStatus = EventStatus.Active,
-                        CreatedOn = DateTime.Today,
+                        CreatedOn = DateTime.Today.AddDays(-1),
                     },
                 },
             },

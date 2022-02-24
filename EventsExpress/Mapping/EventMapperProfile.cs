@@ -55,7 +55,8 @@ namespace EventsExpress.Mapping
                 .ForMember(dest => dest.EventAudience, opts => opts.Ignore())
                 .ForMember(dest => dest.EventSchedule, opts => opts.Ignore())
                 .ForMember(dest => dest.Rates, opts => opts.Ignore())
-                .ForMember(dest => dest.StatusHistory, opts => opts.Ignore());
+                .ForMember(dest => dest.StatusHistory, opts => opts.Ignore())
+                .ForMember(dest => dest.EventBookmarks, opts => opts.Ignore());
 
             CreateMap<EventDto, EventPreviewViewModel>()
                 .ForMember(dest => dest.Categories, opts => opts.MapFrom(src => src.Categories.Select(x => MapCategoryViewModelFromCategoryDto(x))))

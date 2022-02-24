@@ -4,6 +4,6 @@
     {
         Profile = 1,
         OwnEvent,
-        VisitedEvent,
+        JoinedEvent,
     }
 }

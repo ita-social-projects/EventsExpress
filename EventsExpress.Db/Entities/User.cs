@@ -33,5 +33,7 @@ namespace EventsExpress.Db.Entities
         public virtual ICollection<EventStatusHistory> ChangedStatusEvents { get; set; }
 
         public virtual IEnumerable<UserNotificationType> NotificationTypes { get; set; }
+
+        public virtual IEnumerable<EventBookmark> EventBookmarks { get; set; }
     }
 }
