@@ -99,7 +99,9 @@ class App extends Component {
                                 <Route path='/about' component={About} />
                                 <Route path='/unauthorized' component={Unauthorized} />
                                 <Route path='/forbidden' component={Forbidden} />
+
                                 <Route path ='/privacy' component ={Privacy}/>
+
                                 <Route path='/terms' component={Terms}/>
                                 <Route component={NotFound} />
                             </Switch>
