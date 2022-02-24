@@ -59,30 +59,29 @@
         {
             return @"
             {
-                events(
+              events(
                 where: {
-                    categories: {
+                  categories: {
                     some: {
-                        category: {
+                      category: {
                         name: {
-                            contains: ""Second""
+                          contains: ""Second""
                         }
-                }
-            }
+                      }
                     }
+                  }
                 }
-                ) {
+            ) {
                 nodes {
-                    title
-                    categories {
-                        category {
-                            id
-                            name
-                        }
+                  title
+                  categories {
+                    category {
+                      id
+                      name
                     }
-
+                  }
                 }
-            }
+              }
             }
             ";
         }
