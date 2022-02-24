@@ -1,0 +1,32 @@
+.list-layout-section {
+    /* place-items: center;
+    padding: 20px;
+    position: relative; */
+    display: grid;
+    grid-template-columns: 10fr 1fr;
+    place-items: center;
+    gap: 5px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.list-layout-card {
+    /* display: inline-block; */
+    /* vertical-align: top; */
+    display: grid;
+    grid-auto-flow: row;
+    gap: 10px;
+    width: 95%;
+}
+
+.nav-buttons {
+    /* display: inline-block;
+    vertical-align: top; */
+    display: grid;
+    grid-auto-flow: row;
+    height: 100%;
+    place-items: center;
+}
+.nav-button {
+    vertical-align: center;
+}

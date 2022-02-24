@@ -6,7 +6,9 @@ import SpinnerWrapper from './spinner';
 import { get_events } from '../actions/event/event-list-action';
 import { useFilterActions } from '../components/event/filter/filter-hooks';
 import { CarouselLayout } from '../components/layouts/carousel-layout';
+import { ListLayout } from '../components/layouts/list-layout';
 import { EventCarouselCard } from '../components/event/layouts/carousel/event-carousel-card';
+import { EventListCard } from '../components/event/layouts/list/event-list-card';
 
 const EventListWrapper = ({ history, events, data, currentUser, getEvents }) => {
     const [prevQuery, setPrevQuery] = useState(null);
@@ -32,7 +34,16 @@ const EventListWrapper = ({ history, events, data, currentUser, getEvents }) => 
 
     const layouts = {
         list: () => (
-            <span>List</span>
+            <ListLayout
+                onNext={nextPage}
+                onPrevious={previousPage}
+                hasNext={data.pageViewModel.hasNextPage}
+                hasPrevious={data.pageViewModel.hasPreviousPage}
+            >
+                {data.items.map(event => (
+                    <EventListCard key={event.id} event={event} />
+                ))}
+            </ListLayout>
         ),
         matrix: () => (
             <EventList
@@ -60,7 +71,7 @@ const EventListWrapper = ({ history, events, data, currentUser, getEvents }) => 
 
     return (
         <SpinnerWrapper showContent={data !== undefined}>
-            {layouts[events.layout ?? 'matrix']()}
+            {layouts[events.layout ?? 'list']()}
         </SpinnerWrapper>
     );
 };
