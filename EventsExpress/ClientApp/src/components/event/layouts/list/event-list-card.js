@@ -1,32 +1,14 @@
-import React, { useEffect, useState } from 'react';
-import { Button, Card, CardActions, CardContent, CardMedia, Icon, Typography } from '@material-ui/core';
+import React from 'react';
+import { Card, CardContent, Icon, Typography } from '@material-ui/core';
 import { Link } from 'react-router-dom';
-import { eventDefaultImage } from '../../../../constants/eventDefaultImage';
-import PhotoService from '../../../../services/PhotoService';
 import { makeStyles } from '@material-ui/core/styles';
 import Moment from 'react-moment';
 import DisplayLocation from '../../map/display-location';
 
 const useStyles = makeStyles({
     root: {
-        //display: 'inline-flex',
         position: 'relative',
         margin: '10px'
-    },
-    header: {
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center'
-    },
-    actions: {
-        marginTop: 'auto'
-    },
-    button: {
-        width: '100%',
-        display: 'inline-flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        textTransform: 'none',
     },
     cardContent: {
         display: 'inline-block',
@@ -42,7 +24,6 @@ const useStyles = makeStyles({
         paddingTop: '30px'
     },
     numberOfAttendiesStyle: {
-        //position: 'absolute',
         paddingRight: '100px',
         float: 'right'
     }
@@ -51,16 +32,6 @@ const useStyles = makeStyles({
 export const EventListCard = ({ event }) => {
     const classes = useStyles();
     const { id, title, dateFrom, countVisitor, categories, location } = event;
-    const [image, setImage] = useState(eventDefaultImage);
-
-    console.log(event);
-    useEffect(() => {
-        new PhotoService().getPreviewEventPhoto(id).then(eventPreviewImage => {
-            if (eventPreviewImage != null) {
-                setImage(URL.createObjectURL(eventPreviewImage));
-            }
-        });
-    }, []);
 
     return (
         <Link to={`/event/${id}/1`} id="LinkToEvent">

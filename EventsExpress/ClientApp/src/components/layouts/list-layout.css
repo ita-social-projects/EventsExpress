@@ -1,7 +1,4 @@
 .list-layout-section {
-    /* place-items: center;
-    padding: 20px;
-    position: relative; */
     display: grid;
     grid-template-columns: 10fr 1fr;
     place-items: center;
@@ -11,8 +8,6 @@
 }
 
 .list-layout-card {
-    /* display: inline-block; */
-    /* vertical-align: top; */
     display: grid;
     grid-auto-flow: row;
     gap: 10px;
@@ -20,8 +15,6 @@
 }
 
 .nav-buttons {
-    /* display: inline-block;
-    vertical-align: top; */
     display: grid;
     grid-auto-flow: row;
     height: 100%;
