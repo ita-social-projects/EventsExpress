@@ -11,30 +11,33 @@ namespace EventsExpress.Core.Services;
 
 public class BookmarkService : IBookmarkService
 {
-    private readonly AppDbContext _dbContext;
-    private readonly ISecurityContext _securityContext;
+    private readonly AppDbContext dbContext;
+    private readonly ISecurityContext securityContext;
 
-    public BookmarkService(AppDbContext dbDbContext, ISecurityContext securityContext) =>
-        (_dbContext, _securityContext) = (dbDbContext, securityContext);
+    public BookmarkService(AppDbContext dbDbContext, ISecurityContext securityContext)
+    {
+        // (_dbContext, _securityContext) = (dbDbContext, securityContext);
+        (this.dbContext, this.securityContext) = (dbDbContext, securityContext);
+    }
 
     public async Task SaveEventToBookmarksAsync(Guid eventId)
     {
-        var userId = _securityContext.GetCurrentUserId();
+        var userId = securityContext.GetCurrentUserId();
         var bookmark = new EventBookmark { UserFromId = userId, EventId = eventId };
 
-        if (_dbContext.EventBookmarks.Any(b => b.UserFromId == bookmark.UserFromId && b.EventId == bookmark.EventId))
+        if (dbContext.EventBookmarks.Any(b => b.UserFromId == bookmark.UserFromId && b.EventId == bookmark.EventId))
         {
             return;
         }
 
-        _dbContext.EventBookmarks.Add(bookmark);
-        await _dbContext.SaveChangesAsync();
+        dbContext.EventBookmarks.Add(bookmark);
+        await dbContext.SaveChangesAsync();
     }
 
     public async Task DeleteEventFromBookmarksAsync(Guid eventId)
     {
-        var userId = _securityContext.GetCurrentUserId();
-        var bookmark = await _dbContext.EventBookmarks.FirstOrDefaultAsync(
+        var userId = securityContext.GetCurrentUserId();
+        var bookmark = await dbContext.EventBookmarks.FirstOrDefaultAsync(
             b => b.UserFromId == userId && b.EventId == eventId);
 
         if (bookmark is null)
@@ -42,7 +45,7 @@ public class BookmarkService : IBookmarkService
             return;
         }
 
-        _dbContext.EventBookmarks.Remove(bookmark);
-        await _dbContext.SaveChangesAsync();
+        dbContext.EventBookmarks.Remove(bookmark);
+        await dbContext.SaveChangesAsync();
     }
 }
