@@ -280,5 +280,3 @@ __pycache__/
 /EventsExpress/Properties/PublishProfiles/*
 /EventsExpress/ClientApp/build
 /EventsExpress/.config/dotnet-tools.json 
-/.vscode/*
-/EventsExpress.Test/GraphQLTests/__snapshots__/EventTests.GetEvents.snap
