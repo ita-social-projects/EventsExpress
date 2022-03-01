@@ -211,7 +211,7 @@ namespace EventsExpress.Test.GraphQLTests
             Event ev = eventList.First<Event>();
 
             Assert.AreEqual(1, filteredEventsCount);
-            Assert.AreEqual(ev.Title, "Event with location");
+            Assert.AreEqual("Event with location", ev.Title);
         }
 
         [Test]
