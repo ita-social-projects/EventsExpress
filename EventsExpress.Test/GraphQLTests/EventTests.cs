@@ -222,7 +222,7 @@ namespace EventsExpress.Test.GraphQLTests
 
             // assert
             List<Event> eventList = GetEventsFromExecutionResult(result);
-            int filteredEventsCount = eventList.Count();
+            int filteredEventsCount = eventList.Count;
 
             Assert.AreEqual(2, filteredEventsCount);
         }
