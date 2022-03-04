@@ -5,6 +5,7 @@ import { eventDefaultImage } from '../../../../constants/eventDefaultImage';
 import PhotoService from '../../../../services/PhotoService';
 import { makeStyles } from '@material-ui/core/styles';
 import Moment from 'react-moment';
+import BookmarkButton from '../../bookmarks/bookmark-button';
 
 const useStyles = makeStyles({
     root: {
@@ -25,6 +26,12 @@ const useStyles = makeStyles({
         justifyContent: 'space-between',
         alignItems: 'center',
         textTransform: 'none',
+    },
+    headerButtons: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        gap: '5px'
     }
 });
 
@@ -60,8 +67,8 @@ export const EventCarouselCard = ({ event }) => {
                     <Typography variant="h5" component="h2">
                         {title}
                     </Typography>
-                    <div>
-                        <Icon className="fas fa-bookmark" />
+                    <div className={classes.headerButtons}>
+                        <BookmarkButton event={event} />
                     </div>
                 </div>
                 <Typography variant="body2" color="textSecondary" gutterBottom={true}>

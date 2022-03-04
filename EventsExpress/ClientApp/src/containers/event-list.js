@@ -71,7 +71,7 @@ const EventListWrapper = ({ history, events, data, currentUser, getEvents }) => 
 
     return (
         <SpinnerWrapper showContent={data !== undefined}>
-            {layouts[events.layout ?? 'list']()}
+            {layouts[events.layout ?? 'matrix']()}
         </SpinnerWrapper>
     );
 };
