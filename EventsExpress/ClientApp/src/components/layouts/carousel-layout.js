@@ -1,19 +1,27 @@
 ﻿import React from 'react';
 import { Icon, IconButton } from '@material-ui/core';
 import './carousel-layout.css';
+import Carousel from 'react-material-ui-carousel';
 
-export const CarouselLayout = ({ children, onNext, onPrevious, hasPrevious = false, hasNext = false }) => {
+export const CarouselLayout = ({ children, onNext, onPrevious }) => {
     return (
         <section className="carousel-layout-section">
-            <IconButton className="navigation-button" onClick={onPrevious} disabled={!hasPrevious}>
-                <Icon className="fas fa-arrow-circle-left" />
-            </IconButton>
-            <div className="carousel-layout-cards">
-                {children}
-            </div>
-            <IconButton className="navigation-button" onClick={onNext} disabled={!hasNext}>
-                <Icon className="fas fa-arrow-circle-right" />
-            </IconButton>
+            <Carousel
+                fullHeightHover={false}
+                autoPlay={false}
+                animation="slide"
+                interval={1000}
+                indicators={false}
+                navButtonsAlwaysVisible={true}
+                next={onNext}
+                prev={onPrevious}
+                NextIcon={<Icon className="fas fa-arrow-circle-right" />}
+                PrevIcon={<Icon className="fas fa-arrow-circle-left" />}
+            >
+                <div className="carousel-layout-cards">
+                    {children}
+                </div>
+            </Carousel>
         </section>
     );
 };
