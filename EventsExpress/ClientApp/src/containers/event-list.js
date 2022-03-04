@@ -25,15 +25,11 @@ const EventListWrapper = ({ history, events, data, currentUser, getEvents }) => 
     });
 
     const nextPage = () => {
-        if (data.pageViewModel.hasNextPage) {
-            appendFilters({ page: data.pageViewModel.pageNumber + 1 });
-        }
+        appendFilters({ page: data.pageViewModel.pageNumber + 1 });
     };
 
     const previousPage = () => {
-        if (data.pageViewModel.hasPreviousPage) {
-            appendFilters({ page: data.pageViewModel.pageNumber - 1 });
-        }
+        appendFilters({ page: data.pageViewModel.pageNumber - 1 });
     };
 
     const layouts = {
@@ -63,6 +59,8 @@ const EventListWrapper = ({ history, events, data, currentUser, getEvents }) => 
             <CarouselLayout
                 onNext={nextPage}
                 onPrevious={previousPage}
+                hasNext={data.pageViewModel.hasNextPage}
+                hasPrevious={data.pageViewModel.hasPreviousPage}
             >
                 {data.items.map(event => (
                     <EventCarouselCard key={event.id} event={event} />

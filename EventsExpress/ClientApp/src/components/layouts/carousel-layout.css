@@ -1,9 +1,24 @@
 ﻿.carousel-layout-section {
     display: grid;
     place-items: center;
+    grid-template-columns: auto 1fr auto;
     gap: 5px;
     margin-top: 20px;
     margin-bottom: 20px;
+}
+
+.carousel-layout-section .CarouselItem {
+    grid-column: 2;
+}
+
+.navigation-button-wrappers:nth-of-type(2) {
+    grid-row: 1;
+    grid-column: 3;
+}
+
+.navigation-button-wrappers:nth-of-type(3) {
+    grid-row: 1;
+    grid-column: 1;
 }
 
 .carousel-layout-cards {
@@ -11,6 +26,12 @@
     grid-auto-flow: column;
     gap: 30px;
     padding: 5px;
+}
+
+.navigation-button-wrappers {
+    top: unset !important;
+    height: unset !important;
+    position: unset !important;
 }
 
 @media screen and (max-width: 1350px) {
@@ -23,6 +44,7 @@
 @media screen and (max-width: 950px) {
     .carousel-layout-section {
         grid-template-columns: 1fr;
+        grid-template-rows: auto 1fr auto;
     }
 
     .navigation-button {
@@ -31,5 +53,20 @@
 
     .carousel-layout-cards {
         grid-template-columns: 1fr;
+    }
+
+    .carousel-layout-section .CarouselItem {
+        grid-row: 2;
+        grid-column: unset;
+    }
+
+    .navigation-button-wrappers:nth-of-type(2) {
+        grid-row: 3;
+        grid-column: unset;
+    }
+
+    .navigation-button-wrappers:nth-of-type(3) {
+        grid-row: 1;
+        grid-column: unset;
     }
 }
