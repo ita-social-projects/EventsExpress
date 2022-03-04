@@ -29,6 +29,8 @@ namespace EventsExpress.Core.DTOs
 
         public bool? IsOnlyForAdults { get; set; }
 
+        public bool Bookmarked { get; set; }
+
         public LocationType? LocationType { get; set; }
 
         public List<string> Categories { get; set; }

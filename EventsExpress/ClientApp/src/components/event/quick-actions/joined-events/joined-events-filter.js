@@ -30,7 +30,7 @@ export const JoinedEventsFilter = () => {
 
     const renderFilterOptions = () => {
         return optionPairs.map(([key, value]) => (
-            <MenuItem onClick={() => handleItemClick(key)}>
+            <MenuItem key={key} onClick={() => handleItemClick(key)}>
                 {value}
             </MenuItem>
         ));

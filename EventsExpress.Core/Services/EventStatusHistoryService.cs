@@ -3,28 +3,22 @@ using System.Linq;
 using System.Threading.Tasks;
 using EventsExpress.Core.Exceptions;
 using EventsExpress.Core.IServices;
-using EventsExpress.Core.Notifications;
 using EventsExpress.Db.Bridge;
 using EventsExpress.Db.EF;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
-using MediatR;
-using Microsoft.AspNetCore.Http;
 
 namespace EventsExpress.Core.Services
 {
     public class EventStatusHistoryService : BaseService<EventStatusHistory>, IEventStatusHistoryService
     {
-        private readonly IMediator _mediator;
         private readonly ISecurityContext _securityContextService;
 
         public EventStatusHistoryService(
-            IMediator mediator,
             AppDbContext context,
             ISecurityContext securityContextService)
              : base(context)
         {
-            _mediator = mediator;
             _securityContextService = securityContextService;
         }
 
@@ -40,8 +34,6 @@ namespace EventsExpress.Core.Services
             Insert(record);
 
             await Context.SaveChangesAsync();
-
-            await _mediator.Publish(new EventStatusMessage(eventId, reason, eventStatus));
         }
 
         private EventStatusHistory CreateEventStatusRecord(Event e, string reason, EventStatus status)
