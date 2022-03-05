@@ -6,6 +6,7 @@ import PhotoService from '../../../../services/PhotoService';
 import { makeStyles } from '@material-ui/core/styles';
 import Moment from 'react-moment';
 import BookmarkButton from '../../bookmarks/bookmark-button';
+import ChangeVisitStatusButton  from './change-visit-status-button';
 
 const useStyles = makeStyles({
     root: {
@@ -31,7 +32,6 @@ const useStyles = makeStyles({
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        gap: '5px'
     }
 });
 
@@ -68,6 +68,7 @@ export const EventCarouselCard = ({ event }) => {
                         {title}
                     </Typography>
                     <div className={classes.headerButtons}>
+                        <ChangeVisitStatusButton  event={event} />
                         <BookmarkButton event={event} />
                     </div>
                 </div>
