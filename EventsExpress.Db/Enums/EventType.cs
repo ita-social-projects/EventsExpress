@@ -1,12 +1,14 @@
-﻿namespace EventsExpress.Db.Enums
+﻿using System;
+
+namespace EventsExpress.Db.Enums;
+
+[Flags]
+public enum EventType : byte
 {
-    public enum EventType
-    {
-        Online,
-        Offline,
-        Free,
-        Paid,
-        NearMe,
-        AnyDistance,
-    }
+    Online = 1,
+    Offline = 2,
+    Free = 4,
+    Paid = 8,
+    NearMe = 16,
+    AnyDistance = 32,
 }

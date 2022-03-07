@@ -48,7 +48,7 @@
                 ParentStatus = ParentStatus.Kids,
                 TheTypeOfLeisure = TheTypeOfLeisure.Passive,
                 RelationShipStatus = RelationShipStatus.Single,
-                AditionalInfoAboutUser = "AditionalInfoAboutUser",
+                AdditionalInfo = "AditionalInfoAboutUser",
             };
 
             user = new User
@@ -79,12 +79,12 @@
                    ParentStatus = e.ParentStatus,
                    TheTypeOfLeisure = e.TheTypeOfLeisure,
                    RelationShipStatus = e.RelationShipStatus,
-                   AditionalInfoAboutUser = e.AditionalInfoAboutUser,
+                   AdditionalInfo = e.AditionalInfoAboutUser,
                });
         }
 
         [Test]
-        public void CreateAsync_ExistingObject_DoesNotThrowExeption()
+        public void CreateAsync_ExistingObject_DoesNotThrowException()
         {
             var actual = service.CreateAsync(userMoreInfoDTO);
 

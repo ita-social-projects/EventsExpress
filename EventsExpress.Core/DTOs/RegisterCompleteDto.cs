@@ -5,16 +5,20 @@ namespace EventsExpress.Core.DTOs
 {
     public class RegisterCompleteDto
     {
-        public Guid AccountId { get; set; }
-
         public string Email { get; set; }
 
         public string Username { get; set; }
+
+        public string FirstName { get; set; }
+
+        public string LastName { get; set; }
 
         public DateTime Birthday { get; set; }
 
         public Gender Gender { get; set; }
 
         public string Phone { get; set; }
+
+        public Guid AccountId { get; set; }
     }
 }

@@ -1,9 +1,11 @@
-﻿namespace EventsExpress.Db.Enums
+﻿using System;
+
+namespace EventsExpress.Db.Enums;
+
+[Flags]
+public enum ReasonsForUsingTheSite : byte
 {
-    public enum ReasonsForUsingTheSite
-    {
-        DevelopASkill,
-        MeetPeopleLikeMe,
-        BeMoreActive,
-    }
+    DevelopASkill = 1,
+    MeetPeopleLikeMe = 2,
+    BeMoreActive = 4,
 }
