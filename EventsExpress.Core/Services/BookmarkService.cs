@@ -16,7 +16,6 @@ public class BookmarkService : IBookmarkService
 
     public BookmarkService(AppDbContext dbDbContext, ISecurityContext securityContext)
     {
-        // (_dbContext, _securityContext) = (dbDbContext, securityContext);
         (this.dbContext, this.securityContext) = (dbDbContext, securityContext);
     }
 
