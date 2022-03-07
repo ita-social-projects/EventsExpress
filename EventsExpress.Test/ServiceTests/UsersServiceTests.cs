@@ -29,6 +29,7 @@ namespace EventsExpress.Test.ServiceTests
         private Mock<ISecurityContext> mockSecurityContext;
         private UserService service;
         private Mock<IMediator> mockMediator;
+        private Mock<ILocationService> mockLocationService;
 
         private UserDto existingUserDTO;
         private UserDto secondUserDTO;
@@ -53,6 +54,7 @@ namespace EventsExpress.Test.ServiceTests
             mockPhotoService = new Mock<IPhotoService>();
             mockMediator = new Mock<IMediator>();
             mockSecurityContext = new Mock<ISecurityContext>();
+            mockLocationService = new Mock<ILocationService>();
             MockMapper.Setup(opts => opts.Map<IEnumerable<CategoryDto>>(It.IsAny<IEnumerable<UserCategory>>()))
                 .Returns((IEnumerable<UserCategory> u) => u.Select(x => new CategoryDto { Id = x.Category.Id, Name = x.Category.Name }));
             MockMapper.Setup(opts => opts.Map<IEnumerable<NotificationTypeDto>>(It.IsAny<IEnumerable<UserNotificationType>>()))
@@ -75,6 +77,7 @@ namespace EventsExpress.Test.ServiceTests
                 MockMapper.Object,
                 mockMediator.Object,
                 mockPhotoService.Object,
+                mockLocationService.Object,
                 mockSecurityContext.Object);
 
             existingUser = new User

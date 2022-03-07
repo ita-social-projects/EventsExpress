@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using EventsExpress.Core.DTOs;
+using EventsExpress.Db.Entities;
+using EventsExpress.ViewModels.Base;
 
 namespace EventsExpress.ViewModels
 {
@@ -16,6 +19,8 @@ namespace EventsExpress.ViewModels
         public DateTime Birthday { get; set; }
 
         public byte Gender { get; set; }
+
+        public LocationViewModel Location { get; set; }
 
         public IEnumerable<string> Roles { get; set; }
 

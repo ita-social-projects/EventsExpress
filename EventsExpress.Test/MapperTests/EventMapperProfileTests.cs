@@ -64,7 +64,7 @@ namespace EventsExpress.Test.MapperTests
                 DateTo = DateTime.Now,
                 IsPublic = true,
                 MaxParticipants = 8,
-                EventLocationId = idEventLocation,
+                LocationId = idEventLocation,
                 EventAudienceId = idEventAudience,
                 EventSchedule = new EventSchedule
                 {
@@ -77,7 +77,7 @@ namespace EventsExpress.Test.MapperTests
                     EventId = idEvent,
                     Event = new Event(),
                 },
-                EventLocation = new EventLocation
+                EventLocation = new Db.Entities.Location
                 {
                     Id = idEventLocation,
                     Type = LocationType.Map,
@@ -395,7 +395,7 @@ namespace EventsExpress.Test.MapperTests
                                                           ex.UnitOfMeasuringId == f.UnitOfMeasuring.Id)));
             Assert.That(resEven.Visitors, Is.Null);
             Assert.That(resEven.Categories, Is.Null);
-            Assert.That(resEven.EventLocationId, Is.Null);
+            Assert.That(resEven.LocationId, Is.Null);
             Assert.That(resEven.EventLocation, Is.Null);
             Assert.That(resEven.EventAudienceId, Is.Null);
             Assert.That(resEven.EventAudience, Is.Null);

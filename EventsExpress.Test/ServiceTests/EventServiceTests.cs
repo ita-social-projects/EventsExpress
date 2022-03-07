@@ -49,7 +49,7 @@ namespace EventsExpress.Test.ServiceTests
                 mockEventScheduleService.Object,
                 mockSecurityContext.Object);
 
-            Context.EventLocations.AddRange(EventTestData.Locations);
+            Context.Locations.AddRange(EventTestData.Locations);
             Context.Events.AddRange(EventTestData.Events);
             Context.Rates.AddRange(EventTestData.Rates);
             Context.Users.AddRange(EventTestData.Users);

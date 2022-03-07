@@ -8,10 +8,11 @@ using EventsExpress.Db.EF;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
 using NetTopologySuite.Geometries;
+using Location = EventsExpress.Db.Entities.Location;
 
 namespace EventsExpress.Core.Services
 {
-    public class LocationService : BaseService<EventLocation>, ILocationService
+    public class LocationService : BaseService<Db.Entities.Location>, ILocationService
     {
         public LocationService(AppDbContext context, IMapper mapper)
             : base(context, mapper)
@@ -32,7 +33,7 @@ namespace EventsExpress.Core.Services
 
         public async Task<Guid> Create(LocationDto locationDTO)
         {
-            var location = Mapper.Map<LocationDto, EventLocation>(locationDTO);
+            var location = Mapper.Map<LocationDto, Db.Entities.Location>(locationDTO);
 
             var result = Insert(location);
 
@@ -43,7 +44,7 @@ namespace EventsExpress.Core.Services
 
         public LocationDto LocationByPoint(Point point)
         {
-            var locationDTO = Mapper.Map<LocationDto>(Context.EventLocations
+            var locationDTO = Mapper.Map<LocationDto>(Context.Locations
                 .Where(e =>
                     e.Point.X == point.X &&
                     e.Point.Y == point.Y)
@@ -53,11 +54,23 @@ namespace EventsExpress.Core.Services
 
         public LocationDto LocationByURI(string uri)
         {
-            var locationDTO = Mapper.Map<LocationDto>(Context.EventLocations
+            var locationDTO = Mapper.Map<LocationDto>(Context.Locations
                 .Where(e =>
                    e.OnlineMeeting == uri)
                 .FirstOrDefault());
             return locationDTO;
+        }
+
+        public async Task<Guid> AddLocationToUser(LocationDto locationDTO)
+        {
+            if (locationDTO.Type == LocationType.Map)
+            {
+                return LocationByPoint(locationDTO.Point)?.Id ?? await Create(new LocationDto { Id = locationDTO.Id, Point = locationDTO.Point, OnlineMeeting = null, Type = locationDTO.Type });
+            }
+            else
+            {
+                return LocationByURI(locationDTO.OnlineMeeting)?.Id ?? await Create(new LocationDto { Id = locationDTO.Id, Point = null, OnlineMeeting = locationDTO.OnlineMeeting, Type = locationDTO.Type });
+            }
         }
     }
 }

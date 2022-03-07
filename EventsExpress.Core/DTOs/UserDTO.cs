@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
+using Point = NetTopologySuite.Geometries.Point;
 
 namespace EventsExpress.Core.DTOs
 {
@@ -28,6 +30,8 @@ namespace EventsExpress.Core.DTOs
         public Guid AccountId { get; set; }
 
         public Account Account { get; set; }
+
+        public LocationDto Location { get; set; }
 
         public IEnumerable<EventDto> Events { get; set; }
 

@@ -49,7 +49,7 @@ namespace EventsExpress.Mapping
                 .ForMember(dest => dest.Categories, opt => opt.Ignore())
                 .ForMember(dest => dest.Inventories, opts => opts.MapFrom(src =>
                     src.Inventories.Select(x => MapInventoryFromInventoryDto(x))))
-                .ForMember(dest => dest.EventLocationId, opts => opts.Ignore())
+                .ForMember(dest => dest.LocationId, opts => opts.Ignore())
                 .ForMember(dest => dest.EventLocation, opts => opts.Ignore())
                 .ForMember(dest => dest.EventAudienceId, opts => opts.Ignore())
                 .ForMember(dest => dest.EventAudience, opts => opts.Ignore())

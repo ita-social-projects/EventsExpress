@@ -8,7 +8,7 @@
 
     public class CorrectLocation : IEnumerable
     {
-        private readonly EventLocation modelMap = new EventLocation { Point = null, Type = LocationType.Online, OnlineMeeting = null };
+        private readonly Location modelMap = new Location { Point = null, Type = LocationType.Online, OnlineMeeting = null };
 
         public IEnumerator GetEnumerator()
         {

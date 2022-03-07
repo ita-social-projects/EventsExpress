@@ -16,6 +16,7 @@ using EventsExpress.Db.Enums;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using NetTopologySuite.Geometries;
+using Location = EventsExpress.Db.Entities.Location;
 
 namespace EventsExpress.Core.Services
 {
@@ -176,7 +177,7 @@ namespace EventsExpress.Core.Services
             var locationId = await _locationService.AddLocationToEvent(locationDto);
 
             var ev = Mapper.Map<EventDto, Event>(eventDto);
-            ev.EventLocationId = locationId;
+            ev.LocationId = locationId;
 
             ev.StatusHistory = new List<EventStatusHistory>
             {
@@ -254,7 +255,7 @@ namespace EventsExpress.Core.Services
             if (eventDto.Location != null)
             {
                 var locationId = await _locationService.AddLocationToEvent(eventDto.Location);
-                ev.EventLocationId = locationId;
+                ev.LocationId = locationId;
             }
 
             if (eventDto.IsReccurent)
@@ -366,7 +367,6 @@ namespace EventsExpress.Core.Services
                         .ThenInclude(u => u.Relationships)
                 .Include(e => e.StatusHistory)
                 .AsQueryable();
-
             var ev = events.FirstOrDefault(x => x.Id == eventId);
             return Mapper.Map<EventDto>(ev);
         }

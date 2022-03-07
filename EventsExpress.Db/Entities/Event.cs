@@ -26,14 +26,14 @@ namespace EventsExpress.Db.Entities
         public int? MaxParticipants { get; set; }
 
         [Track]
-        public Guid? EventLocationId { get; set; }
+        public Guid? LocationId { get; set; }
 
         [Track]
         public Guid? EventAudienceId { get; set; }
 
         public virtual EventSchedule EventSchedule { get; set; }
 
-        public virtual EventLocation EventLocation { get; set; }
+        public virtual Location EventLocation { get; set; }
 
         public virtual EventAudience EventAudience { get; set; }
 

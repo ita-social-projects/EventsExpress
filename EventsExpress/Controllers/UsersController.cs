@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+
 using System.Threading.Tasks;
 using AutoMapper;
 using EventsExpress.Core.DTOs;
@@ -13,6 +14,8 @@ using EventsExpress.ViewModels;
 using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Serilog;
+using Point = NetTopologySuite.Geometries.Point;
 
 namespace EventsExpress.Controllers
 {
@@ -342,6 +345,38 @@ namespace EventsExpress.Controllers
             {
                 return null;
             }
+        }
+
+        /// <summary>
+        /// This method edit Location users.
+        /// </summary>
+        /// <param name="location">Location user.</param>
+        /// <response code = "200">Edit is successful.</response>
+        /// <response code = "400">Edit is not successful.</response>
+        /// <returns>The method returns edited location for user.</returns>
+        [HttpPost("[action]")]
+        public async Task<IActionResult> EditLocation(LocationDto location)
+        {
+            await _userService.EditLocation(location);
+            return Ok(location);
+        }
+
+        /// <summary>
+        /// This method get Location users.
+        /// </summary>
+        /// <response code = "200">Get is succsesful.</response>
+        /// <response code = "400">Get is not succsesful.</response>
+        /// <returns>The method returns User Location.</returns>
+        [HttpGet("[action]")]
+        public IActionResult GetLocation()
+        {
+            var user = GetCurrentUserOrNull();
+            if (user.Location == null)
+            {
+                return Ok("PUSTO");
+            }
+
+            return Ok(user.Location);
         }
     }
 }

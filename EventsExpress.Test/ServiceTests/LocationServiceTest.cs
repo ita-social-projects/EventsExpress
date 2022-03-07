@@ -14,12 +14,12 @@ namespace EventsExpress.Test.ServiceTests
     internal class LocationServiceTest : TestInitializer
     {
         private LocationService service;
-        private EventLocation locationMap;
-        private EventLocation locationOnline;
+        private Db.Entities.Location locationMap;
+        private Db.Entities.Location locationOnline;
 
-        private EventLocation FromDtoToEf(LocationDto locationDto)
+        private Db.Entities.Location FromDtoToEf(LocationDto locationDto)
         {
-            return new EventLocation
+            return new Db.Entities.Location
             {
                 Id = locationDto.Id,
                 Point = locationDto.Point,
@@ -36,13 +36,13 @@ namespace EventsExpress.Test.ServiceTests
             locationMap = FromDtoToEf(CreatingExistingLocation.LocationDTOMap);
             locationOnline = FromDtoToEf(CreatingExistingLocation.LocationDTOOnline);
 
-            Context.EventLocations.Add(locationMap);
+            Context.Locations.Add(locationMap);
             Context.SaveChanges();
-            Context.EventLocations.Add(locationOnline);
+            Context.Locations.Add(locationOnline);
             Context.SaveChanges();
 
-            MockMapper.Setup(u => u.Map<LocationDto>(It.IsAny<EventLocation>()))
-                .Returns((EventLocation el) => el == null ?
+            MockMapper.Setup(u => u.Map<LocationDto>(It.IsAny<Db.Entities.Location>()))
+                .Returns((Db.Entities.Location el) => el == null ?
                 null :
                 new LocationDto
                 {
@@ -52,10 +52,10 @@ namespace EventsExpress.Test.ServiceTests
                     Type = el.Type,
                 });
 
-            MockMapper.Setup(u => u.Map<LocationDto, EventLocation>(It.IsAny<LocationDto>()))
+            MockMapper.Setup(u => u.Map<LocationDto, Db.Entities.Location>(It.IsAny<LocationDto>()))
                 .Returns((LocationDto el) => el == null ?
                 null :
-                new EventLocation
+                new Db.Entities.Location
                 {
                     Id = el.Id,
                     Point = el.Point,
