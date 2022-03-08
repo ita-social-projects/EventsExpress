@@ -44,8 +44,8 @@ const ConfirmationPage = ({ formValues, categories, categoryGroups }) => {
                             </ListItem>
                             <ListItem>
                                 <ListItemText
-                                    primary="Country"
-                                    secondary={formValues.country}
+                                    primary="Phone"
+                                    secondary={formValues.phone}
                                 />
                             </ListItem>
                             <ListItem>
@@ -65,12 +65,6 @@ const ConfirmationPage = ({ formValues, categories, categoryGroups }) => {
                                 <ListItemText
                                     primary="Last Name"
                                     secondary={formValues.lastName}
-                                />
-                            </ListItem>
-                            <ListItem>
-                                <ListItemText
-                                    primary="City"
-                                    secondary={formValues.city}
                                 />
                             </ListItem>
                             <ListItem>

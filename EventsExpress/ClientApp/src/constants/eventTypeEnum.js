@@ -1,10 +1,10 @@
 ﻿const eventTypeEnum = {
-    Online: 0,
-    Offline: 1,
-    Free: 2,
-    Paid: 3,
-    NearMe: 4,
-    AnyDistance: 5,
-}
+    Online: 1,
+    Offline: 2,
+    Free: 4,
+    Paid: 8,
+    NearMe: 16,
+    AnyDistance: 32,
+};
 
 export default eventTypeEnum;

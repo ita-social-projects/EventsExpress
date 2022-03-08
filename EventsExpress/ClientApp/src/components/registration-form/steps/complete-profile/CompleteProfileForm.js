@@ -9,7 +9,8 @@ import {
     renderDatePicker,
     renderTextField,
     renderSelectField,
-    parseEuDate
+    parseEuDate,
+    renderPhoneInput
 } from '../../../helpers/form-helpers';
 
 const CompleteProfileForm = () => {
@@ -42,39 +43,7 @@ const CompleteProfileForm = () => {
                         label="Last Name"
                     />
                 </Grid>
-                <Grid item sm={2} />
-                <Grid item sm={4}>
-                    <Field
-                        name="birthDate"
-                        label="Birth Date"
-                        minValue={moment().subtract(115, 'years')}
-                        maxValue={moment().subtract(14, 'years')}
-                        component={renderDatePicker}
-                        parse={parseEuDate}
-                    />
-                    {/* TODO: look how to reuse component from user profile */}
-                </Grid>
                 <Grid item xs={3}>
-                    <Field
-                        name="country"
-                        variant="outlined"
-                        component={renderTextField}
-                        type="input"
-                        label="Country"
-                    />
-                </Grid>
-                <Grid item xs={3}>
-                    <Field
-                        name="city"
-                        variant="outlined"
-                        component={renderTextField}
-                        type="input"
-                        label="City"
-                    />
-                </Grid>
-                {/* TODO: replace country and city fields with leaflet map */}
-                <Grid item sm={2}></Grid>
-                <Grid item sm={4}>
                     <Field
                         minWidth={140}
                         name="gender"
@@ -86,6 +55,28 @@ const CompleteProfileForm = () => {
                         ))}
                     </Field>
                 </Grid>
+                <Grid item sm={3} />
+                <Grid item sm={4}>
+                    <Field
+                        name="birthDate"
+                        label="Birth Date"
+                        minValue={moment().subtract(115, 'years')}
+                        maxValue={moment().subtract(14, 'years')}
+                        component={renderDatePicker}
+                        parse={parseEuDate}
+                    />
+                    {/* TODO: look how to reuse component from user profile */}
+                </Grid>
+                <Grid item sm={4}>
+                    <Field
+                        name="phone"
+                        variant="outlined"
+                        component={renderPhoneInput}
+                        label="Phone"
+                    />
+                </Grid>
+                <Grid item xs={4} />
+                {/* TODO: add leaflet map to choose location */}
             </Grid>
             <div className="stepper-submit">
                 <StepperNavigation
