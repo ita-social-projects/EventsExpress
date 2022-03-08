@@ -23,7 +23,7 @@ namespace EventsExpress.Mapping
                 .ForMember(dest => dest.Rating, opts => opts.MapFrom<UserToRatingResolver>())
                 .ForMember(dest => dest.Attitude, opts => opts.MapFrom<UserToAttitudeResolver>())
                 .ForMember(dest => dest.CanChangePassword, opts => opts.MapFrom<UserChangePasswordResolver>())
-                .ForMember(dest => dest.Location, opts => opts.MapFrom(srs => srs.Location))
+                .ForMember(dest => dest.Location, opts => opts.MapFrom(srs => MapLocationUser(srs)))
                 .ForMember(dest => dest.MyRates, opts => opts.Ignore())
                 .ForMember(dest => dest.AccountId, opts => opts.MapFrom(src => src.Account.Id))
                 .ForMember(
@@ -37,7 +37,8 @@ namespace EventsExpress.Mapping
                 .ForMember(dest => dest.Gender, opts => opts.MapFrom(src => src.Gender))
                 .ForMember(dest => dest.Email, opts => opts.MapFrom(src => src.Email))
                 .ForMember(dest => dest.Categories, opts => opts.MapFrom(src => src.Categories))
-                .ForMember(dest => dest.Location, opts => opts.MapFrom(src => src.Location))
+                .ForMember(dest => dest.LocationId, opts => opts.Ignore())
+                .ForMember(dest => dest.Location, opts => opts.Ignore())
                 .ForMember(dest => dest.NotificationTypes, opts => opts.MapFrom(src => src.NotificationTypes))
                 .ForMember(dest => dest.Phone, opts => opts.MapFrom(src => src.Phone))
                 .ForAllOtherMembers(x => x.Ignore());
@@ -128,7 +129,7 @@ namespace EventsExpress.Mapping
                 .ForMember(dest => dest.Attitude, opts => opts.MapFrom<ProfileToAttitudeResolver>());
         }
 
-        public static LocationViewModel MapLocationUser(UserDto userDto)
+        private static LocationViewModel MapLocationUser(UserDto userDto)
         {
             return userDto.Location switch
             {
@@ -149,6 +150,22 @@ namespace EventsExpress.Mapping
 
                 _ => null,
             };
+        }
+
+        private static LocationDto MapLocationUser(User u)
+        {
+            if (u.Location != null)
+            {
+                return new LocationDto
+                {
+                    Id = u.Id,
+                    OnlineMeeting = u.Location.OnlineMeeting,
+                    Point = u.Location.Point,
+                    Type = u.Location.Type,
+                };
+            }
+
+            return null;
         }
     }
 }
