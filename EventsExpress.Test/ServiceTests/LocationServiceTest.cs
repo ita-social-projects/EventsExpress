@@ -150,5 +150,21 @@ namespace EventsExpress.Test.ServiceTests
             Assert.DoesNotThrowAsync(
                 async () => await service.AddLocationToEvent(locationDto));
         }
+
+        [TestCaseSource(typeof(CreatingExistingLocation))]
+        [Category("Add Location To User")]
+        public void AddLocationToUser_ExistingLocation_ReturnExistingLocationId(LocationDto locationDto)
+        {
+            var actual = service.AddLocationToUser(locationDto);
+            Assert.That(Is.Equals(locationDto.Id, actual.Result), Is.True);
+        }
+
+        [TestCaseSource(typeof(CreatingNotExistingLocation))]
+        [Category("Add Location To User")]
+        public void AddLocationToUser_NotExistingLocation_CreateNewLocation(LocationDto locationDto)
+        {
+            Assert.DoesNotThrowAsync(
+                async () => await service.AddLocationToUser(locationDto));
+        }
     }
 }

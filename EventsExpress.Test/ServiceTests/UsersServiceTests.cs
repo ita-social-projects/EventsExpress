@@ -411,6 +411,13 @@ namespace EventsExpress.Test.ServiceTests
         }
 
         [Test]
+        public void EditLocation_DoesNotThrow()
+        {
+            mockSecurityContext.Setup(s => s.GetCurrentUserId()).Returns(existingUserDTO.Id);
+            Assert.DoesNotThrowAsync(async () => await service.EditLocation(It.IsAny<LocationDto>()));
+        }
+
+        [Test]
         public void EditGender_DoesNotThrow()
         {
             mockSecurityContext.Setup(s => s.GetCurrentUserId()).Returns(existingUserDTO.Id);

@@ -355,28 +355,10 @@ namespace EventsExpress.Controllers
         /// <response code = "400">Edit is not successful.</response>
         /// <returns>The method returns edited location for user.</returns>
         [HttpPost("[action]")]
-        public async Task<IActionResult> EditLocation(LocationDto location)
+        public async Task<IActionResult> EditLocation(EditLocationViewModel location)
         {
-            await _userService.EditLocation(location);
+            await _userService.EditLocation(location.Location);
             return Ok(location);
-        }
-
-        /// <summary>
-        /// This method get Location users.
-        /// </summary>
-        /// <response code = "200">Get is succsesful.</response>
-        /// <response code = "400">Get is not succsesful.</response>
-        /// <returns>The method returns User Location.</returns>
-        [HttpGet("[action]")]
-        public IActionResult GetLocation()
-        {
-            var user = GetCurrentUserOrNull();
-            if (user.Location == null)
-            {
-                return Ok("PUSTO");
-            }
-
-            return Ok(user.Location);
         }
     }
 }
