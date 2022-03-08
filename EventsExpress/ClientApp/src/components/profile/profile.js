@@ -18,10 +18,14 @@ import ChangeAvatarWrapper from '../../containers/editProfileContainers/change-a
 import './profile.css';
 import SelectNotificationTypesWrapper from '../../containers/notificationTypes/SelectNotificationTypes';
 import LinkedAuthsWrapper from '../../containers/linked-auths-wrapper';
+import { InterestsSection } from './profile-sections/interests-section';
+import { MoreInfoSection } from './profile-sections/more-info-section';
+import { GeneralInfoSection } from './profile-sections/general-info-section';
 
 const useStyles = makeStyles(theme => ({
     root: {
         width: '100%',
+        padding: "0px 50px 0px 30px",
     },
     heading: {
         fontSize: theme.typography.pxToRem(15),
@@ -32,6 +36,41 @@ const useStyles = makeStyles(theme => ({
         fontSize: theme.typography.pxToRem(15),
         color: theme.palette.text.secondary,
     },
+    profileHeader: {
+        width: "fit-content",
+        margin: "10px 10px 10px 0px",
+        padding: "0px 10px 0px 10px",
+        border: "1px solid black",
+    },
+    profileContent: {
+        display: "grid",
+        gridTemplateColumns: "repeat(3, 1fr)",
+        gridAutoRows: "350px",
+        //gridTemplateRows: "repeat(2, 1fr)",
+        gridRowGap: "30px",
+        gridColumnGap: "40px",
+    },
+    interestsBlock: {
+        backgroundColor: "gray",
+        gridColumnStart: "1",
+        gridColumnEnd: "3",
+        gridRowStart: "1",
+        gridRowEnd: "2",
+    },
+    moreInfoBlock: {
+        backgroundColor: "gray",
+        gridColumnStart: "1",
+        gridColumnEnd: "3",
+        gridRowStart: "2",
+        gridRowEnd: "3",
+    },
+    generalInfoBlock: {
+        gridColumnStart: "3",
+        gridColumnEnd: "4",
+        gridRowStart: "1",
+        gridRowEnd: "3",
+        width: "270px",
+    },
 }));
 
 const Profile = (props) => {
@@ -41,10 +80,24 @@ const Profile = (props) => {
     const handleChange = panel => (event, isExpanded) => {
         setExpanded(isExpanded ? panel : false);
     };
-
+    console.log(props);
     return (
         <div className={classes.root}>
-            <ExpansionPanel expanded={expanded === 'panel0'} onChange={handleChange('panel0')}>
+            <div className={classes.profileHeader}>
+                <h1>Profile</h1>
+            </div>
+            <div className={classes.profileContent}>
+                <div className={classes.interestsBlock}>
+                    <InterestsSection />
+                </div>
+                <div className={classes.moreInfoBlock}>
+                    <MoreInfoSection />
+                </div>
+                <div className={classes.generalInfoBlock}>
+                    <GeneralInfoSection />
+                </div>
+            </div>
+            {/* <ExpansionPanel expanded={expanded === 'panel0'} onChange={handleChange('panel0')}>
                 <ExpansionPanelSummary
                     expandIcon={<ExpandMoreIcon />}
                     aria-controls="panel1bh-content"
@@ -166,7 +219,7 @@ const Profile = (props) => {
                     </Typography>
                 </ExpansionPanelDetails>
             </ExpansionPanel>
-            {props.canChangePassword && <ChangePasswordContainer /> }
+            {props.canChangePassword && <ChangePasswordContainer /> } */}
         </div>
     );
 }
