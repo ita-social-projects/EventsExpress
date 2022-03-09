@@ -18,6 +18,7 @@ namespace EventsExpress.Db.Configurations
                new NotificationTemplate { Id = NotificationProfile.UnblockedUser, Title = "UnblockedUser", Subject = "Your account was Unblocked", Message = "Dear {{UserEmail}}, congratulations, your account was Unblocked, so you can come back and enjoy spending your time in EventsExpress" },
                new NotificationTemplate { Id = NotificationProfile.OwnEventChanged, Title = "OwnEventChanged", Subject = "Your event was changed", Message = "Dear {{UserEmail}}, your <a href='{{EventLink}}'>event</a> has been changed." },
                new NotificationTemplate { Id = NotificationProfile.JoinedEventChanged, Title = "JoinedEventChanged", Subject = "Joined event was changed", Message = "Dear {{UserEmail}}, your joined <a href='{{EventLink}}'>event</a> has been changed." },
+               new NotificationTemplate { Id = NotificationProfile.RoleChanged, Title = "RolesChanged", Subject = "Your roles were changed", Message = "Dear {{UserEmail}}, your roles were changed. Your current roles are: {{FormattedRoles}}." },
             });
             builder.HasKey(c => c.Id);
             builder.Property(c => c.Id)
