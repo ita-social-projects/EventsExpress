@@ -7,7 +7,7 @@ import { get_events } from '../actions/event/event-list-action';
 import { useFilterActions } from '../components/event/filter/filter-hooks';
 import { CarouselLayout } from '../components/layouts/carousel-layout';
 import { ListLayout } from '../components/layouts/list-layout';
-import { EventCarouselCard } from '../components/event/layouts/carousel/event-carousel-card';
+import EventCarouselCard from '../components/event/layouts/carousel/event-carousel-card';
 import { EventListCard } from '../components/event/layouts/list/event-list-card';
 
 const EventListWrapper = ({ history, events, data, currentUser, getEvents }) => {

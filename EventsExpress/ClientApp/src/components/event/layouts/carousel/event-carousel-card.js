@@ -6,7 +6,11 @@ import PhotoService from '../../../../services/PhotoService';
 import { makeStyles } from '@material-ui/core/styles';
 import Moment from 'react-moment';
 import BookmarkButton from '../../bookmarks/bookmark-button';
-import ChangeVisitStatusButton  from './change-visit-status-button';
+import { useFilterActions } from '../../filter/filter-hooks';
+import { get_events } from '../../../../actions/event/event-list-action';
+import { connect } from 'react-redux';
+import JoinButton from './join-button';
+import LeaveButton from './leave-button';
 
 const useStyles = makeStyles({
     root: {
@@ -35,10 +39,16 @@ const useStyles = makeStyles({
     }
 });
 
-export const EventCarouselCard = ({ event }) => {
+const EventCarouselCard = ({ event, ...props }) => {
     const classes = useStyles();
     const { id, title, dateFrom, description } = event;
     const [image, setImage] = useState(eventDefaultImage);
+    const { getQueryWithRequestFilters } = useFilterActions();
+
+    const refreshEvents = () => {
+        const filterQuery = getQueryWithRequestFilters();
+        props.getEvents(filterQuery);
+    };
 
     useEffect(() => {
         new PhotoService().getPreviewEventPhoto(id).then(eventPreviewImage => {
@@ -68,7 +78,8 @@ export const EventCarouselCard = ({ event }) => {
                         {title}
                     </Typography>
                     <div className={classes.headerButtons}>
-                        <ChangeVisitStatusButton  event={event} />
+                        <JoinButton event={event} onJoin={refreshEvents} />
+                        <LeaveButton event={event} onLeave={refreshEvents} />
                         <BookmarkButton event={event} />
                     </div>
                 </div>
@@ -90,3 +101,9 @@ export const EventCarouselCard = ({ event }) => {
         </Card>
     );
 };
+
+const mapDispatchToProps = dispatch => ({
+    getEvents: query => dispatch(get_events(query)),
+});
+
+export default connect(null, mapDispatchToProps)(EventCarouselCard);
