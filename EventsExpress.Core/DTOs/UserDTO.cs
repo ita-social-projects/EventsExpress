@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
-using Point = NetTopologySuite.Geometries.Point;
 
 namespace EventsExpress.Core.DTOs
 {

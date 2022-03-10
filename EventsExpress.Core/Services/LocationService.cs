@@ -5,10 +5,9 @@ using AutoMapper;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.IServices;
 using EventsExpress.Db.EF;
-using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
 using NetTopologySuite.Geometries;
-using Location = EventsExpress.Db.Entities.Location;
+
 
 namespace EventsExpress.Core.Services
 {
@@ -69,7 +68,7 @@ namespace EventsExpress.Core.Services
             }
             else
             {
-                return LocationByURI(locationDto.OnlineMeeting)?.Id ?? await Create(new LocationDto { Id = locationDto.Id, Point = null, OnlineMeeting = locationDto.OnlineMeeting, Type = locationDto.Type });
+                throw new("Location error");
             }
         }
     }

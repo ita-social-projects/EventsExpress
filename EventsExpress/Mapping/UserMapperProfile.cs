@@ -140,6 +140,7 @@ namespace EventsExpress.Mapping
                     OnlineMeeting = null,
                     Type = userDto.Location.Type,
                 },
+                //ask this!!!
                 { Type: LocationType.Online } => new LocationViewModel
                 {
                     Latitude = null,

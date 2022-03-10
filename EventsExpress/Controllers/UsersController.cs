@@ -8,14 +8,10 @@ using EventsExpress.Core.Exceptions;
 using EventsExpress.Core.IServices;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
-using EventsExpress.ExtensionMethods;
 using EventsExpress.Policies;
 using EventsExpress.ViewModels;
-using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Serilog;
-using Point = NetTopologySuite.Geometries.Point;
 
 namespace EventsExpress.Controllers
 {

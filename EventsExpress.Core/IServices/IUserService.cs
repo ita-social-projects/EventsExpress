@@ -5,9 +5,6 @@ using EventsExpress.Core.DTOs;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
 using Microsoft.AspNetCore.Http;
-using NetTopologySuite.Geometries;
-using Location = EventsExpress.Db.Entities.Location;
-using Point = NetTopologySuite.Geometries.Point;
 using Role = EventsExpress.Db.Enums.Role;
 
 namespace EventsExpress.Core.IServices
