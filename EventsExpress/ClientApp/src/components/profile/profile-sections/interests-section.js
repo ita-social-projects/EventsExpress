@@ -30,7 +30,7 @@ export const InterestsSection = () => {
     return (
         <div className={classes.sectionContent}>
             <div className={classes.blockStyle}>
-                <h1>First block</h1>
+                <h1>Interest</h1>
             </div>
             <div className={classes.blockStyle}>
                 <h1>Second block</h1>

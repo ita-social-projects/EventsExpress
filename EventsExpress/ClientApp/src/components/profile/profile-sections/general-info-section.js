@@ -1,12 +1,13 @@
 import { makeStyles } from "@material-ui/core";
 import React from "react";
 import { Button } from '@material-ui/core';
+import { InfoField } from "./info-field";
 
 const useStyles = makeStyles(theme => ({
     sectionContent: {
         position: "relative",
         display: "grid",
-        gridTemplateRows: "1.5fr 2fr",
+        gridTemplateRows: "1.8fr 2fr",
         height: "100%",
         width: "100%",
         gridGap: "20px",
@@ -44,16 +45,25 @@ export const GeneralInfoSection = () => {
             </div>
             <div className={classes.secondBlockContent}>
                 <div className={classes.blockStyle}>
-                    <h1>Second block</h1>
+                    <h3>General information</h3>
                 </div>
                 <div className={classes.blockStyle}>
-                    <h1>Third block</h1>
+                    <InfoField fieldName={"Name"} info={"test"} />
                 </div>
                 <div className={classes.blockStyle}>
-                    <h1>Fourth block</h1>
+                    <InfoField fieldName={"Surname"} info={"test"} />
                 </div>
                 <div className={classes.blockStyle}>
-                    <h1>Fiveth block</h1>
+                    <InfoField fieldName={"Date of birth"} info={"test"} />
+                </div>
+                <div className={classes.blockStyle}>
+                    <InfoField fieldName={"Gender"} info={"test"} />
+                </div>
+                <div className={classes.blockStyle}>
+                    <InfoField fieldName={"Location"} info={"test"} />
+                </div>
+                <div className={classes.blockStyle}>
+                    <InfoField fieldName={"Email"} info={"test"} />
                 </div>
             </div>
         </div>

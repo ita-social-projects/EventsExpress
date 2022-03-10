@@ -69,7 +69,7 @@ const useStyles = makeStyles(theme => ({
         gridColumnEnd: "4",
         gridRowStart: "1",
         gridRowEnd: "3",
-        width: "270px",
+        width: "285px",
     },
 }));
 

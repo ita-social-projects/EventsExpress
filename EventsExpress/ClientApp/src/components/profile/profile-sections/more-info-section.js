@@ -1,6 +1,7 @@
 import { makeStyles } from "@material-ui/core";
 import React from "react";
 import { Button } from '@material-ui/core';
+import { InfoField } from "./info-field";
 
 const useStyles = makeStyles(theme => ({
     sectionContent: {
@@ -34,20 +35,26 @@ export const MoreInfoSection = () => {
     return (
         <div className={classes.sectionContent}>
             <div className={classes.blockStyle}>
-                <h1>First block</h1>
+                <h1>More information</h1>
             </div>
             <div className={classes.secondBlockContent}>
                 <div className={classes.blockStyle}>
-                    <h1>Second block</h1>
+                    <InfoField fieldName={"Relationship status"} info={"test"} />
                 </div>
                 <div className={classes.blockStyle}>
-                    <h1>Third block</h1>
+                    <InfoField fieldName={"Parents status"} info={"test"} />
                 </div>
                 <div className={classes.blockStyle}>
-                    <h1>Fourth block</h1>
+                    <InfoField fieldName={"Type of leisure"} info={"test"} />
                 </div>
                 <div className={classes.blockStyle}>
-                    <h1>Fiveth block</h1>
+                    <InfoField fieldName={"Reasons for using the site"} info={"test"} />
+                </div>
+                <div className={classes.blockStyle}>
+                    <InfoField fieldName={"Type of event"} info={"test"} />
+                </div>
+                <div className={classes.blockStyle}>
+                    <InfoField fieldName={"Tell us more about yourself"} info={"test"} />
                 </div>
             </div>
             <Button className={classes.editButton}>Edit</Button>
