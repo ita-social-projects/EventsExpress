@@ -1,5 +1,6 @@
 ﻿using System;
 using EventsExpress.Core.DTOs;
+using EventsExpress.Core.Exceptions;
 using EventsExpress.Core.Services;
 using EventsExpress.Db.Entities;
 using EventsExpress.Test.ServiceTests.TestClasses.Location;
@@ -151,7 +152,7 @@ namespace EventsExpress.Test.ServiceTests
                 async () => await service.AddLocationToEvent(locationDto));
         }
 
-        [TestCaseSource(typeof(CreatingExistingLocation))]
+        [TestCaseSource(typeof(CreatingExistingUserLocation))]
         [Category("Add Location To User")]
         public void AddLocationToUser_ExistingLocation_ReturnExistingLocationId(LocationDto locationDto)
         {
@@ -159,11 +160,11 @@ namespace EventsExpress.Test.ServiceTests
             Assert.That(Is.Equals(locationDto.Id, actual.Result), Is.True);
         }
 
-        [TestCaseSource(typeof(CreatingNotExistingLocation))]
+        [TestCaseSource(typeof(CreatingNotExistingUserLocation))]
         [Category("Add Location To User")]
         public void AddLocationToUser_NotExistingLocation_CreateNewLocation(LocationDto locationDto)
         {
-            Assert.DoesNotThrowAsync(
+            Assert.ThrowsAsync<EventsExpressException>(
                 async () => await service.AddLocationToUser(locationDto));
         }
     }

@@ -17,7 +17,6 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using NetTopologySuite.Geometries;
 
-
 namespace EventsExpress.Core.Services
 {
     public class EventService : BaseService<Event>, IEventService

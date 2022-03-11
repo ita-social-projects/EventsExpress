@@ -3,11 +3,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using EventsExpress.Core.DTOs;
+using EventsExpress.Core.Exceptions;
 using EventsExpress.Core.IServices;
 using EventsExpress.Db.EF;
 using EventsExpress.Db.Enums;
 using NetTopologySuite.Geometries;
-
 
 namespace EventsExpress.Core.Services
 {
@@ -68,7 +68,7 @@ namespace EventsExpress.Core.Services
             }
             else
             {
-                throw new("Location error");
+                throw new EventsExpressException("Location error");
             }
         }
     }

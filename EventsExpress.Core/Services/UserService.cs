@@ -14,8 +14,6 @@ using EventsExpress.Db.Enums;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
-using Serilog;
-using Point = NetTopologySuite.Geometries.Point;
 using Role = EventsExpress.Db.Enums.Role;
 
 namespace EventsExpress.Core.Services
@@ -255,7 +253,7 @@ namespace EventsExpress.Core.Services
             }
             else
             {
-                location.Id = (Guid)user.LocationId;
+                location.Id = user.LocationId.Value;
             }
 
             user.Location = Mapper.Map<LocationDto, Location>(location);

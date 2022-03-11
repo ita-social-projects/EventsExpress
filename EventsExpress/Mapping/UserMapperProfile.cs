@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Linq;
-using System.Security;
 using AutoMapper;
 using EventsExpress.Core.DTOs;
+using EventsExpress.Core.Exceptions;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
 using EventsExpress.ValueResolvers;
 using EventsExpress.ViewModels;
 using EventsExpress.ViewModels.Base;
-using NetTopologySuite.Index.Strtree;
 
 namespace EventsExpress.Mapping
 {
@@ -140,15 +139,7 @@ namespace EventsExpress.Mapping
                     OnlineMeeting = null,
                     Type = userDto.Location.Type,
                 },
-                //ask this!!!
-                { Type: LocationType.Online } => new LocationViewModel
-                {
-                    Latitude = null,
-                    Longitude = null,
-                    OnlineMeeting = userDto.Location.OnlineMeeting,
-                    Type = userDto.Location.Type,
-                },
-
+                { Type: LocationType.Online } => throw new EventsExpressException("Location error"),
                 _ => null,
             };
         }
