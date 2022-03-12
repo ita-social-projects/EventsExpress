@@ -27,13 +27,19 @@ export default class EventLeaveModal extends Component {
     render() {
         return (
             <div>
-                <button onClick={this.handleClickOpen}
-                    type="button"
-                    className="btn btn-danger join-leave"
-                    variant="contained"
-                >
-                    Leave
-                </button>
+                {this.props.openButton !== undefined && this.props.openButton !== null
+                    ? this.props.openButton(this.handleClickOpen)
+                    : (
+                        <button
+                            onClick={this.handleClickOpen}
+                            type="button"
+                            className="btn btn-danger join-leave"
+                            variant="contained"
+                        >
+                            Leave
+                        </button>
+                    )
+                }
                 <Dialog
                     open={this.state.open}
                     TransitionComponent={Transition}

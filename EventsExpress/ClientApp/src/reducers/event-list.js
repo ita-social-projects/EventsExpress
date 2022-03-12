@@ -5,6 +5,7 @@ import {
     RESET_EVENTS,
     UPDATE_EVENTS_FILTERS
 } from '../actions/event/event-list-action';
+import { SET_EVENTS_LAYOUT } from '../actions/events-layout';
 
 export const reducer = (state = initialState.events, action) => {
     switch (action.type) {
@@ -30,6 +31,11 @@ export const reducer = (state = initialState.events, action) => {
             return {
                 ...state,
                 filter: action.payload,
+            };
+        case SET_EVENTS_LAYOUT:
+            return {
+                ...state,
+                layout: action.payload,
             };
         default:
             return state;
