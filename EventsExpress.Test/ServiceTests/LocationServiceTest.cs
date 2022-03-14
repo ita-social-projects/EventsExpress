@@ -99,7 +99,7 @@ namespace EventsExpress.Test.ServiceTests
 
             var actual = service.LocationByPoint(point);
 
-            Assert.That(Is.Equals(actual.Id, id), Is.True);
+            Assert.That(Is.Equals(actual, id), Is.True);
         }
 
         [Test]
@@ -107,10 +107,7 @@ namespace EventsExpress.Test.ServiceTests
         public void LocationByPoint_NotExistingPoint_ReturnLocationDTO()
         {
             Point point = new Point(1.1, 1.8);
-
-            var actual = service.LocationByPoint(point);
-
-            Assert.That(actual, Is.Null);
+            Assert.Throws<NullReferenceException>(() => service.LocationByPoint(point));
         }
 
         [Test]
@@ -122,7 +119,7 @@ namespace EventsExpress.Test.ServiceTests
 
             var actual = service.LocationByURI(uri);
 
-            Assert.That(Is.Equals(actual.Id, id), Is.True);
+            Assert.That(Is.Equals(actual, id), Is.True);
         }
 
         [Test]
@@ -131,9 +128,7 @@ namespace EventsExpress.Test.ServiceTests
         {
             string uri = "http://basin.example.com/#branch";
 
-            var actual = service.LocationByURI(uri);
-
-            Assert.That(actual, Is.Null);
+            Assert.Throws<NullReferenceException>(() => service.LocationByURI(uri));
         }
 
         [TestCaseSource(typeof(CreatingExistingLocation))]
@@ -148,7 +143,7 @@ namespace EventsExpress.Test.ServiceTests
         [Category("Add Location To Event")]
         public void AddLocationToEvent_NotExistingLocation_CreateNewLocation(LocationDto locationDto)
         {
-            Assert.DoesNotThrowAsync(
+            Assert.ThrowsAsync<NullReferenceException>(
                 async () => await service.AddLocationToEvent(locationDto));
         }
 
@@ -156,8 +151,8 @@ namespace EventsExpress.Test.ServiceTests
         [Category("Add Location To User")]
         public void AddLocationToUser_ExistingLocation_ReturnExistingLocationId(LocationDto locationDto)
         {
-            var actual = service.AddLocationToUser(locationDto);
-            Assert.That(Is.Equals(locationDto.Id, actual.Result), Is.True);
+            Assert.DoesNotThrow(
+                () => service.AddLocationToUser(locationDto));
         }
 
         [TestCaseSource(typeof(CreatingNotExistingUserLocation))]

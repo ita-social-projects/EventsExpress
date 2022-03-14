@@ -22,11 +22,11 @@ namespace EventsExpress.Core.Services
         {
             if (locationDto.Type == LocationType.Map)
             {
-                return LocationByPoint(locationDto.Point)?.Id ?? await Create(new LocationDto { Id = locationDto.Id, Point = locationDto.Point, OnlineMeeting = null, Type = locationDto.Type });
+                return LocationByPoint(locationDto.Point) ?? await Create(new LocationDto { Id = locationDto.Id, Point = locationDto.Point, OnlineMeeting = null, Type = locationDto.Type });
             }
             else
             {
-                return LocationByURI(locationDto.OnlineMeeting)?.Id ?? await Create(new LocationDto { Id = locationDto.Id, Point = null, OnlineMeeting = locationDto.OnlineMeeting, Type = locationDto.Type });
+                return LocationByURI(locationDto.OnlineMeeting) ?? await Create(new LocationDto { Id = locationDto.Id, Point = null, OnlineMeeting = locationDto.OnlineMeeting, Type = locationDto.Type });
             }
         }
 
@@ -41,30 +41,30 @@ namespace EventsExpress.Core.Services
             return result.Id;
         }
 
-        public LocationDto LocationByPoint(Point point)
+        public Guid? LocationByPoint(Point point)
         {
             var locationDto = Mapper.Map<LocationDto>(Context.Locations
                 .Where(e =>
                     e.Point.X == point.X &&
                     e.Point.Y == point.Y)
                 .FirstOrDefault());
-            return locationDto;
+            return locationDto.Id;
         }
 
-        public LocationDto LocationByURI(string uri)
+        public Guid? LocationByURI(string uri)
         {
             var locationDTO = Mapper.Map<LocationDto>(Context.Locations
                 .Where(e =>
                    e.OnlineMeeting == uri)
                 .FirstOrDefault());
-            return locationDTO;
+            return locationDTO.Id;
         }
 
         public async Task<Guid> AddLocationToUser(LocationDto locationDto)
         {
             if (locationDto.Type == LocationType.Map)
             {
-                return LocationByPoint(locationDto.Point)?.Id ?? await Create(new LocationDto { Id = locationDto.Id, Point = locationDto.Point, OnlineMeeting = null, Type = locationDto.Type });
+                return LocationByPoint(locationDto.Point) ?? await Create(new LocationDto { Id = locationDto.Id, Point = locationDto.Point, OnlineMeeting = null, Type = locationDto.Type });
             }
             else
             {

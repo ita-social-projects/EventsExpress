@@ -13,8 +13,8 @@ namespace EventsExpress.Core.IServices
 
         Task<Guid> AddLocationToUser(LocationDto locationDto);
 
-        LocationDto LocationByPoint(Point point);
+        Guid? LocationByPoint(Point point);
 
-        LocationDto LocationByURI(string uri);
+        Guid? LocationByURI(string uri);
     }
 }
