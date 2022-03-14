@@ -14,7 +14,7 @@ public class RegisterCompleteViewModelValidator : AbstractValidator<RegisterComp
         RuleFor(x => x.Birthday)
             .NotEmpty()
             .WithMessage("Birthday date is required")
-            .InclusiveBetween(DateTime.Now.AddYears(-115), DateTime.Now.AddYears(-15))
+            .InclusiveBetween(DateTime.Now.AddYears(-115), DateTime.Now.AddYears(-14))
             .WithMessage("Birthday date is not correct");
 
         RuleFor(x => x.Email)

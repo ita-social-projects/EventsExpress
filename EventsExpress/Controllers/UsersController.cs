@@ -153,7 +153,6 @@ namespace EventsExpress.Controllers
         {
             var user = GetCurrentUserOrNull();
             var userInfo = _mapper.Map<UserDto, UserInfoViewModel>(user);
-
             return Ok(userInfo);
         }
 
@@ -329,14 +328,11 @@ namespace EventsExpress.Controllers
         }
 
         [NonAction]
-        private UserDto GetCurrentUserInfo() => _userService.GetCurrentUserInfo();
-
-        [NonAction]
         private UserDto GetCurrentUserOrNull()
         {
             try
             {
-                return GetCurrentUserInfo();
+                return _userService.GetCurrentUserInfo();
             }
             catch (EventsExpressException)
             {
