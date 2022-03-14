@@ -8,39 +8,30 @@ using EventsExpress.Core.IServices;
 using EventsExpress.Db.EF;
 using EventsExpress.Db.Entities;
 
-namespace EventsExpress.Core.Services
+namespace EventsExpress.Core.Services;
+
+public class UserMoreInfoService : BaseService<UserMoreInfo>, IUserMoreInfoService
 {
-    public class UserMoreInfoService : BaseService<UserMoreInfo>, IUserMoreInfoService
+    public UserMoreInfoService(AppDbContext context, IMapper mapper)
+        : base(context, mapper)
     {
-        public UserMoreInfoService(
-            AppDbContext context,
-            IMapper mapper)
-            : base(context, mapper)
+    }
+
+    public async Task<Guid> CreateAsync(UserMoreInfoDto userMoreInfoDto)
+    {
+        if (Context.UserMoreInfo.Any(u => u.UserId == userMoreInfoDto.UserId))
         {
+            throw new EventsExpressException("Additional info already exists about this user");
         }
 
-        public async Task<Guid> CreateAsync(UserMoreInfoDto userMoreInfoDto)
+        var userMoreInfo = Mapper.Map<UserMoreInfo>(userMoreInfoDto);
+        var newUserMoreInfo = Insert(userMoreInfo);
+        if (newUserMoreInfo.Id == Guid.Empty)
         {
-            if (Context.UserMoreInfo.Any(u => u.UserId == userMoreInfoDto.UserId))
-            {
-                throw new EventsExpressException("Additional info already exists about this user");
-            }
-
-            var userMoreInfo = Mapper.Map<UserMoreInfo>(userMoreInfoDto);
-            var newUserMoreInfo = Insert(userMoreInfo);
-            if (newUserMoreInfo.Id == Guid.Empty)
-            {
-                throw new EventsExpressException("Inserting failed");
-            }
-
-            var user = await Context.Users.FindAsync(userMoreInfo.UserId);
-            if (user is not null)
-            {
-                user.UserMoreInfo = newUserMoreInfo;
-            }
-
-            await Context.SaveChangesAsync();
-            return newUserMoreInfo.Id;
+            throw new EventsExpressException("Inserting failed");
         }
+
+        await Context.SaveChangesAsync();
+        return newUserMoreInfo.Id;
     }
 }

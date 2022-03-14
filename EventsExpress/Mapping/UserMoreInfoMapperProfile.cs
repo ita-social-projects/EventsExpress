@@ -19,7 +19,7 @@ public class UserMoreInfoMapperProfile : Profile
             .ForMember(dest => dest.EventTypes, opts => opts.MapFrom(src => src.EventTypes))
             .ForMember(dest => dest.RelationShipStatus, opts => opts.MapFrom(src => src.RelationShipStatus))
             .ForMember(dest => dest.TheTypeOfLeisure, opts => opts.MapFrom(src => src.TheTypeOfLeisure))
-            .ForMember(dest => dest.AditionalInfoAboutUser, opts => opts.MapFrom(src => src.AditionalInfoAboutUser));
+            .ForMember(dest => dest.AdditionalInfoAboutUser, opts => opts.MapFrom(src => src.AdditionalInfoAboutUser));
 
         CreateMap<UserMoreInfoCreateViewModel, UserMoreInfoDto>()
             .ForMember(dest => dest.Id, opts => opts.MapFrom(src => src.Id))
@@ -29,7 +29,7 @@ public class UserMoreInfoMapperProfile : Profile
             .ForMember(dest => dest.EventTypes, opts => opts.MapFrom(src => src.EventTypes))
             .ForMember(dest => dest.RelationShipStatus, opts => opts.MapFrom(src => src.RelationShipStatus))
             .ForMember(dest => dest.TheTypeOfLeisure, opts => opts.MapFrom(src => src.TheTypeOfLeisure))
-            .ForMember(dest => dest.AditionalInfoAboutUser, opts => opts.MapFrom(src => src.AditionalInfoAboutUser));
+            .ForMember(dest => dest.AdditionalInfoAboutUser, opts => opts.MapFrom(src => src.AdditionalInfoAboutUser));
 
         CreateMap<UserMoreInfoDto, UserMoreInfo>()
             .ForMember(dest => dest.Id, opts => opts.MapFrom(src => src.Id))
@@ -39,6 +39,6 @@ public class UserMoreInfoMapperProfile : Profile
             .ForMember(dest => dest.EventTypes, opts => opts.MapFrom(src => src.EventTypes.Cast<int>().Sum()))
             .ForMember(dest => dest.RelationShipStatus, opts => opts.MapFrom(src => src.RelationShipStatus))
             .ForMember(dest => dest.TheTypeOfLeisure, opts => opts.MapFrom(src => src.TheTypeOfLeisure))
-            .ForMember(dest => dest.AdditionalInfo, opts => opts.MapFrom(src => src.AditionalInfoAboutUser));
+            .ForMember(dest => dest.AdditionalInfo, opts => opts.MapFrom(src => src.AdditionalInfoAboutUser));
     }
 }

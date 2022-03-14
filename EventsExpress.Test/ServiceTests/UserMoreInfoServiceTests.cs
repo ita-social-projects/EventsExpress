@@ -38,7 +38,7 @@
                 ParentStatus = ParentStatus.Kids,
                 TheTypeOfLeisure = TheTypeOfLeisure.Passive,
                 RelationShipStatus = RelationShipStatus.Single,
-                AditionalInfoAboutUser = "AditionalInfoAboutUser",
+                AdditionalInfoAboutUser = "AditionalInfoAboutUser",
             };
 
             userMoreInfo = new UserMoreInfo
@@ -79,7 +79,7 @@
                    ParentStatus = e.ParentStatus,
                    TheTypeOfLeisure = e.TheTypeOfLeisure,
                    RelationShipStatus = e.RelationShipStatus,
-                   AdditionalInfo = e.AditionalInfoAboutUser,
+                   AdditionalInfo = e.AdditionalInfoAboutUser,
                });
         }
 

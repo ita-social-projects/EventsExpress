@@ -40,7 +40,7 @@
             userMoreInfoViewModel.RelationShipStatus = RelationShipStatus.InARelationship;
             userMoreInfoViewModel.ReasonsForUsingTheSite = new[] { ReasonsForUsingTheSite.BeMoreActive };
             userMoreInfoViewModel.TheTypeOfLeisure = TheTypeOfLeisure.Active;
-            userMoreInfoViewModel.AditionalInfoAboutUser = "AditionalInfoAboutUser";
+            userMoreInfoViewModel.AdditionalInfoAboutUser = "AditionalInfoAboutUser";
 
             var expected = userMoreInfoController.Create(userMoreInfoViewModel);
             Assert.IsInstanceOf<OkResult>(expected.Result);

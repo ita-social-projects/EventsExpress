@@ -1,8 +1,7 @@
-﻿namespace EventsExpress.Db.Enums
+﻿namespace EventsExpress.Db.Enums;
+
+public enum RelationShipStatus : byte
 {
-    public enum RelationShipStatus
-    {
-        Single = 0,
-        InARelationship = 1,
-    }
+    Single,
+    InARelationship,
 }

@@ -1,13 +1,14 @@
-﻿namespace EventsExpress.Validation
-{
-    using EventsExpress.ViewModels;
-    using FluentValidation;
+﻿using EventsExpress.ViewModels;
+using FluentValidation;
 
-    public class UserMoreInfoCreateViewModelValidator : AbstractValidator<UserMoreInfoCreateViewModel>
+namespace EventsExpress.Validation;
+
+public class UserMoreInfoCreateViewModelValidator : AbstractValidator<UserMoreInfoCreateViewModel>
+{
+    public UserMoreInfoCreateViewModelValidator()
     {
-        public UserMoreInfoCreateViewModelValidator()
-        {
-            RuleFor(x => x.UserId).NotEmpty().WithMessage("Name is required");
-        }
+        RuleFor(x => x.UserId)
+            .NotEmpty()
+            .WithMessage("User ID is missing");
     }
 }

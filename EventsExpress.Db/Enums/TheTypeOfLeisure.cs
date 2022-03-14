@@ -1,8 +1,7 @@
-﻿namespace EventsExpress.Db.Enums
+﻿namespace EventsExpress.Db.Enums;
+
+public enum TheTypeOfLeisure : byte
 {
-    public enum TheTypeOfLeisure
-    {
-        Active,
-        Passive,
-    }
+    Active,
+    Passive,
 }
