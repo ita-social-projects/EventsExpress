@@ -8,7 +8,7 @@ const StepperNavigation = ({
     hasNext = true,
     confirmWhenSkipping = false,
 }) => {
-    const { goBack, skipToLast } = useContext(RegisterStepContext);
+    const { goBack, goToNext } = useContext(RegisterStepContext);
 
     return (
         <Grid item sm={12}>
@@ -26,9 +26,8 @@ const StepperNavigation = ({
             )}
             {showSkip && (
                 <Button
-                    type="button"
+                    type="submit"
                     className="mx-3"
-                    onClick={skipToLast}
                     color="primary"
                     variant="text"
                     size="large"
@@ -40,8 +39,9 @@ const StepperNavigation = ({
                 </Button>
             )}
             <Button
-                type="submit"
+                type="button"
                 className="next mx-3"
+                onClick={goToNext}
                 color="primary"
                 variant="contained"
                 size="large"

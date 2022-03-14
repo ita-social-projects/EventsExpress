@@ -1,8 +1,7 @@
-﻿import React, { useContext } from 'react';
+﻿import React from 'react';
 import { reduxForm, Field } from 'redux-form';
 import { Grid } from '@material-ui/core';
 import { MultiCheckbox } from '../../../helpers/form-helpers';
-import { RegisterStepContext } from '../../RegistrationForm';
 import RadioGroup from './RadioGroup';
 import StepperNavigation from '../../StepperNavigation';
 import { renderTextArea } from '../../../helpers/form-helpers'
@@ -10,15 +9,13 @@ import maps from '../../maps'
 import '../../RegistrationForm.css';
 import './CheckboxDesign.css';
 
-const UserPreferencesForm = () => {
-    const { goToNext } = useContext(RegisterStepContext);
-    
+const UserPreferencesForm = ({ handleSubmit }) => {
     const mapToOptions = sourceMap => {
         return Array.from(sourceMap).map(([key, value]) => ({ value: key, text: value }));
     };
 
     return (
-        <form onSubmit={goToNext}>
+        <form onSubmit={handleSubmit}>
             <h1>Step 4: Tell us more about yourself</h1>
             <Grid container spacing={2}>
                 <Grid item xs={4}>

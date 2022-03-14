@@ -1,11 +1,13 @@
 import React, { createContext, useState } from 'react';
-import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { getFormValues } from 'redux-form';
 import Stepper from '../stepper/Stepper';
+import SuccessPage from './steps/success/SuccessPage';
 import ConfirmationPage from './steps/confirm/ConfirmationPage';
 import CompleteProfileForm from './steps/complete-profile/CompleteProfileForm';
 import UserPreferencesForm from './steps/preferences/UserPreferencesForm';
 import ChooseActivities from './steps/activities/ChooseActivities';
-import SuccessPage from './steps/success/SuccessPage';
+import registerComplete from '../../actions/register/register-complete-action';
 import './RegistrationForm.css';
 
 const stepsArray = [
@@ -18,18 +20,23 @@ const stepsArray = [
 
 export const RegisterStepContext = createContext();
 
-const RegistrationForm = () => {
+const RegistrationForm = ({ formValues, registerComplete }) => {
     const [currentStep, setCurrentStep] = useState(2);
 
     const adjustStep = value => {
         setCurrentStep(currentStep + value);
     };
 
+    const saveProfile = () => {
+        registerComplete(formValues);
+        setCurrentStep(6);
+    };
+
     const renderStep = () => {
         switch (currentStep) {
-            case 2: return <CompleteProfileForm />;
-            case 3: return <ChooseActivities />;
-            case 4: return <UserPreferencesForm />;
+            case 2: return <CompleteProfileForm onSubmit={saveProfile} />;
+            case 3: return <ChooseActivities onSubmit={saveProfile} />;
+            case 4: return <UserPreferencesForm onSubmit={saveProfile} />;
             case 5: return <ConfirmationPage />;
             case 6: return <SuccessPage />;
             default: return null;
@@ -48,7 +55,6 @@ const RegistrationForm = () => {
                     value={{
                         goBack: () => adjustStep(-1),
                         goToNext: () => adjustStep(1),
-                        skipToLast: () => setCurrentStep(6),
                     }}
                 >
                     {renderStep()}
@@ -58,8 +64,12 @@ const RegistrationForm = () => {
     );
 };
 
-RegistrationForm.propTypes = {
-    onSubmit: PropTypes.func.isRequired,
-};
+const mapStateToProps = state => ({
+    formValues: getFormValues('registrationForm')(state),
+});
 
-export default RegistrationForm;
+const mapDispatchToProps = dispatch => ({
+    registerComplete: data => dispatch(registerComplete(data)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(RegistrationForm);

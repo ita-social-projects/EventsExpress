@@ -44,16 +44,16 @@ const ConfirmationPage = ({ formValues, categories, categoryGroups }) => {
                             </ListItem>
                             <ListItem>
                                 <ListItemText
-                                    primary="Phone"
-                                    secondary={formValues.phone}
+                                    primary="Email"
+                                    secondary={formValues.email}
                                 />
                             </ListItem>
                             <ListItem>
                                 <ListItemText
                                     primary="Birth Date"
                                     secondary={
-                                        formValues.birthDate
-                                            && moment(formValues.birthDate).format('DD-MM-YYYY')
+                                        formValues.birthday
+                                            && moment(formValues.birthday).format('DD-MM-YYYY')
                                     }
                                 />
                             </ListItem>
@@ -65,6 +65,12 @@ const ConfirmationPage = ({ formValues, categories, categoryGroups }) => {
                                 <ListItemText
                                     primary="Last Name"
                                     secondary={formValues.lastName}
+                                />
+                            </ListItem>
+                            <ListItem>
+                                <ListItemText
+                                    primary="Phone"
+                                    secondary={formValues.phone}
                                 />
                             </ListItem>
                             <ListItem>

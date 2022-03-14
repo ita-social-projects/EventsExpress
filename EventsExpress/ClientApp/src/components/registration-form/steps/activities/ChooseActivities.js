@@ -1,10 +1,9 @@
-﻿import React, { useContext, useEffect } from 'react';
+﻿import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { reduxForm } from 'redux-form';
 import get_category_groups from '../../../../actions/categoryGroup/category-group-list-action';
 import get_categories from '../../../../actions/category/category-list-action';
 import TileGroup from '../../../../containers/TileGroup';
-import { RegisterStepContext } from '../../RegistrationForm';
 import StepperNavigation from '../../StepperNavigation';
 
 const ChooseActivities = ({
@@ -12,9 +11,8 @@ const ChooseActivities = ({
     categoryGroups,
     getCategories,
     getCategoryGroups,
+    handleSubmit,
 }) => {
-    const { goToNext } = useContext(RegisterStepContext);
-    
     useEffect(() => {
         getCategoryGroups();
         getCategories();
@@ -28,7 +26,7 @@ const ChooseActivities = ({
     };
 
     return (
-        <form onSubmit={goToNext}>
+        <form onSubmit={handleSubmit}>
             <h1 className="mb-3">
                 Step 3: Choose your favorite activities
             </h1>
