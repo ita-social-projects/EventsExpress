@@ -62,18 +62,26 @@ class RegisterBindAccount extends Component {
     }
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
     const profile = state.routing.location.state.profile;
-    return {
-        initialValues: {
-            type: profile.type
-        },
+    const props = {
         form_values: getFormValues('register-bind-account-form')(state),
+    };
+
+    if (!profile) {
+        return props;
     }
-}
+
+    return {
+        ...props,
+        initialValues: {
+            type: profile.type,
+        },
+    };
+};
 
 export default connect(mapStateToProps)(reduxForm({
-    form: "register-bind-account-form",
+    form: 'register-bind-account-form',
     validate,
-    enableReinitialize: true
+    enableReinitialize: true,
 })(RegisterBindAccount));

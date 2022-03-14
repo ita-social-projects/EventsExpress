@@ -62,7 +62,7 @@ class App extends Component {
                             <Redirect to="/landing" />
                         )}
                     />
-                    <Route path='/registrationForm' component={RegistrationForm} />
+                    <Route path='/register/complete' component={this.AdminAndUserRoleSecurity(RegistrationForm)} />
                     <Route>
                         <Layout>
                             <Switch>
@@ -74,6 +74,7 @@ class App extends Component {
                                         <Redirect to="/home/events" />
                                     )}
                                 />
+                                {/* TODO: delete this route */}
                                 <Route path='/registerComplete' component={this.AdminAndUserRoleSecurity(RegisterCompleteWrapper)} />
                                 <Route path="/editProfile/" component={this.AdminAndUserRoleSecurity(Profile)} />
                                 <Route path="/event/:id/:page" component={EventItemViewWrapper} />
