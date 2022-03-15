@@ -24,7 +24,7 @@ namespace EventsExpress.Test.ValidationTests
                 Email = "correct@mail.com",
                 Gender = Gender.Male,
                 Phone = "+380123456789",
-                Username = "Username",
+                FirstName = "Username",
             };
         }
 
@@ -138,7 +138,7 @@ namespace EventsExpress.Test.ValidationTests
 
             var result = validator.TestValidate(model);
 
-            result.ShouldHaveValidationErrorFor(m => m.Phone).WithErrorMessage("Phonenumber is required");
+            result.ShouldHaveValidationErrorFor(m => m.Phone).WithErrorMessage("Phone number is required");
         }
 
         [Test]
@@ -149,7 +149,7 @@ namespace EventsExpress.Test.ValidationTests
 
             var result = validator.TestValidate(model);
 
-            result.ShouldHaveValidationErrorFor(m => m.Phone).WithErrorMessage("Phonenumber is not correct");
+            result.ShouldHaveValidationErrorFor(m => m.Phone).WithErrorMessage("Phone number is not correct");
         }
 
         [Test]
@@ -158,40 +158,40 @@ namespace EventsExpress.Test.ValidationTests
         {
             var result = validator.TestValidate(model);
 
-            result.ShouldNotHaveValidationErrorFor(m => m.Username);
+            result.ShouldNotHaveValidationErrorFor(m => m.FirstName);
         }
 
         [Test]
         [Category("Username validation")]
         public void ShouldHaveError_UsernameIsDefault()
         {
-            model.Username = default;
+            model.FirstName = default;
 
             var result = validator.TestValidate(model);
 
-            result.ShouldHaveValidationErrorFor(m => m.Username).WithErrorMessage("Username is required");
+            result.ShouldHaveValidationErrorFor(m => m.FirstName).WithErrorMessage("First name is required");
         }
 
         [Test]
         [Category("Username validation")]
         public void ShouldHaveError_UsernameIsTooShort()
         {
-            model.Username = "TS";
+            model.FirstName = "TS";
 
             var result = validator.TestValidate(model);
 
-            result.ShouldHaveValidationErrorFor(m => m.Username).WithErrorMessage("Username is too short");
+            result.ShouldHaveValidationErrorFor(m => m.FirstName).WithErrorMessage("First name is too short");
         }
 
         [Test]
         [Category("Username validation")]
         public void ShouldHaveError_UsernameIsTooLong()
         {
-            model.Username = "ThereAreTooLongUsernameSoLongThatValidationWillFailed";
+            model.FirstName = "ThereAreTooLongUsernameSoLongThatValidationWillFailed";
 
             var result = validator.TestValidate(model);
 
-            result.ShouldHaveValidationErrorFor(m => m.Username).WithErrorMessage("Username is too long");
+            result.ShouldHaveValidationErrorFor(m => m.FirstName).WithErrorMessage("First name is too long");
         }
     }
 }
