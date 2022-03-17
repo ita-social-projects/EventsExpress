@@ -2,6 +2,7 @@ import { makeStyles } from "@material-ui/core";
 import React from "react";
 import { Button } from '@material-ui/core';
 import { InfoField } from "./info-field";
+import ChangeAvatarButton from "../editProfile/change-avatar-button";
 
 const useStyles = makeStyles(theme => ({
     sectionContent: {
@@ -41,7 +42,7 @@ export const GeneralInfoSection = () => {
                 <div className={classes.blockStyle}>
                     <h1>Picture</h1>
                 </div>
-                <Button className={classes.editButton}>Change your photo</Button>
+               <ChangeAvatarButton></ChangeAvatarButton>
             </div>
             <div className={classes.secondBlockContent}>
                 <div className={classes.blockStyle}>
