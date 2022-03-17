@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.Eventing.Reader;
 using System.Linq;
 using AutoMapper;
 using EventsExpress.Core.DTOs;
@@ -139,7 +140,7 @@ namespace EventsExpress.Mapping
                     OnlineMeeting = null,
                     Type = userDto.Location.Type,
                 },
-                { Type: LocationType.Online } => throw new EventsExpressException("Location error"),
+                { Type: LocationType.Online } => throw new EventsExpressException("Uri-based location is not applicable to users"),
                 _ => null,
             };
         }

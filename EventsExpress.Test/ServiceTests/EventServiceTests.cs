@@ -22,7 +22,7 @@ namespace EventsExpress.Test.ServiceTests
     internal class EventServiceTests : TestInitializer
     {
         private Mock<IPhotoService> mockPhotoService;
-        private Mock<ILocationService> mockLocationService;
+        private Mock<ILocationManager> mockLocationService;
         private Mock<IEventScheduleService> mockEventScheduleService;
         private Mock<IMediator> mockMediator;
         private Mock<ISecurityContext> mockSecurityContext;
@@ -36,7 +36,7 @@ namespace EventsExpress.Test.ServiceTests
 
             mockMediator = new Mock<IMediator>();
             mockPhotoService = new Mock<IPhotoService>();
-            mockLocationService = new Mock<ILocationService>();
+            mockLocationService = new Mock<ILocationManager>();
             mockEventScheduleService = new Mock<IEventScheduleService>();
             mockSecurityContext = new Mock<ISecurityContext>();
 

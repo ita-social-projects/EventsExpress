@@ -13,6 +13,7 @@ using EventsExpress.Db.Bridge;
 using EventsExpress.Db.EF;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
+using EventsExpress.Db.Migrations;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using NetTopologySuite.Geometries;
@@ -22,7 +23,7 @@ namespace EventsExpress.Core.Services
     public class EventService : BaseService<Event>, IEventService
     {
         private readonly IPhotoService _photoService;
-        private readonly ILocationService _locationService;
+        private readonly ILocationManager _locationManager;
         private readonly IMediator _mediator;
         private readonly IEventScheduleService _eventScheduleService;
         private readonly ISecurityContext _securityContextService;
@@ -32,13 +33,13 @@ namespace EventsExpress.Core.Services
             IMapper mapper,
             IMediator mediator,
             IPhotoService photoService,
-            ILocationService locationService,
+            ILocationManager locationManager,
             IEventScheduleService eventScheduleService,
             ISecurityContext securityContextService)
             : base(context, mapper)
         {
             _photoService = photoService;
-            _locationService = locationService;
+            _locationManager = locationManager;
             _mediator = mediator;
             _eventScheduleService = eventScheduleService;
             _securityContextService = securityContextService;
@@ -173,7 +174,7 @@ namespace EventsExpress.Core.Services
             eventDto.DateTo = (eventDto.DateTo < eventDto.DateFrom) ? eventDto.DateFrom : eventDto.DateTo;
 
             var locationDto = eventDto.Location;
-            var locationId = await _locationService.AddLocationToEvent(locationDto);
+            var locationId = _locationManager.Create(locationDto);
 
             var ev = Mapper.Map<EventDto, Event>(eventDto);
             ev.LocationId = locationId;
@@ -244,17 +245,21 @@ namespace EventsExpress.Core.Services
         public async Task<Guid> Edit(EventDto eventDto)
         {
             var ev = Context.Events
-                .Include(e => e.EventLocation)
                 .Include(e => e.Categories)
                     .ThenInclude(c => c.Category)
                 .Include(e => e.EventSchedule)
                 .Include(e => e.EventAudience)
                 .First(x => x.Id == eventDto.Id);
 
-            if (eventDto.Location != null)
+            if (ev.LocationId == null)
             {
-                var locationId = await _locationService.AddLocationToEvent(eventDto.Location);
+                var locationId = _locationManager.Create(eventDto.Location);
                 ev.LocationId = locationId;
+            }
+            else
+            {
+                eventDto.Location.Id = ev.LocationId.Value;
+                _locationManager.EditLocation(eventDto.Location);
             }
 
             if (eventDto.IsReccurent)
@@ -298,6 +303,7 @@ namespace EventsExpress.Core.Services
                 .ToList();
 
             ev.Categories = eventCategories;
+
             await Context.SaveChangesAsync();
             await _photoService.ChangeTempToImagePhoto(eventDto.Id);
             await _mediator.Publish(new OwnEventMessage(eventDto.Id));
@@ -309,7 +315,7 @@ namespace EventsExpress.Core.Services
         public async Task<Guid> Publish(Guid eventId)
         {
             var ev = Context.Events
-               .Include(e => e.EventLocation)
+               .Include(e => e.Location)
                .Include(e => e.StatusHistory)
                .Include(e => e.EventAudience)
                .Include(e => e.Categories)
@@ -352,7 +358,7 @@ namespace EventsExpress.Core.Services
         {
             var events = Context.Events
                 .Include(e => e.EventSchedule)
-                .Include(e => e.EventLocation)
+                .Include(e => e.Location)
                 .Include(e => e.EventAudience)
                 .Include(e => e.Organizers)
                     .ThenInclude(o => o.User)
@@ -365,6 +371,7 @@ namespace EventsExpress.Core.Services
                     .ThenInclude(v => v.User)
                         .ThenInclude(u => u.Relationships)
                 .Include(e => e.StatusHistory)
+                .AsNoTracking()
                 .AsQueryable();
             var ev = events.FirstOrDefault(x => x.Id == eventId);
             return Mapper.Map<EventDto>(ev);
@@ -373,7 +380,7 @@ namespace EventsExpress.Core.Services
         public IEnumerable<EventDto> GetAll(EventFilterViewModel model, out int count)
         {
             var events = Context.Events
-                .Include(e => e.EventLocation)
+                .Include(e => e.Location)
                 .Include(e => e.EventAudience)
                 .Include(e => e.Organizers)
                     .ThenInclude(o => o.User)
@@ -407,7 +414,7 @@ namespace EventsExpress.Core.Services
         public IEnumerable<EventDto> GetAllDraftEvents(int page, int pageSize, out int count)
         {
             var events = Context.Events
-                .Include(e => e.EventLocation)
+                .Include(e => e.Location)
                 .Include(e => e.Organizers)
                     .ThenInclude(o => o.User)
                 .Include(e => e.Categories)
@@ -497,7 +504,7 @@ namespace EventsExpress.Core.Services
         public IEnumerable<EventDto> GetEvents(List<Guid> eventIds, PaginationViewModel paginationViewModel)
         {
             var events = Context.Events
-                .Include(e => e.EventLocation)
+                .Include(e => e.Location)
                 .Include(e => e.Organizers)
                     .ThenInclude(o => o.User)
                 .Include(e => e.Categories)
@@ -592,11 +599,11 @@ namespace EventsExpress.Core.Services
                     .AddFilter(e => e.Visitors.Any(v => v.UserId == model.VisitorId))
                 .Then()
                     .IfNotNull(model.X, model.Y, model.Radius)
-                    .AddFilter(e => e.EventLocation.Point
+                    .AddFilter(e => e.Location.Point
                         .Distance(MapPointFromFilter(model)) <= model.Radius * 1000)
                 .Then()
                     .IfNotNull(model.LocationType)
-                    .AddFilter(e => e.EventLocation.Type == model.LocationType)
+                    .AddFilter(e => e.Location.Type == model.LocationType)
                 .Then()
                     .IfNotNull(model.IsOnlyForAdults)
                     .AddFilter(e => e.EventAudience.IsOnlyForAdults == model.IsOnlyForAdults)

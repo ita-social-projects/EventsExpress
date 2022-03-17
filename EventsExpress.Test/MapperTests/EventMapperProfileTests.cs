@@ -77,7 +77,7 @@ namespace EventsExpress.Test.MapperTests
                     EventId = idEvent,
                     Event = new Event(),
                 },
-                EventLocation = new Db.Entities.Location
+                Location = new Db.Entities.Location
                 {
                     Id = idEventLocation,
                     Type = LocationType.Map,
@@ -349,9 +349,9 @@ namespace EventsExpress.Test.MapperTests
             var e = Mapper.Map<Event, EventDto>(firstEvent);
 
             Assert.That(e.Photo, Is.Null);
-            Assert.That(e.Location.Point, Is.EqualTo(firstEvent.EventLocation.Point));
-            Assert.That(e.Location.Type, Is.EqualTo(firstEvent.EventLocation.Type));
-            Assert.That(e.Location.OnlineMeeting, Is.EqualTo(firstEvent.EventLocation.OnlineMeeting));
+            Assert.That(e.Location.Point, Is.EqualTo(firstEvent.Location.Point));
+            Assert.That(e.Location.Type, Is.EqualTo(firstEvent.Location.Type));
+            Assert.That(e.Location.OnlineMeeting, Is.EqualTo(firstEvent.Location.OnlineMeeting));
             Assert.That(e.Organizers, Has.All.Matches<User>(ex =>
                                                         firstEvent.Organizers
                                                         .All(f =>
@@ -396,7 +396,7 @@ namespace EventsExpress.Test.MapperTests
             Assert.That(resEven.Visitors, Is.Null);
             Assert.That(resEven.Categories, Is.Null);
             Assert.That(resEven.LocationId, Is.Null);
-            Assert.That(resEven.EventLocation, Is.Null);
+            Assert.That(resEven.Location, Is.Null);
             Assert.That(resEven.EventAudienceId, Is.Null);
             Assert.That(resEven.EventAudience, Is.Null);
             Assert.That(resEven.EventSchedule, Is.Null);

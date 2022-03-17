@@ -50,7 +50,7 @@ namespace EventsExpress.Mapping
                 .ForMember(dest => dest.Inventories, opts => opts.MapFrom(src =>
                     src.Inventories.Select(x => MapInventoryFromInventoryDto(x))))
                 .ForMember(dest => dest.LocationId, opts => opts.Ignore())
-                .ForMember(dest => dest.EventLocation, opts => opts.Ignore())
+                .ForMember(dest => dest.Location, opts => opts.Ignore())
                 .ForMember(dest => dest.EventAudienceId, opts => opts.Ignore())
                 .ForMember(dest => dest.EventAudience, opts => opts.Ignore())
                 .ForMember(dest => dest.EventSchedule, opts => opts.Ignore())
@@ -105,14 +105,14 @@ namespace EventsExpress.Mapping
 
         private static LocationDto MapLocation(Event e)
         {
-            if (e.EventLocation != null)
+            if (e.Location != null)
             {
                 return new LocationDto()
                 {
                     Id = e.Id,
-                    OnlineMeeting = e.EventLocation.OnlineMeeting,
-                    Point = e.EventLocation.Point,
-                    Type = e.EventLocation.Type,
+                    OnlineMeeting = e.Location.OnlineMeeting,
+                    Point = e.Location.Point,
+                    Type = e.Location.Type,
                 };
             }
 

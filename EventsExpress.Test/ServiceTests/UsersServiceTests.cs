@@ -29,7 +29,7 @@ namespace EventsExpress.Test.ServiceTests
         private Mock<ISecurityContext> mockSecurityContext;
         private UserService service;
         private Mock<IMediator> mockMediator;
-        private Mock<ILocationService> mockLocationService;
+        private Mock<ILocationManager> mockLocationService;
 
         private UserDto existingUserDTO;
         private UserDto secondUserDTO;
@@ -54,7 +54,7 @@ namespace EventsExpress.Test.ServiceTests
             mockPhotoService = new Mock<IPhotoService>();
             mockMediator = new Mock<IMediator>();
             mockSecurityContext = new Mock<ISecurityContext>();
-            mockLocationService = new Mock<ILocationService>();
+            mockLocationService = new Mock<ILocationManager>();
             MockMapper.Setup(opts => opts.Map<IEnumerable<CategoryDto>>(It.IsAny<IEnumerable<UserCategory>>()))
                 .Returns((IEnumerable<UserCategory> u) => u.Select(x => new CategoryDto { Id = x.Category.Id, Name = x.Category.Name }));
             MockMapper.Setup(opts => opts.Map<IEnumerable<NotificationTypeDto>>(It.IsAny<IEnumerable<UserNotificationType>>()))
@@ -414,7 +414,7 @@ namespace EventsExpress.Test.ServiceTests
         public void EditLocation_DoesNotThrow()
         {
             mockSecurityContext.Setup(s => s.GetCurrentUserId()).Returns(existingUserDTO.Id);
-            Assert.DoesNotThrowAsync(async () => await service.EditLocation(It.IsAny<LocationDto>()));
+            Assert.DoesNotThrow(() => service.EditLocation(It.IsAny<LocationDto>()));
         }
 
         [Test]

@@ -14,6 +14,8 @@ using EventsExpress.Db.Enums;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using NetTopologySuite.Geometries;
+using Location = EventsExpress.Db.Entities.Location;
 using Role = EventsExpress.Db.Enums.Role;
 
 namespace EventsExpress.Core.Services
@@ -22,7 +24,7 @@ namespace EventsExpress.Core.Services
     {
         private readonly IMediator _mediator;
         private readonly IPhotoService _photoService;
-        private readonly ILocationService _locationService;
+        private readonly ILocationManager _locationManager;
         private readonly ISecurityContext _securityContext;
 
         public UserService(
@@ -30,13 +32,13 @@ namespace EventsExpress.Core.Services
             IMapper mapper,
             IMediator mediator,
             IPhotoService photoSrv,
-            ILocationService locationSrv,
+            ILocationManager locationManager,
             ISecurityContext securityContext)
             : base(context, mapper)
         {
             _mediator = mediator;
             _photoService = photoSrv;
-            _locationService = locationSrv;
+            _locationManager = locationManager;
             _securityContext = securityContext;
         }
 
@@ -90,7 +92,6 @@ namespace EventsExpress.Core.Services
                 .Include(u => u.Account)
                 .ThenInclude(a => a.AccountRoles)
                         .ThenInclude(ar => ar.Role)
-                .AsNoTracking()
                 .FirstOrDefault(x => x.Id == userId);
 
             var userDto = Mapper.Map<UserDto>(user);
@@ -246,17 +247,24 @@ namespace EventsExpress.Core.Services
         public async Task EditLocation(LocationDto location)
         {
             var user = CurrentUser();
-            if (user.LocationId == null)
+
+            if (location.Type == LocationType.Map)
             {
-                var locationId = await _locationService.AddLocationToUser(location);
-                user.LocationId = locationId;
+                if (user.LocationId == null)
+                {
+                    var locationId = _locationManager.Create(location);
+                    user.LocationId = locationId;
+                }
+                else
+                {
+                    location.Id = user.LocationId.Value;
+                    _locationManager.EditLocation(location);
+                }
             }
             else
             {
-                location.Id = user.LocationId.Value;
+                throw new EventsExpressException("Uri-based location is not applicable to users");
             }
-
-            user.Location = Mapper.Map<LocationDto, Location>(location);
 
             Context.Update(user);
             await Context.SaveChangesAsync();
