@@ -3,6 +3,8 @@ import React from "react";
 import { Button } from '@material-ui/core';
 import { InfoField } from "./info-field";
 import ChangeAvatarButton from "../editProfile/change-avatar-button";
+import '../User-profile.css';
+import CustomAvatar from "../../avatar/custom-avatar"
 
 const useStyles = makeStyles(theme => ({
     sectionContent: {
@@ -33,14 +35,16 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-export const GeneralInfoSection = () => {
+export const GeneralInfoSection = (props) => {
     const classes = useStyles();
 
     return (
         <div className={classes.sectionContent}>
             <div className={classes.firstBlockContent}>
                 <div className={classes.blockStyle}>
-                    <h1>Picture</h1>
+                    <div className="user-profile-avatar">
+                        <CustomAvatar size="big" name={"name"} userId={props.userId}/>
+                    </div>
                 </div>
                <ChangeAvatarButton></ChangeAvatarButton>
             </div>
