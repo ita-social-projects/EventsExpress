@@ -14,8 +14,6 @@ using EventsExpress.Db.Enums;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
-using NetTopologySuite.Geometries;
-using Location = EventsExpress.Db.Entities.Location;
 using Role = EventsExpress.Db.Enums.Role;
 
 namespace EventsExpress.Core.Services

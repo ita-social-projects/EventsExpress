@@ -6,7 +6,6 @@ using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Enums;
 using EventsExpress.Core.Exceptions;
 using EventsExpress.Core.IServices;
-using EventsExpress.Core.Notifications;
 using EventsExpress.Core.Services;
 using EventsExpress.Db.Bridge;
 using EventsExpress.Db.Entities;

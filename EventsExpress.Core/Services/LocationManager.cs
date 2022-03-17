@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
 using AutoMapper;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.IServices;
 using EventsExpress.Db.EF;
-using Microsoft.EntityFrameworkCore;
 
 namespace EventsExpress.Core.Services
 {
