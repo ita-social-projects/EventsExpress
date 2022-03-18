@@ -52,7 +52,7 @@ const GeneralInfoSection = (props) => {
             <div className={classes.firstBlockContent}>
                 <div className={classes.blockStyle}>
                     <div className="user-profile-avatar">
-                        <CustomAvatar size="big" name={"name"} userId={props.userId}/>
+                        <CustomAvatar size = "300px" name={props.name} userId={props.userId}/>
                     </div>
                 </div>
                <ChangeAvatarButton></ChangeAvatarButton>
