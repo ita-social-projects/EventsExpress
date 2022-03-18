@@ -12,6 +12,7 @@ using EventsExpress.Db.Bridge;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
 using EventsExpress.Test.ServiceTests.TestClasses.Comparers;
+using EventsExpress.Test.ServiceTests.TestClasses.Location;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.StaticFiles;
@@ -415,6 +416,23 @@ namespace EventsExpress.Test.ServiceTests
         {
             mockSecurityContext.Setup(s => s.GetCurrentUserId()).Returns(existingUserDTO.Id);
             Assert.DoesNotThrow(() => service.EditLocation(It.IsAny<LocationDto>()));
+        }
+
+        [Test]
+        public void EditLocation_CurrentUser_IsNull()
+        {
+            mockSecurityContext.Setup(s => s.GetCurrentUserId()).Returns(null);
+            Assert.ThrowsAsync<NullReferenceException>(
+                () => service.EditLocation(It.IsAny<LocationDto>()));
+        }
+
+        [TestCaseSource(typeof(CreatingNotExistingUserLocation))]
+        [TestCase("Edit Location")]
+        public void EditLocation_LocationType_Online_Throws(LocationDto locationDto)
+        {
+            mockSecurityContext.Setup(s => s.GetCurrentUserId()).Returns(existingUserDTO.Id);
+            Assert.ThrowsAsync<EventsExpressException>(
+                () => service.EditLocation(locationDto));
         }
 
         [Test]
