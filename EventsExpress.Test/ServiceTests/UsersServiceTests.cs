@@ -45,6 +45,7 @@ namespace EventsExpress.Test.ServiceTests
         private string existingEmail = "existingEmail@gmail.com";
         private string secondEmail = "secondEmail@gmail.com";
 
+
         private UserDtoComparer userDtoComparer;
 
         [SetUp]
@@ -433,6 +434,25 @@ namespace EventsExpress.Test.ServiceTests
             mockSecurityContext.Setup(s => s.GetCurrentUserId()).Returns(existingUserDTO.Id);
             Assert.ThrowsAsync<EventsExpressException>(
                 () => service.EditLocation(locationDto));
+        }
+
+        [Test]
+        public void EditLocation_UserLocationId_IsNull_CreateNewLocation()
+        {
+            mockSecurityContext.Setup(s => s.GetCurrentUserId()).Returns(existingUserDTO.Id);
+            Assert.That(existingUser.LocationId, Is.Null);
+            Assert.DoesNotThrow(
+                () => service.EditLocation(It.IsAny<LocationDto>()));
+        }
+
+        [Test]
+        public void EditLocation_UserLocationId_IsNotNull_Edit()
+        {
+            mockSecurityContext.Setup(s => s.GetCurrentUserId()).Returns(existingUserDTO.Id);
+            existingUser.LocationId = Guid.Empty;
+            Assert.IsNotNull(existingUser.LocationId);
+            Assert.DoesNotThrow(
+                () => service.EditLocation(It.IsAny<LocationDto>()));
         }
 
         [Test]
