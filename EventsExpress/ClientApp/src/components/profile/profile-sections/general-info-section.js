@@ -37,7 +37,11 @@ const useStyles = makeStyles(theme => ({
     },
     editButton: {
         backgroundColor: "lightgray",
-    }
+    },
+    avatar :{
+        border: "none"
+    },
+
 }));
 
 const GeneralInfoSection = (props) => {
@@ -50,7 +54,7 @@ const GeneralInfoSection = (props) => {
     return (
         <div className={classes.sectionContent}>
             <div className={classes.firstBlockContent}>
-                <div className={classes.blockStyle}>
+                <div className={`${classes.blockStyle} ${classes.avatar}`}>
                     <div className="user-profile-avatar">
                         <CustomAvatar size = "300px" name={props.name} userId={props.userId}/>
                     </div>
