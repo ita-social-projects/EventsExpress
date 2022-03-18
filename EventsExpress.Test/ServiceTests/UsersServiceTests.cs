@@ -426,8 +426,8 @@ namespace EventsExpress.Test.ServiceTests
                 () => service.EditLocation(It.IsAny<LocationDto>()));
         }
 
+        [Test]
         [TestCaseSource(typeof(CreatingNotExistingUserLocation))]
-        [TestCase("Edit Location")]
         public void EditLocation_LocationType_Online_Throws(LocationDto locationDto)
         {
             mockSecurityContext.Setup(s => s.GetCurrentUserId()).Returns(existingUserDTO.Id);
