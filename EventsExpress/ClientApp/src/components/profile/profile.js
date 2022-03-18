@@ -20,7 +20,7 @@ import SelectNotificationTypesWrapper from '../../containers/notificationTypes/S
 import LinkedAuthsWrapper from '../../containers/linked-auths-wrapper';
 import { InterestsSection } from './profile-sections/interests-section';
 import { MoreInfoSection } from './profile-sections/more-info-section';
-import { GeneralInfoSection } from './profile-sections/general-info-section';
+import GeneralInfoSection from './profile-sections/general-info-section';
 
 const useStyles = makeStyles(theme => ({
     root: {
