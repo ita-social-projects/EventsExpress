@@ -26,7 +26,7 @@ namespace EventsExpress.Core.Services
         {
             var location = Mapper.Map<LocationDto, Db.Entities.Location>(locationDto);
 
-            var result = Update(location);
+            Update(location);
         }
     }
 }

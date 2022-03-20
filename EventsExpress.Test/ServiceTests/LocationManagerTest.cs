@@ -1,14 +1,11 @@
 ﻿using System;
 using EventsExpress.Core.DTOs;
-using EventsExpress.Core.Exceptions;
 using EventsExpress.Core.IServices;
 using EventsExpress.Core.Services;
-using EventsExpress.Db.Entities;
 using EventsExpress.Test.ServiceTests.TestClasses.Location;
 using Moq;
-using NetTopologySuite.Geometries;
 using NUnit.Framework;
-using NUnit.Framework.Internal;
+using Location = EventsExpress.Db.Entities.Location;
 
 namespace EventsExpress.Test.ServiceTests
 {
@@ -16,12 +13,12 @@ namespace EventsExpress.Test.ServiceTests
     internal class LocationManagerTest : TestInitializer
     {
         private ILocationManager service;
-        private Db.Entities.Location locationMap;
-        private Db.Entities.Location locationOnline;
+        private Location locationMap;
+        private Location locationOnline;
 
-        private Db.Entities.Location FromDtoToEf(LocationDto locationDto)
+        private Location FromDtoToEf(LocationDto locationDto)
         {
-            return new Db.Entities.Location
+            return new Location
             {
                 Id = locationDto.Id,
                 Point = locationDto.Point,

@@ -18,7 +18,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.EntityFrameworkCore;
 using Moq;
+using NetTopologySuite.Geometries;
 using NUnit.Framework;
+using Location = EventsExpress.Db.Entities.Location;
 
 namespace EventsExpress.Test.ServiceTests
 {
@@ -44,7 +46,6 @@ namespace EventsExpress.Test.ServiceTests
         private string secondName = "secondName";
         private string existingEmail = "existingEmail@gmail.com";
         private string secondEmail = "secondEmail@gmail.com";
-
 
         private UserDtoComparer userDtoComparer;
 
@@ -87,6 +88,7 @@ namespace EventsExpress.Test.ServiceTests
                 Id = userId,
                 Name = name,
                 Email = existingEmail,
+                LocationId = Guid.NewGuid(),
                 NotificationTypes = new List<UserNotificationType>
                 {
                     new UserNotificationType
@@ -116,6 +118,12 @@ namespace EventsExpress.Test.ServiceTests
                 {
                     UserId = userId,
                     IsBlocked = true,
+                },
+                Location = new Location
+                {
+                    Point = Point.Empty,
+                    OnlineMeeting = null,
+                    Type = LocationType.Map,
                 },
             };
 
@@ -149,6 +157,7 @@ namespace EventsExpress.Test.ServiceTests
                     UserId = secondUserId,
                     IsBlocked = false,
                 },
+                LocationId = null,
             };
 
             existingUserDTO = new UserDto
@@ -180,6 +189,13 @@ namespace EventsExpress.Test.ServiceTests
                             Name = "Sea",
                         },
                     },
+                },
+                Location = new LocationDto
+                {
+                    Point = Point.Empty,
+                    OnlineMeeting = null,
+                    Type = LocationType.Map,
+                    Id = Guid.NewGuid(),
                 },
             };
 
@@ -213,6 +229,7 @@ namespace EventsExpress.Test.ServiceTests
                     UserId = secondUserId,
                     IsBlocked = false,
                 },
+                Location = null,
             };
 
             userDtoComparer = new UserDtoComparer();
@@ -439,10 +456,10 @@ namespace EventsExpress.Test.ServiceTests
         [Test]
         public void EditLocation_UserLocationId_IsNull_CreateNewLocation()
         {
-            mockSecurityContext.Setup(s => s.GetCurrentUserId()).Returns(existingUserDTO.Id);
-            Assert.That(existingUser.LocationId, Is.Null);
+            mockSecurityContext.Setup(s => s.GetCurrentUserId()).Returns(secondUser.Id);
+            Assert.That(secondUser.LocationId, Is.Null);
             Assert.DoesNotThrow(
-                () => service.EditLocation(It.IsAny<LocationDto>()));
+                () => service.EditLocation(existingUserDTO.Location));
         }
 
         [Test]
