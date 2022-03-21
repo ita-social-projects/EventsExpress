@@ -281,4 +281,4 @@ __pycache__/
 /EventsExpress/ClientApp/build
 /EventsExpress/.config/dotnet-tools.json
 /.vscode/*
-/.DS_Store
+.DS_Store
