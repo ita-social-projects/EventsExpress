@@ -11,7 +11,6 @@ public class RegisterMapperProfile : Profile
     public RegisterMapperProfile()
     {
         CreateMap<LoginViewModel, RegisterDto>();
-        CreateMap<RegisterBindViewModel, RegisterBindDto>();
 
         CreateMap<RegisterCompleteViewModel, RegisterCompleteDto>()
             .ForMember(dest => dest.Username, opts => opts.MapFrom(src => $"{src.FirstName} {src.LastName}"));
