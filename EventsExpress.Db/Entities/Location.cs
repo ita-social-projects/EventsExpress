@@ -7,7 +7,6 @@ using NetTopologySuite.Geometries;
 namespace EventsExpress.Db.Entities
 {
     [Track]
-
     public class Location : BaseEntity
     {
         [Track]

@@ -279,5 +279,6 @@ __pycache__/
 /EventsExpress/ClientApp/package-lock.json
 /EventsExpress/Properties/PublishProfiles/*
 /EventsExpress/ClientApp/build
-/EventsExpress/.config/dotnet-tools.json 
+/EventsExpress/.config/dotnet-tools.json
 /.vscode/*
+/.DS_Store
