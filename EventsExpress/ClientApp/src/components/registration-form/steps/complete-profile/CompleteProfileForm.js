@@ -23,7 +23,6 @@ const validate = values => {
         'firstName',
         'lastName',
         'phone',
-        'gender',
     ];
 
     if (values.firstName) {
@@ -165,8 +164,4 @@ export default connect(mapStateToProps)(
         validate,
         destroyOnUnmount: false,
         forceUnregisterOnUnmount: true,
-        enableReinitialize: true,
-        initialValues: {
-            gender: 0,
-        },
 })(CompleteProfileForm));

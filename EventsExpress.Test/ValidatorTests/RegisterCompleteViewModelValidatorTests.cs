@@ -93,16 +93,6 @@ internal class RegisterCompleteViewModelValidatorTests
     }
 
     [Test]
-    public void Gender_DefaultValue_ShouldHaveError()
-    {
-        model.Gender = default;
-
-        var result = validator.TestValidate(model);
-
-        result.ShouldHaveValidationErrorFor(m => m.Gender).WithErrorMessage("Gender is required");
-    }
-
-    [Test]
     public void Gender_NonEnumValue_ShouldHaveError()
     {
         model.Gender = (Gender)4;

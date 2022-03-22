@@ -24,8 +24,6 @@ public class RegisterCompleteViewModelValidator : AbstractValidator<RegisterComp
             .WithMessage("Email address is not correct");
 
         RuleFor(x => x.Gender)
-            .NotEmpty()
-            .WithMessage("Gender is required")
             .IsInEnum()
             .WithMessage("Gender is not correct");
 
