@@ -38,19 +38,28 @@ const StepperNavigation = ({
                     }
                 </Button>
             )}
-            <Button
-                type="button"
-                className="next mx-3"
-                onClick={goToNext}
-                color="primary"
-                variant="contained"
-                size="large"
-            >
-                {hasNext
-                    ? 'Continue'
-                    : 'Confirm'
-                }
-            </Button>
+            {hasNext ? (
+                <Button
+                    type="button"
+                    className="next mx-3"
+                    onClick={goToNext}
+                    color="primary"
+                    variant="contained"
+                    size="large"
+                >
+                    Continue
+                </Button>
+            ) : (
+                <Button
+                    type="submit"
+                    className="next mx-3"
+                    color="primary"
+                    variant="contained"
+                    size="large"
+                >
+                    Confirm
+                </Button>
+            )}
         </Grid>
     );
 };

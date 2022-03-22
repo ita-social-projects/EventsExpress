@@ -32,7 +32,7 @@ const PreferencesList = ({ formValues }) => {
         <List>
             <DisplaySelectedOption
                 label="Parental status"
-                source={formValues.parentalStatus}
+                source={formValues.parentStatus}
                 map={maps.parenting}
             />
             <DisplayFormItems
@@ -42,7 +42,7 @@ const PreferencesList = ({ formValues }) => {
             />
             <DisplayFormItems
                 label="Event preferences"
-                source={formValues.eventType}
+                source={formValues.eventTypes}
                 map={maps.eventPreferences}
             />
             <DisplaySelectedOption

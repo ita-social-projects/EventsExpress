@@ -27,9 +27,8 @@ const RegistrationForm = ({ formValues, registerComplete }) => {
         setCurrentStep(currentStep + value);
     };
 
-    const saveProfile = () => {
-        registerComplete(formValues);
-        setCurrentStep(6);
+    const saveProfile = (shouldSaveMoreInfo = false) => {
+        return registerComplete(formValues, { shouldSaveMoreInfo }).then(() => setCurrentStep(6));
     };
 
     const renderStep = () => {
@@ -37,7 +36,7 @@ const RegistrationForm = ({ formValues, registerComplete }) => {
             case 2: return <CompleteProfileForm onSubmit={saveProfile} />;
             case 3: return <ChooseActivities onSubmit={saveProfile} />;
             case 4: return <UserPreferencesForm onSubmit={saveProfile} />;
-            case 5: return <ConfirmationPage />;
+            case 5: return <ConfirmationPage onSubmit={() => saveProfile(true)} />;
             case 6: return <SuccessPage />;
             default: return null;
         }
@@ -69,7 +68,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-    registerComplete: data => dispatch(registerComplete(data)),
+    registerComplete: (data, options) => dispatch(registerComplete(data, options)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(RegistrationForm);

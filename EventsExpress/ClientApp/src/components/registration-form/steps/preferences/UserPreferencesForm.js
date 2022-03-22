@@ -21,7 +21,7 @@ const UserPreferencesForm = ({ handleSubmit }) => {
                 <Grid item xs={4}>
                     <div className="stepper-tellusmore-block">
                         <RadioGroup
-                            name="parentalStatus"
+                            name="parentStatus"
                             label="Parental status"
                             source={maps.parenting}
                         />
@@ -47,9 +47,9 @@ const UserPreferencesForm = ({ handleSubmit }) => {
                         <Field
                             options={mapToOptions(maps.eventPreferences)}
                             component={MultiCheckbox}
-                            name="eventType"
+                            name="eventTypes"
                             className="form-control mt-2"
-                            placeholder="eventType"
+                            placeholder="eventTypes"
                         />
                     </div>
                 </Grid>

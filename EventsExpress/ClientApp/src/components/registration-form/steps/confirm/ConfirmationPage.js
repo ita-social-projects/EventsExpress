@@ -1,17 +1,19 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import { reduxForm, getFormValues } from 'redux-form';
 import { Grid, List, ListItem, ListItemText } from '@material-ui/core';
 import moment from 'moment';
 import genders from '../../../../constants/GenderConstants';
 import SelectedActivitiesList from '../activities/SelectedActivitiesList';
-import { RegisterStepContext } from '../../RegistrationForm';
 import StepperNavigation from '../../StepperNavigation';
 import PreferencesList from './PreferencesList';
 
-const ConfirmationPage = ({ formValues, categories, categoryGroups }) => {
-    const { goToNext } = useContext(RegisterStepContext);
-
+const ConfirmationPage = ({
+    formValues,
+    handleSubmit,
+    categories,
+    categoryGroups,
+}) => {
     const getSelectedCategories = () => {
         const filteredCategories = categories.filter(el =>
             formValues.categories.includes(el.id)
@@ -28,7 +30,7 @@ const ConfirmationPage = ({ formValues, categories, categoryGroups }) => {
     };
 
     return (
-        <form onSubmit={goToNext}>
+        <form onSubmit={handleSubmit}>
             <Grid container spacing={3}>
                 <Grid item sm={12}>
                     <h1>Step 5: Confirm your user data</h1>

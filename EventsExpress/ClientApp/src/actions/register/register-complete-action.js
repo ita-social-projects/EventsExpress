@@ -1,16 +1,14 @@
 import { SubmissionError } from 'redux-form';
-import { createBrowserHistory } from 'history';
 import moment from 'moment';
 import jwt from 'jsonwebtoken';
 import { AuthenticationService } from '../../services';
-import { setSuccessAllert } from '../alert-action';
+import { setSuccessAllert, setErrorAllertFromResponse } from '../alert-action';
 import { buildValidationState } from '../../components/helpers/action-helpers';
 import { jwtStorageKey } from '../../constants/constants';
 
 const api_serv = new AuthenticationService();
-const history = createBrowserHistory({ forceRefresh: true });
 
-export default function registerComplete(data) {
+export default function registerComplete(data, { shouldSaveMoreInfo }) {
     return async dispatch => {
         const body = {
             ...data,
@@ -18,15 +16,24 @@ export default function registerComplete(data) {
             accountId: getAccountIdFromJWT(),
         };
 
-        const response = await api_serv.setRegisterComplete(body);
-        if (!response.ok) {
-            throw new SubmissionError(await buildValidationState(response));
+        const profileResponse = await api_serv.setRegisterComplete(body);
+        if (!profileResponse.ok) {
+            dispatch(setErrorAllertFromResponse(profileResponse.clone()));
+            throw new SubmissionError(await buildValidationState(profileResponse));
+        }
+        
+        const jsonRes = await profileResponse.json();
+        localStorage.setItem(jwtStorageKey, jsonRes.token);
+
+        if (shouldSaveMoreInfo === true) {
+            const moreInfoResponse = await api_serv.setMoreInfo(data);
+            if (!moreInfoResponse.ok) {
+                dispatch(setErrorAllertFromResponse(moreInfoResponse.clone()));
+                throw new SubmissionError(await buildValidationState(moreInfoResponse));
+            }
         }
 
-        const jsonRes = await response.json();
-        localStorage.setItem(jwtStorageKey, jsonRes.token);
         dispatch(setSuccessAllert('Your profile was updated'));
-        dispatch(history.push('/home'));
         return Promise.resolve();
     };
 }

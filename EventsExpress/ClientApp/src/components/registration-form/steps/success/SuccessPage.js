@@ -14,7 +14,7 @@ const SuccessPage = () => (
                 <Button
                     component={Link}
                     className="mx-4"
-                    to="/profile"
+                    to="/editProfile"
                     color="primary"
                     variant="contained"
                     size="large"
