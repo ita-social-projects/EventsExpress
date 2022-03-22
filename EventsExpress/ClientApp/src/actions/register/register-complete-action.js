@@ -5,6 +5,7 @@ import { AuthenticationService } from '../../services';
 import { setSuccessAllert, setErrorAllertFromResponse } from '../alert-action';
 import { buildValidationState } from '../../components/helpers/action-helpers';
 import { jwtStorageKey } from '../../constants/constants';
+import { getUserInfo } from '../login/login-action';
 
 const api_serv = new AuthenticationService();
 
@@ -33,6 +34,7 @@ export default function registerComplete(data, { shouldSaveMoreInfo }) {
             }
         }
 
+        dispatch(getUserInfo());
         dispatch(setSuccessAllert('Your profile was updated'));
         return Promise.resolve();
     };
