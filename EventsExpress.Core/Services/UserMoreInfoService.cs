@@ -31,10 +31,6 @@ public class UserMoreInfoService : BaseService<UserMoreInfo>, IUserMoreInfoServi
 
         var userMoreInfo = Mapper.Map<UserMoreInfo>(userMoreInfoDto);
         var newUserMoreInfo = Insert(userMoreInfo);
-        if (newUserMoreInfo.Id == Guid.Empty)
-        {
-            throw new EventsExpressException("Inserting failed");
-        }
 
         await Context.SaveChangesAsync();
         return newUserMoreInfo.Id;

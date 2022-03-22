@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Threading.Tasks;
 using EventsExpress.Core.DTOs;
+using EventsExpress.Core.Exceptions;
 using EventsExpress.Core.Services;
 using EventsExpress.Db.Bridge;
 using EventsExpress.Db.Entities;
@@ -15,64 +15,36 @@ internal class UserMoreInfoServiceTests : TestInitializer
 {
     private UserMoreInfoService service;
 
-    private UserMoreInfoDto userMoreInfoDTO;
-
-    private User user;
-    private User validUserButNotVisitor;
-    private UserMoreInfo userMoreInfo;
-
-    private Guid userMoreInfoId = Guid.NewGuid();
-    private Guid userId = Guid.NewGuid();
-    private Guid validUserId = Guid.NewGuid();
+    private UserMoreInfoDto userMoreInfoDto;
 
     [SetUp]
     protected override void Initialize()
     {
         base.Initialize();
 
-        var securityContextMock = new Mock<ISecurityContext>();
-
-        service = new UserMoreInfoService(Context, MockMapper.Object, securityContextMock.Object);
-
-        userMoreInfoDTO = new UserMoreInfoDto
+        var user = new User
         {
-            Id = userMoreInfoId,
-            UserId = userId,
+            Id = Guid.NewGuid(),
+            Name = "Name",
+            Email = "Email",
+        };
+
+        userMoreInfoDto = new UserMoreInfoDto
+        {
+            UserId = user.Id,
             ParentStatus = ParentStatus.Kids,
             TheTypeOfLeisure = TheTypeOfLeisure.Passive,
             RelationShipStatus = RelationShipStatus.Single,
             AdditionalInfo = "AdditionalInfoAboutUser",
         };
 
-        userMoreInfo = new UserMoreInfo
-        {
-            Id = userMoreInfoId,
-            UserId = userId,
-            ParentStatus = ParentStatus.Kids,
-            TheTypeOfLeisure = TheTypeOfLeisure.Passive,
-            RelationShipStatus = RelationShipStatus.Single,
-            AdditionalInfo = "AdditionalInfoAboutUser",
-        };
-
-        user = new User
-        {
-            Id = userId,
-            Name = "Name",
-            Email = "Email",
-        };
-
-        validUserButNotVisitor = new User
-        {
-            Id = validUserId,
-            Name = "Name",
-            Email = "Email",
-        };
-
-        Context.Users.AddRange(user, validUserButNotVisitor);
-        Context.UserMoreInfo.Add(userMoreInfo);
+        Context.Users.Add(user);
         Context.SaveChanges();
 
-        MockMapper.Setup(u => u.Map<UserMoreInfoDto, UserMoreInfo>(It.IsAny<UserMoreInfoDto>()))
+        var securityContextMock = new Mock<ISecurityContext>();
+        service = new UserMoreInfoService(Context, MockMapper.Object, securityContextMock.Object);
+
+        MockMapper.Setup(u => u.Map<UserMoreInfo>(It.IsAny<UserMoreInfoDto>()))
             .Returns((UserMoreInfoDto e) =>
                 e == null
                 ? null
@@ -85,13 +57,28 @@ internal class UserMoreInfoServiceTests : TestInitializer
                     RelationShipStatus = e.RelationShipStatus,
                     AdditionalInfo = e.AdditionalInfo,
                 });
+
+        securityContextMock.Setup(sc => sc.GetCurrentUserId()).Returns(user.Id);
     }
 
     [Test]
-    public void CreateAsync_ExistingObject_DoesNotThrowException()
+    public void CreateAsync_ValidObject_DoesNotThrow()
     {
-        var actual = service.CreateAsync(userMoreInfoDTO);
+        Assert.DoesNotThrowAsync(async () =>
+        {
+            await service.CreateAsync(userMoreInfoDto);
+        });
+    }
 
-        Assert.IsInstanceOf<Task<Guid>>(actual);
+    [Test]
+    public void CreateAsync_ExistingUser_ThrowsEventsExpressException()
+    {
+        Assert.ThrowsAsync<EventsExpressException>(async () =>
+        {
+            for (int i = 0; i < 2; i++)
+            {
+                await service.CreateAsync(userMoreInfoDto);
+            }
+        });
     }
 }

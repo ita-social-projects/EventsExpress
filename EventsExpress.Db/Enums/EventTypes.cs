@@ -3,7 +3,7 @@
 namespace EventsExpress.Db.Enums;
 
 [Flags]
-public enum EventType : byte
+public enum EventTypes : byte
 {
     Online = 1,
     Offline = 2,

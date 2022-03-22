@@ -36,8 +36,8 @@ public class UserMoreInfoMapperProfile : Profile
             .ForMember(dest => dest.UserId, opts => opts.MapFrom(src => src.UserId))
             .ForMember(dest => dest.User, opts => opts.Ignore())
             .ForMember(dest => dest.ParentStatus, opts => opts.MapFrom(src => src.ParentStatus))
-            .ForMember(dest => dest.ReasonsForUsingTheSite, opts => opts.MapFrom(src => (ReasonsForUsingTheSite)src.ReasonsForUsingTheSite.Sum(et => (int)et)))
-            .ForMember(dest => dest.EventTypes, opts => opts.MapFrom(src => (EventType)src.EventTypes.Sum(et => (int)et)))
+            .ForMember(dest => dest.ReasonsForUsingTheSite, opts => opts.MapFrom(src => (InterestReasons)src.ReasonsForUsingTheSite.Sum(et => (int)et)))
+            .ForMember(dest => dest.EventTypes, opts => opts.MapFrom(src => (EventTypes)src.EventTypes.Sum(et => (int)et)))
             .ForMember(dest => dest.RelationShipStatus, opts => opts.MapFrom(src => src.RelationShipStatus))
             .ForMember(dest => dest.TheTypeOfLeisure, opts => opts.MapFrom(src => src.TheTypeOfLeisure))
             .ForMember(dest => dest.AdditionalInfo, opts => opts.MapFrom(src => src.AdditionalInfo));

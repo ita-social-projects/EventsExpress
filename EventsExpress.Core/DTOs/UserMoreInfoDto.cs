@@ -14,13 +14,13 @@ public class UserMoreInfoDto
 
     public ParentStatus? ParentStatus { get; set; }
 
-    public IEnumerable<EventType> EventTypes { get; set; }
+    public IEnumerable<EventTypes> EventTypes { get; set; }
 
     public RelationShipStatus? RelationShipStatus { get; set; }
 
     public TheTypeOfLeisure? TheTypeOfLeisure { get; set; }
 
-    public IEnumerable<ReasonsForUsingTheSite> ReasonsForUsingTheSite { get; set; }
+    public IEnumerable<InterestReasons> ReasonsForUsingTheSite { get; set; }
 
     public string AdditionalInfo { get; set; }
 }

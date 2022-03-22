@@ -37,9 +37,9 @@ internal class UserMoreInfoControllerTests
             Id = Guid.NewGuid(),
             UserId = Guid.NewGuid(),
             ParentStatus = ParentStatus.Kids,
-            EventTypes = new[] { EventType.Free, EventType.Online },
+            EventTypes = new[] { EventTypes.Free, EventTypes.Online },
             RelationshipStatus = RelationShipStatus.InARelationship,
-            ReasonsForUsingTheSite = new[] { ReasonsForUsingTheSite.BeMoreActive },
+            ReasonsForUsingTheSite = new[] { InterestReasons.BeMoreActive },
             LeisureType = TheTypeOfLeisure.Active,
             AdditionalInfo = "AdditionalInfoAboutUser",
         };

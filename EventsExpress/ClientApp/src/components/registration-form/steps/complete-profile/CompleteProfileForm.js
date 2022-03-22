@@ -65,7 +65,6 @@ const CompleteProfileForm = ({ handleSubmit }) => {
                         Step 2: Complete your profile
                     </h1>
                 </Grid>
-                {/*TODO: change avatar */}
                 <Grid item sm={6}>
                     <Field
                         name="email"
@@ -129,7 +128,6 @@ const CompleteProfileForm = ({ handleSubmit }) => {
                     />
                 </Grid>
                 <Grid item xs={4} />
-                {/* TODO: add leaflet map to choose location */}
             </Grid>
             <div className="stepper-submit">
                 <StepperNavigation

@@ -13,13 +13,13 @@ public class UserMoreInfo : BaseEntity
 
     public ParentStatus? ParentStatus { get; set; }
 
-    public EventType? EventTypes { get; set; }
+    public EventTypes? EventTypes { get; set; }
 
     public RelationShipStatus? RelationShipStatus { get; set; }
 
     public TheTypeOfLeisure? TheTypeOfLeisure { get; set; }
 
-    public ReasonsForUsingTheSite? ReasonsForUsingTheSite { get; set; }
+    public InterestReasons? ReasonsForUsingTheSite { get; set; }
 
     public string AdditionalInfo { get; set; }
 }

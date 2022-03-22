@@ -12,13 +12,13 @@ public class UserMoreInfoCreateViewModel
 
     public ParentStatus? ParentStatus { get; set; }
 
-    public IEnumerable<EventType> EventTypes { get; set; }
+    public IEnumerable<EventTypes> EventTypes { get; set; }
 
     public RelationShipStatus? RelationshipStatus { get; set; }
 
     public TheTypeOfLeisure? LeisureType { get; set; }
 
-    public IEnumerable<ReasonsForUsingTheSite> ReasonsForUsingTheSite { get; set; }
+    public IEnumerable<InterestReasons> ReasonsForUsingTheSite { get; set; }
 
     public string AdditionalInfo { get; set; }
 }

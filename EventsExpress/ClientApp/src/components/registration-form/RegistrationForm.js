@@ -20,7 +20,7 @@ const stepsArray = [
 
 export const RegisterStepContext = createContext();
 
-const RegistrationForm = ({ formValues, registerComplete }) => {
+const RegistrationForm = ({ formValues, completeRegistration }) => {
     const [currentStep, setCurrentStep] = useState(2);
 
     const adjustStep = value => {
@@ -28,7 +28,7 @@ const RegistrationForm = ({ formValues, registerComplete }) => {
     };
 
     const saveProfile = (shouldSaveMoreInfo = false) => {
-        return registerComplete(formValues, { shouldSaveMoreInfo }).then(() => setCurrentStep(6));
+        return completeRegistration(formValues, { shouldSaveMoreInfo }).then(() => setCurrentStep(6));
     };
 
     const renderStep = () => {
@@ -68,7 +68,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-    registerComplete: (data, options) => dispatch(registerComplete(data, options)),
+    completeRegistration: (data, options) => dispatch(registerComplete(data, options)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(RegistrationForm);

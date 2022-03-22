@@ -1,10 +1,9 @@
 ﻿import React from 'react';
 import { reduxForm, Field } from 'redux-form';
 import { Grid } from '@material-ui/core';
-import { MultiCheckbox } from '../../../helpers/form-helpers';
+import { MultiCheckbox, renderTextArea } from '../../../helpers/form-helpers';
 import RadioGroup from './RadioGroup';
 import StepperNavigation from '../../StepperNavigation';
-import { renderTextArea } from '../../../helpers/form-helpers'
 import maps from '../../maps'
 import '../../RegistrationForm.css';
 import './CheckboxDesign.css';
