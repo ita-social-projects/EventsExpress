@@ -24,7 +24,6 @@ import UserChats from '../chat/user_chats';
 import NotificationEvents from '../notification_events';
 import ContactAdminWrapper from '../../containers/contactAdmin/contactAdmin-container';
 import ContactAdminDetails from '../../containers/contactAdmin/contactAdmin-details-container';
-import RegisterCompleteWrapper from '../../containers/register-complete-wrapper';
 import Admin from '../admin';
 import RegisterSuccess from '../register/register-success';
 import EventEditWrapper from '../../containers/event-edit-wrapper';
@@ -74,8 +73,6 @@ class App extends Component {
                                         <Redirect to="/home/events" />
                                     )}
                                 />
-                                {/* TODO: delete this route */}
-                                <Route path='/registerComplete' component={this.AdminAndUserRoleSecurity(RegisterCompleteWrapper)} />
                                 <Route path="/editProfile/" component={this.AdminAndUserRoleSecurity(Profile)} />
                                 <Route path="/event/:id/:page" component={EventItemViewWrapper} />
                                 <Route path="/eventSchedules" component={EventSchedulesListWrapper} />
