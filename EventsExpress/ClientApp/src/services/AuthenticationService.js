@@ -24,8 +24,6 @@ export default class AuthenticationService {
 
     setRegister = data => baseService.setResource('Authentication/RegisterBegin', data);
 
-    setRegisterBindAccount = data => baseService.setResource('Authentication/RegisterBindExternalAccount', data);
-
     setRegisterComplete = data => baseService.setResource('Authentication/RegisterComplete', data);
 
     setMoreInfo = data => baseService.setResource('UserMoreInfo/Create', data);
