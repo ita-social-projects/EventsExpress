@@ -12,12 +12,15 @@ using EventsExpress.Db.Bridge;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
 using EventsExpress.Test.ServiceTests.TestClasses.Comparers;
+using EventsExpress.Test.ServiceTests.TestClasses.Location;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.EntityFrameworkCore;
 using Moq;
+using NetTopologySuite.Geometries;
 using NUnit.Framework;
+using Location = EventsExpress.Db.Entities.Location;
 
 namespace EventsExpress.Test.ServiceTests
 {
@@ -29,6 +32,7 @@ namespace EventsExpress.Test.ServiceTests
         private Mock<ISecurityContext> mockSecurityContext;
         private UserService service;
         private Mock<IMediator> mockMediator;
+        private Mock<ILocationManager> mockLocationService;
 
         private UserDto existingUserDTO;
         private UserDto secondUserDTO;
@@ -53,6 +57,7 @@ namespace EventsExpress.Test.ServiceTests
             mockPhotoService = new Mock<IPhotoService>();
             mockMediator = new Mock<IMediator>();
             mockSecurityContext = new Mock<ISecurityContext>();
+            mockLocationService = new Mock<ILocationManager>();
             MockMapper.Setup(opts => opts.Map<IEnumerable<CategoryDto>>(It.IsAny<IEnumerable<UserCategory>>()))
                 .Returns((IEnumerable<UserCategory> u) => u.Select(x => new CategoryDto { Id = x.Category.Id, Name = x.Category.Name }));
             MockMapper.Setup(opts => opts.Map<IEnumerable<NotificationTypeDto>>(It.IsAny<IEnumerable<UserNotificationType>>()))
@@ -75,6 +80,7 @@ namespace EventsExpress.Test.ServiceTests
                 MockMapper.Object,
                 mockMediator.Object,
                 mockPhotoService.Object,
+                mockLocationService.Object,
                 mockSecurityContext.Object);
 
             existingUser = new User
@@ -82,6 +88,7 @@ namespace EventsExpress.Test.ServiceTests
                 Id = userId,
                 Name = name,
                 Email = existingEmail,
+                LocationId = Guid.NewGuid(),
                 NotificationTypes = new List<UserNotificationType>
                 {
                     new UserNotificationType
@@ -111,6 +118,12 @@ namespace EventsExpress.Test.ServiceTests
                 {
                     UserId = userId,
                     IsBlocked = true,
+                },
+                Location = new Location
+                {
+                    Point = Point.Empty,
+                    OnlineMeeting = null,
+                    Type = LocationType.Map,
                 },
             };
 
@@ -144,6 +157,7 @@ namespace EventsExpress.Test.ServiceTests
                     UserId = secondUserId,
                     IsBlocked = false,
                 },
+                LocationId = null,
             };
 
             existingUserDTO = new UserDto
@@ -175,6 +189,13 @@ namespace EventsExpress.Test.ServiceTests
                             Name = "Sea",
                         },
                     },
+                },
+                Location = new LocationDto
+                {
+                    Point = Point.Empty,
+                    OnlineMeeting = null,
+                    Type = LocationType.Map,
+                    Id = Guid.NewGuid(),
                 },
             };
 
@@ -208,6 +229,7 @@ namespace EventsExpress.Test.ServiceTests
                     UserId = secondUserId,
                     IsBlocked = false,
                 },
+                Location = null,
             };
 
             userDtoComparer = new UserDtoComparer();
@@ -405,6 +427,49 @@ namespace EventsExpress.Test.ServiceTests
         {
             mockSecurityContext.Setup(s => s.GetCurrentUserId()).Returns(existingUserDTO.Id);
             Assert.DoesNotThrowAsync(async () => await service.EditBirthday(It.IsAny<DateTime>()));
+        }
+
+        [Test]
+        public void EditLocation_DoesNotThrow()
+        {
+            mockSecurityContext.Setup(s => s.GetCurrentUserId()).Returns(existingUserDTO.Id);
+            Assert.DoesNotThrow(() => service.EditLocation(It.IsAny<LocationDto>()));
+        }
+
+        [Test]
+        public void EditLocation_CurrentUser_IsNull()
+        {
+            mockSecurityContext.Setup(s => s.GetCurrentUserId()).Returns(null);
+            Assert.ThrowsAsync<NullReferenceException>(
+                () => service.EditLocation(It.IsAny<LocationDto>()));
+        }
+
+        [Test]
+        [TestCaseSource(typeof(CreatingNotExistingUserLocation))]
+        public void EditLocation_LocationType_Online_Throws(LocationDto locationDto)
+        {
+            mockSecurityContext.Setup(s => s.GetCurrentUserId()).Returns(existingUserDTO.Id);
+            Assert.ThrowsAsync<EventsExpressException>(
+                () => service.EditLocation(locationDto));
+        }
+
+        [Test]
+        public void EditLocation_UserLocationId_IsNull_CreateNewLocation()
+        {
+            mockSecurityContext.Setup(s => s.GetCurrentUserId()).Returns(secondUser.Id);
+            Assert.That(secondUser.LocationId, Is.Null);
+            Assert.DoesNotThrow(
+                () => service.EditLocation(existingUserDTO.Location));
+        }
+
+        [Test]
+        public void EditLocation_UserLocationId_IsNotNull_Edit()
+        {
+            mockSecurityContext.Setup(s => s.GetCurrentUserId()).Returns(existingUserDTO.Id);
+            existingUser.LocationId = Guid.Empty;
+            Assert.IsNotNull(existingUser.LocationId);
+            Assert.DoesNotThrow(
+                () => service.EditLocation(It.IsAny<LocationDto>()));
         }
 
         [Test]

@@ -18,9 +18,13 @@ namespace EventsExpress.Db.Entities
 
         public Gender Gender { get; set; }
 
+        public Guid? LocationId { get; set; }
+
         public IEnumerable<EventOrganizer> Events { get; set; }
 
         public virtual IEnumerable<UserEvent> EventsToVisit { get; set; }
+
+        public virtual Location Location { get; set; }
 
         public virtual IEnumerable<UserCategory> Categories { get; set; }
 

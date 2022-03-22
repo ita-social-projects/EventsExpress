@@ -48,5 +48,7 @@ namespace EventsExpress.Core.IServices
         Task EditBirthday(DateTime birthday);
 
         Task EditGender(Gender gender);
+
+        Task EditLocation(LocationDto location);
     }
 }

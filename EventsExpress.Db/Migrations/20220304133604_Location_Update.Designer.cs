@@ -4,6 +4,7 @@ using EventsExpress.Db.EF;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NetTopologySuite.Geometries;
 
@@ -12,9 +13,10 @@ using NetTopologySuite.Geometries;
 namespace EventsExpress.Db.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220304133604_Location_Update")]
+    partial class Location_Update
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -628,13 +630,6 @@ namespace EventsExpress.Db.Migrations
                             Message = "Dear {{UserEmail}}, your joined <a href='{{EventLink}}'>event</a> has been changed.",
                             Subject = "Joined event was changed",
                             Title = "JoinedEventChanged"
-                        },
-                        new
-                        {
-                            Id = 7,
-                            Message = "Dear {{UserEmail}}, your roles were changed. Your current roles are: {{FormattedRoles}}.",
-                            Subject = "Your roles were changed",
-                            Title = "RolesChanged"
                         });
                 });
 

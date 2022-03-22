@@ -2,13 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 using EventsExpress.Db.Bridge;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Newtonsoft.Json;
@@ -53,7 +51,7 @@ namespace EventsExpress.Db.EF
 
         public DbSet<EventOrganizer> EventOrganizers { get; set; }
 
-        public DbSet<EventLocation> EventLocations { get; set; }
+        public DbSet<Location> Locations { get; set; }
 
         public DbSet<EventSchedule> EventSchedules { get; set; }
 

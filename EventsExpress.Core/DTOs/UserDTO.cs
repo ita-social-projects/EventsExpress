@@ -29,6 +29,8 @@ namespace EventsExpress.Core.DTOs
 
         public Account Account { get; set; }
 
+        public LocationDto Location { get; set; }
+
         public IEnumerable<EventDto> Events { get; set; }
 
         public IEnumerable<UserEvent> EventsToVisit { get; set; }

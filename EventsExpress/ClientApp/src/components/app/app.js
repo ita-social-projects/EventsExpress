@@ -37,7 +37,7 @@ import AuthUser from '../../actions/login/auth-user-action';
 import getConfig from '../../actions/config/get-config-action';
 import RegistrationForm from '../RegistrationForm';
 import MainLayout from '../MainLayout';
-import privacy from '../privacy/privacy';
+import privacy from '../privacy/privacy.js';
 import About from "../about/about.js";
 import Terms from '../terms/terms.js';
 
