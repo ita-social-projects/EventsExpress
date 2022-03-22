@@ -3,14 +3,9 @@ import Avatar from '@material-ui/core/Avatar';
 import { userDefaultImage } from "../../constants/userDefaultImage";
 import { connect } from 'react-redux';
 import PhotoService from '../../services/PhotoService';
-import {withStyles} from "@material-ui/core/styles";
+
 
 const photoService = new PhotoService();
-
-const defaultStyle = {
-        height:"40px",
-        width:"40px"
-  };
 
 export class CustomAvatar extends Component {
     constructor(props) {
@@ -47,7 +42,7 @@ export class CustomAvatar extends Component {
     render() {
         
 
-        const { name,size } = this.props;
+        const { name, height, width } = this.props;
 
          
 
@@ -57,7 +52,7 @@ export class CustomAvatar extends Component {
                 <Avatar
                     alt={name + "avatar"}
                     src={this.state.avatarImage}
-                    style={size !== null ? {height: size, width: size} : defaultStyle}
+                    style={{height: height, width: width}}
                     imgProps={{ onError: (e) => { e.target.onerror = null; e.target.src = `${userDefaultImage}` } }} />
             </>
         );
