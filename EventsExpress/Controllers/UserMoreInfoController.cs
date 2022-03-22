@@ -2,6 +2,7 @@
 using AutoMapper;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.IServices;
+using EventsExpress.Policies;
 using EventsExpress.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -10,7 +11,7 @@ namespace EventsExpress.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-[AllowAnonymous]
+[Authorize(Policy = PolicyNames.UserPolicyName)]
 public class UserMoreInfoController : ControllerBase
 {
     private readonly IUserMoreInfoService _userMoreInfoService;

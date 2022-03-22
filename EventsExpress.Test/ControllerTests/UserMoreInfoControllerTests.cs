@@ -1,49 +1,51 @@
-﻿namespace EventsExpress.Test.ControllerTests
+﻿using System;
+using AutoMapper;
+using EventsExpress.Controllers;
+using EventsExpress.Core.IServices;
+using EventsExpress.Db.Enums;
+using EventsExpress.ViewModels;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Moq;
+using NUnit.Framework;
+
+namespace EventsExpress.Test.ControllerTests;
+
+[TestFixture]
+internal class UserMoreInfoControllerTests
 {
-    using System;
-    using AutoMapper;
-    using EventsExpress.Controllers;
-    using EventsExpress.Core.IServices;
-    using EventsExpress.Db.Enums;
-    using EventsExpress.ViewModels;
-    using Microsoft.AspNetCore.Http;
-    using Microsoft.AspNetCore.Mvc;
-    using Moq;
-    using NUnit.Framework;
+    private Mock<IUserMoreInfoService> service;
+    private UserMoreInfoController userMoreInfoController;
 
-    [TestFixture]
-    internal class UserMoreInfoControllerTests
+    private Mock<IMapper> MockMapper { get; set; }
+
+    [SetUp]
+    protected void Initialize()
     {
-        private Mock<IUserMoreInfoService> service;
-        private UserMoreInfoController userMoreInfoController;
+        MockMapper = new Mock<IMapper>();
+        service = new Mock<IUserMoreInfoService>();
+        userMoreInfoController = new UserMoreInfoController(service.Object, MockMapper.Object);
+        userMoreInfoController.ControllerContext = new ControllerContext();
+        userMoreInfoController.ControllerContext.HttpContext = new DefaultHttpContext();
+    }
 
-        private Mock<IMapper> MockMapper { get; set; }
-
-        [SetUp]
-        protected void Initialize()
+    [Test]
+    public void Create_ValidModel_OkResult()
+    {
+        var userMoreInfoViewModel = new UserMoreInfoCreateViewModel
         {
-            MockMapper = new Mock<IMapper>();
-            service = new Mock<IUserMoreInfoService>();
-            userMoreInfoController = new UserMoreInfoController(service.Object, MockMapper.Object);
-            userMoreInfoController.ControllerContext = new ControllerContext();
-            userMoreInfoController.ControllerContext.HttpContext = new DefaultHttpContext();
-        }
+            Id = Guid.NewGuid(),
+            UserId = Guid.NewGuid(),
+            ParentStatus = ParentStatus.Kids,
+            EventTypes = new[] { EventType.Free, EventType.Online },
+            RelationshipStatus = RelationShipStatus.InARelationship,
+            ReasonsForUsingTheSite = new[] { ReasonsForUsingTheSite.BeMoreActive },
+            LeisureType = TheTypeOfLeisure.Active,
+            AdditionalInfo = "AdditionalInfoAboutUser",
+        };
 
-        [Test]
-        public void Create_OkResult()
-        {
-            var userMoreInfoViewModel = new UserMoreInfoCreateViewModel();
-            userMoreInfoViewModel.Id = new Guid("e618879f-966e-4bbb-b8d2-c497586e4405");
-            userMoreInfoViewModel.UserId = new Guid("D4C124A7-66F7-42DF-E556-08D983455BD7");
-            userMoreInfoViewModel.ParentStatus = ParentStatus.Kids;
-            userMoreInfoViewModel.EventTypes = new[] { EventType.Free, EventType.Online };
-            userMoreInfoViewModel.RelationshipStatus = RelationShipStatus.InARelationship;
-            userMoreInfoViewModel.ReasonsForUsingTheSite = new[] { ReasonsForUsingTheSite.BeMoreActive };
-            userMoreInfoViewModel.LeisureType = TheTypeOfLeisure.Active;
-            userMoreInfoViewModel.AdditionalInfo = "AditionalInfoAboutUser";
+        var expected = userMoreInfoController.Create(userMoreInfoViewModel);
 
-            var expected = userMoreInfoController.Create(userMoreInfoViewModel);
-            Assert.IsInstanceOf<OkResult>(expected.Result);
-        }
+        Assert.IsInstanceOf<OkResult>(expected.Result);
     }
 }
