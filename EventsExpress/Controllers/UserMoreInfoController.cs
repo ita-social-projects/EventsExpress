@@ -6,30 +6,27 @@ using EventsExpress.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace EventsExpress.Controllers
+namespace EventsExpress.Controllers;
+
+[ApiController]
+[Route("api/[controller]")]
+[AllowAnonymous]
+public class UserMoreInfoController : ControllerBase
 {
-    [ApiController]
-    [Route("api/[controller]")]
-    [AllowAnonymous]
-    public class UserMoreInfoController : ControllerBase
+    private readonly IUserMoreInfoService _userMoreInfoService;
+    private readonly IMapper _mapper;
+
+    public UserMoreInfoController(IUserMoreInfoService userService, IMapper mapper)
     {
-        private readonly IUserMoreInfoService _userMoreInfoService;
-        private readonly IMapper _mapper;
+        _userMoreInfoService = userService;
+        _mapper = mapper;
+    }
 
-        public UserMoreInfoController(IUserMoreInfoService userService, IMapper mapper)
-        {
-            _userMoreInfoService = userService;
-            _mapper = mapper;
-        }
-
-        [HttpPost("[action]")]
-        public async Task<IActionResult> Create([FromBody] UserMoreInfoCreateViewModel userMoreInfo)
-        {
-            var newuserMoreInfo = _mapper.Map<UserMoreInfoDto>(userMoreInfo);
-
-            await _userMoreInfoService.CreateAsync(newuserMoreInfo);
-
-            return Ok();
-        }
+    [HttpPost("[action]")]
+    public async Task<IActionResult> Create([FromBody] UserMoreInfoCreateViewModel userMoreInfo)
+    {
+        var dto = _mapper.Map<UserMoreInfoDto>(userMoreInfo);
+        await _userMoreInfoService.CreateAsync(dto);
+        return Ok();
     }
 }

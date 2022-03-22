@@ -1,4 +1,6 @@
-﻿namespace EventsExpress.Test.ServiceTests
+﻿using EventsExpress.Db.Bridge;
+
+namespace EventsExpress.Test.ServiceTests
 {
     using System;
     using System.Threading.Tasks;
@@ -29,7 +31,9 @@
         {
             base.Initialize();
 
-            service = new UserMoreInfoService(Context, MockMapper.Object);
+            var securityContextMock = new Mock<ISecurityContext>();
+
+            service = new UserMoreInfoService(Context, MockMapper.Object, securityContextMock.Object);
 
             userMoreInfoDTO = new UserMoreInfoDto
             {
@@ -38,7 +42,7 @@
                 ParentStatus = ParentStatus.Kids,
                 TheTypeOfLeisure = TheTypeOfLeisure.Passive,
                 RelationShipStatus = RelationShipStatus.Single,
-                AdditionalInfoAboutUser = "AditionalInfoAboutUser",
+                AdditionalInfo = "AditionalInfoAboutUser",
             };
 
             userMoreInfo = new UserMoreInfo
@@ -79,7 +83,7 @@
                    ParentStatus = e.ParentStatus,
                    TheTypeOfLeisure = e.TheTypeOfLeisure,
                    RelationShipStatus = e.RelationShipStatus,
-                   AdditionalInfo = e.AdditionalInfoAboutUser,
+                   AdditionalInfo = e.AdditionalInfo,
                });
         }
 

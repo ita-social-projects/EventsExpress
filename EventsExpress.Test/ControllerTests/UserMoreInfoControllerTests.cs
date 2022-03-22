@@ -37,10 +37,10 @@
             userMoreInfoViewModel.UserId = new Guid("D4C124A7-66F7-42DF-E556-08D983455BD7");
             userMoreInfoViewModel.ParentStatus = ParentStatus.Kids;
             userMoreInfoViewModel.EventTypes = new[] { EventType.Free, EventType.Online };
-            userMoreInfoViewModel.RelationShipStatus = RelationShipStatus.InARelationship;
+            userMoreInfoViewModel.RelationshipStatus = RelationShipStatus.InARelationship;
             userMoreInfoViewModel.ReasonsForUsingTheSite = new[] { ReasonsForUsingTheSite.BeMoreActive };
-            userMoreInfoViewModel.TheTypeOfLeisure = TheTypeOfLeisure.Active;
-            userMoreInfoViewModel.AdditionalInfoAboutUser = "AditionalInfoAboutUser";
+            userMoreInfoViewModel.LeisureType = TheTypeOfLeisure.Active;
+            userMoreInfoViewModel.AdditionalInfo = "AditionalInfoAboutUser";
 
             var expected = userMoreInfoController.Create(userMoreInfoViewModel);
             Assert.IsInstanceOf<OkResult>(expected.Result);
