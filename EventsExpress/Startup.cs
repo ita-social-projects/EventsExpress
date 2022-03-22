@@ -133,7 +133,6 @@ namespace EventsExpress
             services.AddScoped<ITrackService, TrackService>();
             services.AddScoped<ICommentService, CommentService>();
             services.AddScoped<IInventoryService, InventoryService>();
-            services.AddScoped<ILocationService, LocationService>();
             services.AddScoped<IUnitOfMeasuringService, UnitOfMeasuringService>();
             services.AddScoped<ICategoryOfMeasuringService, CategoryOfMeasuringService>();
             services.AddScoped<IUserEventInventoryService, UserEventInventoryService>();
@@ -143,8 +142,10 @@ namespace EventsExpress
             services.AddScoped<INotificationTemplateService, NotificationTemplateService>();
             services.AddScoped<IContactAdminService, ContactAdminService>();
             services.AddScoped<IIpProviderService, IpProviderService>();
+            services.AddScoped<IBookmarkService, BookmarkService>();
             services.AddScoped<IUserMoreInfoService, UserMoreInfoService>();
 
+            services.AddScoped<ILocationManager, LocationManager>();
             services.AddSingleton<ICacheHelper, CacheHelper>();
             services.AddScoped<IPhotoService, PhotoService>();
             services.AddScoped<IPasswordHasher, PasswordHasherService>();
@@ -195,7 +196,7 @@ namespace EventsExpress
                 configuration.RootPath = "ClientApp/build";
             });
 
-            services.AddMediatR(typeof(EventCreatedHandler).Assembly);
+            services.AddMediatR(typeof(OwnEventChangedHandler).Assembly);
 
             services.AddAutoMapper(typeof(UserMapperProfile).GetTypeInfo().Assembly);
 

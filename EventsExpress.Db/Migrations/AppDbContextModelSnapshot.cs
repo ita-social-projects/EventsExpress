@@ -41,7 +41,7 @@ namespace EventsExpress.Db.Migrations
                         .IsUnique()
                         .HasFilter("[UserId] IS NOT NULL");
 
-                    b.ToTable("Accounts");
+                    b.ToTable("Accounts", (string)null);
                 });
 
             modelBuilder.Entity("EventsExpress.Db.Entities.AccountRole", b =>
@@ -56,7 +56,7 @@ namespace EventsExpress.Db.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("AccountRoles");
+                    b.ToTable("AccountRoles", (string)null);
                 });
 
             modelBuilder.Entity("EventsExpress.Db.Entities.AuthExternal", b =>
@@ -78,7 +78,7 @@ namespace EventsExpress.Db.Migrations
 
                     b.HasIndex("AccountId");
 
-                    b.ToTable("AuthExternal");
+                    b.ToTable("AuthExternal", (string)null);
                 });
 
             modelBuilder.Entity("EventsExpress.Db.Entities.AuthLocal", b =>
@@ -109,7 +109,7 @@ namespace EventsExpress.Db.Migrations
                     b.HasIndex("AccountId")
                         .IsUnique();
 
-                    b.ToTable("AuthLocal");
+                    b.ToTable("AuthLocal", (string)null);
                 });
 
             modelBuilder.Entity("EventsExpress.Db.Entities.Category", b =>
@@ -129,7 +129,7 @@ namespace EventsExpress.Db.Migrations
 
                     b.HasIndex("CategoryGroupId");
 
-                    b.ToTable("Categories");
+                    b.ToTable("Categories", (string)null);
                 });
 
             modelBuilder.Entity("EventsExpress.Db.Entities.CategoryGroup", b =>
@@ -143,7 +143,7 @@ namespace EventsExpress.Db.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("CategoryGroups");
+                    b.ToTable("CategoryGroups", (string)null);
 
                     b.HasData(
                         new
@@ -174,7 +174,7 @@ namespace EventsExpress.Db.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("CategoriesOfMeasurings");
+                    b.ToTable("CategoriesOfMeasurings", (string)null);
                 });
 
             modelBuilder.Entity("EventsExpress.Db.Entities.ChangeInfo", b =>
@@ -205,7 +205,7 @@ namespace EventsExpress.Db.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("ChangeInfos");
+                    b.ToTable("ChangeInfos", (string)null);
                 });
 
             modelBuilder.Entity("EventsExpress.Db.Entities.ChatRoom", b =>
@@ -219,7 +219,7 @@ namespace EventsExpress.Db.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ChatRoom");
+                    b.ToTable("ChatRoom", (string)null);
                 });
 
             modelBuilder.Entity("EventsExpress.Db.Entities.Comments", b =>
@@ -251,7 +251,7 @@ namespace EventsExpress.Db.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Comments");
+                    b.ToTable("Comments", (string)null);
                 });
 
             modelBuilder.Entity("EventsExpress.Db.Entities.ContactAdmin", b =>
@@ -297,7 +297,7 @@ namespace EventsExpress.Db.Migrations
 
                     b.HasIndex("SenderId");
 
-                    b.ToTable("ContactAdmin");
+                    b.ToTable("ContactAdmin", (string)null);
                 });
 
             modelBuilder.Entity("EventsExpress.Db.Entities.Event", b =>
@@ -338,7 +338,7 @@ namespace EventsExpress.Db.Migrations
 
                     b.HasIndex("EventLocationId");
 
-                    b.ToTable("Events");
+                    b.ToTable("Events", (string)null);
                 });
 
             modelBuilder.Entity("EventsExpress.Db.Entities.EventAudience", b =>
@@ -352,7 +352,7 @@ namespace EventsExpress.Db.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("EventAudiences");
+                    b.ToTable("EventAudiences", (string)null);
                 });
 
             modelBuilder.Entity("EventsExpress.Db.Entities.EventCategory", b =>
@@ -367,7 +367,7 @@ namespace EventsExpress.Db.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("EventCategory");
+                    b.ToTable("EventCategory", (string)null);
                 });
 
             modelBuilder.Entity("EventsExpress.Db.Entities.EventLocation", b =>
@@ -387,7 +387,7 @@ namespace EventsExpress.Db.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("EventLocations");
+                    b.ToTable("EventLocations", (string)null);
                 });
 
             modelBuilder.Entity("EventsExpress.Db.Entities.EventOrganizer", b =>
@@ -404,7 +404,7 @@ namespace EventsExpress.Db.Migrations
 
                     b.HasIndex("UserId", "EventId");
 
-                    b.ToTable("EventOrganizers");
+                    b.ToTable("EventOrganizers", (string)null);
                 });
 
             modelBuilder.Entity("EventsExpress.Db.Entities.EventSchedule", b =>
@@ -436,7 +436,7 @@ namespace EventsExpress.Db.Migrations
                     b.HasIndex("EventId")
                         .IsUnique();
 
-                    b.ToTable("EventSchedules");
+                    b.ToTable("EventSchedules", (string)null);
                 });
 
             modelBuilder.Entity("EventsExpress.Db.Entities.EventStatusHistory", b =>
@@ -466,7 +466,7 @@ namespace EventsExpress.Db.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("EventStatusHistory");
+                    b.ToTable("EventStatusHistory", (string)null);
                 });
 
             modelBuilder.Entity("EventsExpress.Db.Entities.Inventory", b =>
@@ -493,7 +493,7 @@ namespace EventsExpress.Db.Migrations
 
                     b.HasIndex("UnitOfMeasuringId");
 
-                    b.ToTable("Inventories");
+                    b.ToTable("Inventories", (string)null);
                 });
 
             modelBuilder.Entity("EventsExpress.Db.Entities.Message", b =>
@@ -531,7 +531,7 @@ namespace EventsExpress.Db.Migrations
 
                     b.HasIndex("SenderId");
 
-                    b.ToTable("Message");
+                    b.ToTable("Message", (string)null);
                 });
 
             modelBuilder.Entity("EventsExpress.Db.Entities.NotificationTemplate", b =>
@@ -556,7 +556,7 @@ namespace EventsExpress.Db.Migrations
                     b.HasIndex("Title")
                         .IsUnique();
 
-                    b.ToTable("NotificationTemplates");
+                    b.ToTable("NotificationTemplates", (string)null);
                 });
 
             modelBuilder.Entity("EventsExpress.Db.Entities.NotificationType", b =>
@@ -570,7 +570,7 @@ namespace EventsExpress.Db.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("NotificationTypes");
+                    b.ToTable("NotificationTypes", (string)null);
 
                     b.HasData(
                         new
@@ -601,7 +601,7 @@ namespace EventsExpress.Db.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Permissions");
+                    b.ToTable("Permissions", (string)null);
                 });
 
             modelBuilder.Entity("EventsExpress.Db.Entities.Rate", b =>
@@ -625,7 +625,7 @@ namespace EventsExpress.Db.Migrations
 
                     b.HasIndex("UserFromId");
 
-                    b.ToTable("Rates");
+                    b.ToTable("Rates", (string)null);
                 });
 
             modelBuilder.Entity("EventsExpress.Db.Entities.Relationship", b =>
@@ -649,7 +649,7 @@ namespace EventsExpress.Db.Migrations
 
                     b.HasIndex("UserToId");
 
-                    b.ToTable("Relationships");
+                    b.ToTable("Relationships", (string)null);
                 });
 
             modelBuilder.Entity("EventsExpress.Db.Entities.Role", b =>
@@ -664,7 +664,7 @@ namespace EventsExpress.Db.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Roles");
+                    b.ToTable("Roles", (string)null);
 
                     b.HasData(
                         new
@@ -705,7 +705,7 @@ namespace EventsExpress.Db.Migrations
                         .IsUnique()
                         .HasFilter("IsDeleted = 0");
 
-                    b.ToTable("UnitOfMeasurings");
+                    b.ToTable("UnitOfMeasurings", (string)null);
                 });
 
             modelBuilder.Entity("EventsExpress.Db.Entities.User", b =>
@@ -737,7 +737,7 @@ namespace EventsExpress.Db.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("EventsExpress.Db.Entities.UserCategory", b =>
@@ -752,7 +752,7 @@ namespace EventsExpress.Db.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("UserCategory");
+                    b.ToTable("UserCategory", (string)null);
                 });
 
             modelBuilder.Entity("EventsExpress.Db.Entities.UserChat", b =>
@@ -773,7 +773,7 @@ namespace EventsExpress.Db.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserChat");
+                    b.ToTable("UserChat", (string)null);
                 });
 
             modelBuilder.Entity("EventsExpress.Db.Entities.UserEvent", b =>
@@ -794,7 +794,7 @@ namespace EventsExpress.Db.Migrations
 
                     b.HasIndex("EventId");
 
-                    b.ToTable("UserEvent");
+                    b.ToTable("UserEvent", (string)null);
                 });
 
             modelBuilder.Entity("EventsExpress.Db.Entities.UserEventInventory", b =>
@@ -815,7 +815,7 @@ namespace EventsExpress.Db.Migrations
 
                     b.HasIndex("UserId", "EventId");
 
-                    b.ToTable("UserEventInventories");
+                    b.ToTable("UserEventInventories", (string)null);
                 });
 
             modelBuilder.Entity("EventsExpress.Db.Entities.UserMoreInfo", b =>
@@ -850,7 +850,7 @@ namespace EventsExpress.Db.Migrations
                     b.HasIndex("UserId")
                         .IsUnique();
 
-                    b.ToTable("UserMoreInfo");
+                    b.ToTable("UserMoreInfo", (string)null);
                 });
 
             modelBuilder.Entity("EventsExpress.Db.Entities.UserNotificationType", b =>
@@ -865,7 +865,7 @@ namespace EventsExpress.Db.Migrations
 
                     b.HasIndex("NotificationTypeId");
 
-                    b.ToTable("UserNotificationTypes");
+                    b.ToTable("UserNotificationTypes", (string)null);
                 });
 
             modelBuilder.Entity("EventsExpress.Db.Entities.UserToken", b =>
@@ -905,7 +905,7 @@ namespace EventsExpress.Db.Migrations
 
                     b.HasIndex("AccountId");
 
-                    b.ToTable("UserTokens");
+                    b.ToTable("UserTokens", (string)null);
                 });
 
             modelBuilder.Entity("EventsExpress.Db.Entities.Account", b =>

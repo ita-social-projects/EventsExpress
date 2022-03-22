@@ -43,7 +43,7 @@ public class EventOrganizersServiceTests : TestInitializer
 
         var eventCategoryId = Guid.NewGuid();
         var eventLocationIdMap = Guid.NewGuid();
-        var eventLocationMap = new EventLocation
+        var eventLocationMap = new Db.Entities.Location
         {
             Id = eventLocationIdMap, Point = new Point(10.45, 12.34), Type = LocationType.Map,
         };
@@ -57,7 +57,7 @@ public class EventOrganizersServiceTests : TestInitializer
             DateFrom = DateTime.Today,
             DateTo = DateTime.Today.AddDays(1),
             IsPublic = true,
-            EventLocationId = eventLocationIdMap,
+            LocationId = eventLocationIdMap,
             MaxParticipants = 2147483647,
             EventSchedule = new EventSchedule
             {
@@ -85,7 +85,7 @@ public class EventOrganizersServiceTests : TestInitializer
             },
         };
 
-        Context.EventLocations.Add(eventLocationMap);
+        Context.Locations.Add(eventLocationMap);
         Context.EventOrganizers.Add(new EventOrganizer { UserId = _organizerId, EventId = _eventId });
         Context.UserEvent.Add(new UserEvent { UserId = _visitorId, EventId = _eventId });
         Context.Users.Add(organizer);

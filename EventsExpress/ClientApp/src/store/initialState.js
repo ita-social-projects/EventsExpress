@@ -27,6 +27,7 @@ const initialState = {
         token: null,
         categories: [],
         notificationTypes: [],
+        bookmarkedEvents: []
     },
     roles: {
         data: []
@@ -93,6 +94,7 @@ const initialState = {
             pageViewModel: {},
         },
         filter: filterHelper.getDefaultEventFilter(),
+        layout: 'matrix',
     },
     tracks: {
         isError: false,

@@ -33,6 +33,8 @@ namespace EventsExpress.Core.DTOs
 
         public Account Account { get; set; }
 
+        public LocationDto Location { get; set; }
+
         public IEnumerable<EventDto> Events { get; set; }
 
         public IEnumerable<UserEvent> EventsToVisit { get; set; }
@@ -42,5 +44,7 @@ namespace EventsExpress.Core.DTOs
         public IEnumerable<Rate> MyRates { get; set; }
 
         public IEnumerable<UserNotificationType> NotificationTypes { get; set; }
+
+        public IEnumerable<Guid> BookmarkedEvents { get; set; }
     }
 }

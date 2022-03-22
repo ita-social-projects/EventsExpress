@@ -26,9 +26,13 @@ public class User : BaseEntity
 
     public Gender Gender { get; set; }
 
+    public Guid? LocationId { get; set; }
+
     public IEnumerable<EventOrganizer> Events { get; set; }
 
     public virtual IEnumerable<UserEvent> EventsToVisit { get; set; }
+
+    public virtual Location Location { get; set; }
 
     public virtual IEnumerable<UserCategory> Categories { get; set; }
 
@@ -41,4 +45,6 @@ public class User : BaseEntity
     public virtual ICollection<EventStatusHistory> ChangedStatusEvents { get; set; }
 
     public virtual IEnumerable<UserNotificationType> NotificationTypes { get; set; }
+
+    public virtual IEnumerable<EventBookmark> EventBookmarks { get; set; }
 }

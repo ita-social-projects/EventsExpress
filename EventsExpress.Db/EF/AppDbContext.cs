@@ -2,13 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 using EventsExpress.Db.Bridge;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Newtonsoft.Json;
@@ -39,7 +37,11 @@ namespace EventsExpress.Db.EF
 
         public DbSet<User> Users { get; set; }
 
+        public DbSet<EventRelationship> EventRelationships { get; set; }
+
         public DbSet<Rate> Rates { get; set; }
+
+        public DbSet<EventBookmark> EventBookmarks { get; set; }
 
         public DbSet<Entities.Role> Roles { get; set; }
 
@@ -49,7 +51,7 @@ namespace EventsExpress.Db.EF
 
         public DbSet<EventOrganizer> EventOrganizers { get; set; }
 
-        public DbSet<EventLocation> EventLocations { get; set; }
+        public DbSet<Location> Locations { get; set; }
 
         public DbSet<EventSchedule> EventSchedules { get; set; }
 

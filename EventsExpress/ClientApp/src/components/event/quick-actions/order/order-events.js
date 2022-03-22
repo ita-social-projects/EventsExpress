@@ -40,6 +40,7 @@ export const OrderEvents = () => {
     const renderCriteria = () => {
         return criteriaPairs.map(([key, value]) => (
             <MenuItem
+                key={key}
                 onClick={e => handleItemClick(e, key)}
                 selected={orderCriteria === key}
             >

@@ -8,7 +8,7 @@ namespace EventsExpress.Mapping
     {
         public LocationMapperProfile()
         {
-            CreateMap<LocationDto, EventLocation>().ReverseMap();
+            CreateMap<LocationDto, Location>().ReverseMap();
         }
     }
 }

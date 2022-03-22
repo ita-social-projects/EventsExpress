@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using EventsExpress.Db.EF;
 
 namespace EventsExpress.Db.Entities
@@ -26,14 +27,14 @@ namespace EventsExpress.Db.Entities
         public int? MaxParticipants { get; set; }
 
         [Track]
-        public Guid? EventLocationId { get; set; }
+        public Guid? EventAudienceId { get; set; }
 
         [Track]
-        public Guid? EventAudienceId { get; set; }
+        public Guid? LocationId { get; set; }
 
         public virtual EventSchedule EventSchedule { get; set; }
 
-        public virtual EventLocation EventLocation { get; set; }
+        public virtual Location Location { get; set; }
 
         public virtual EventAudience EventAudience { get; set; }
 
@@ -48,5 +49,7 @@ namespace EventsExpress.Db.Entities
         public virtual ICollection<Inventory> Inventories { get; set; }
 
         public virtual ICollection<EventStatusHistory> StatusHistory { get; set; }
+
+        public virtual ICollection<EventBookmark> EventBookmarks { get; set; }
     }
 }

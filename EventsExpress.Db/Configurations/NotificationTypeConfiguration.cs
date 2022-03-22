@@ -11,9 +11,9 @@ namespace EventsExpress.Db.Configuration
         {
             builder.HasData(new[]
                 {
-                    new NotificationType { Id = NotificationChange.Profile, Name = "Profile Change" },
+                    new NotificationType { Id = NotificationChange.Profile, Name = "User Status Change" },
                     new NotificationType { Id = NotificationChange.OwnEvent, Name = "Own Event Change" },
-                    new NotificationType { Id = NotificationChange.VisitedEvent, Name = "Visited Event Change" },
+                    new NotificationType { Id = NotificationChange.JoinedEvent, Name = "Joined Event Change" },
                 });
             builder.HasKey(c => c.Id);
             builder.Property(c => c.Id)
