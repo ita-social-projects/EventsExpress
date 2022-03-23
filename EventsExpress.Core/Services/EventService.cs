@@ -24,7 +24,7 @@ namespace EventsExpress.Core.Services
         private readonly IPhotoService _photoService;
         private readonly ILocationManager _locationManager;
         private readonly IMediator _mediator;
-        private readonly IEventScheduleService _eventScheduleService;
+        private readonly IEventScheduleManager _eventScheduleManager;
         private readonly ISecurityContext _securityContextService;
 
         public EventService(
@@ -33,14 +33,14 @@ namespace EventsExpress.Core.Services
             IMediator mediator,
             IPhotoService photoService,
             ILocationManager locationManager,
-            IEventScheduleService eventScheduleService,
+            IEventScheduleManager eventScheduleManager,
             ISecurityContext securityContextService)
             : base(context, mapper)
         {
             _photoService = photoService;
             _locationManager = locationManager;
             _mediator = mediator;
-            _eventScheduleService = eventScheduleService;
+            _eventScheduleManager = eventScheduleManager;
             _securityContextService = securityContextService;
         }
 
@@ -216,7 +216,7 @@ namespace EventsExpress.Core.Services
         {
             var eventDto = EventById(eventId);
 
-            var eventScheduleDto = _eventScheduleService.EventScheduleByEventId(eventId);
+            var eventScheduleDto = _eventScheduleManager.EventScheduleByEventId(eventId);
 
             long ticksDiff = 0;
             if (eventDto.DateTo != null && eventDto.DateFrom != null)
@@ -234,7 +234,7 @@ namespace EventsExpress.Core.Services
             eventScheduleDto.NextRun = DateTimeExtensions
                 .AddDateUnit(eventScheduleDto.Periodicity, eventScheduleDto.Frequency, eventDto.DateTo.Value);
 
-            await _eventScheduleService.Edit(eventScheduleDto);
+            await _eventScheduleManager.Edit(eventScheduleDto);
 
             var createResult = await Create(eventDto);
 
@@ -267,13 +267,13 @@ namespace EventsExpress.Core.Services
                 {
                     if (ev.EventSchedule == null)
                     {
-                        await _eventScheduleService.Create(Mapper.Map<EventScheduleDto>(eventDto));
+                        await _eventScheduleManager.Create(Mapper.Map<EventScheduleDto>(eventDto));
                     }
                     else
                     {
                         var eventScheduleDto = Mapper.Map<EventScheduleDto>(eventDto);
                         eventScheduleDto.Id = ev.EventSchedule.Id;
-                        await _eventScheduleService.Edit(eventScheduleDto);
+                        await _eventScheduleManager.Edit(eventScheduleDto);
                     }
                 }
             }
@@ -281,7 +281,7 @@ namespace EventsExpress.Core.Services
             {
                 if (ev.EventSchedule != null)
                 {
-                    await _eventScheduleService.Delete(ev.EventSchedule.Id);
+                    await _eventScheduleManager.Delete(ev.EventSchedule.Id);
                 }
             }
 
@@ -335,7 +335,7 @@ namespace EventsExpress.Core.Services
 
         public async Task<Guid> EditNextEvent(EventDto eventDto)
         {
-            var eventScheduleDto = _eventScheduleService.EventScheduleByEventId(eventDto.Id);
+            var eventScheduleDto = _eventScheduleManager.EventScheduleByEventId(eventDto.Id);
             if (eventDto.DateTo != null)
             {
                 eventScheduleDto.LastRun = eventDto.DateTo.Value;
@@ -343,7 +343,7 @@ namespace EventsExpress.Core.Services
                     .AddDateUnit(eventScheduleDto.Periodicity, eventScheduleDto.Frequency, eventDto.DateTo.Value);
             }
 
-            await _eventScheduleService.Edit(eventScheduleDto);
+            await _eventScheduleManager.Edit(eventScheduleDto);
 
             eventDto.IsReccurent = false;
             eventDto.Id = Guid.Empty;

@@ -17,7 +17,7 @@ namespace EventsExpress.Test.ServiceTests
     internal class EventScheduleServiceTests : TestInitializer
     {
         private static Mock<ISecurityContext> mockSecurityContextService;
-        private EventScheduleService service;
+        private EventScheduleManager service;
         private List<EventSchedule> eventSchedules;
         private EventScheduleDto esDTO;
         private Event activeEvent;
@@ -34,7 +34,7 @@ namespace EventsExpress.Test.ServiceTests
             base.Initialize();
             mockSecurityContextService = new Mock<ISecurityContext>();
 
-            service = new EventScheduleService(
+            service = new EventScheduleManager(
                 Context,
                 MockMapper.Object,
                 mockSecurityContextService.Object);

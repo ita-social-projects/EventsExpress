@@ -35,7 +35,7 @@ namespace EventsExpress.Core.HostedService
             {
                 var scopedProcessingService =
                     scope.ServiceProvider
-                        .GetRequiredService<IEventScheduleService>();
+                        .GetRequiredService<IEventScheduleManager>();
 
                 var mediator =
                     scope.ServiceProvider

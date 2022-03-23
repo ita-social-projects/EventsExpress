@@ -5,7 +5,7 @@ using EventsExpress.Core.DTOs;
 
 namespace EventsExpress.Core.IServices
 {
-    public interface IEventScheduleService
+    public interface IEventScheduleManager
     {
         Task<Guid> Create(EventScheduleDto eventScheduleDTO);
 

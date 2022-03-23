@@ -16,11 +16,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EventsExpress.Core.Services
 {
-    public class EventScheduleService : BaseService<EventSchedule>, IEventScheduleService
+    public class EventScheduleManager : BaseService<EventSchedule>, IEventScheduleManager
     {
         private readonly ISecurityContext _securityContextService;
 
-        public EventScheduleService(AppDbContext context, IMapper mapper, ISecurityContext securityContextService)
+        public EventScheduleManager(AppDbContext context, IMapper mapper, ISecurityContext securityContextService)
             : base(context, mapper)
         {
             _securityContextService = securityContextService;
