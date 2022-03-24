@@ -341,6 +341,24 @@ namespace EventsExpress.Test.ServiceTests
         }
 
         [Test]
+        public void RegisterComplete_ValidModel_DoesNotThrow()
+        {
+            var registerCompleteDto = new RegisterCompleteDto();
+            var userDto = new UserDto
+            {
+                FirstName = "John",
+                LastName = "Doe",
+                Birthday = DateTime.Today.AddYears(-20),
+            };
+
+            MockMapper.Setup(s => s.Map<UserDto>(It.IsAny<RegisterCompleteDto>())).Returns(userDto);
+            mockSecurityContext.Setup(s => s.GetCurrentAccountId()).Returns(idAccount);
+            async Task Call() => await service.RegisterComplete(registerCompleteDto);
+
+            Assert.DoesNotThrowAsync(Call);
+        }
+
+        [Test]
         public void ConfirmEmail_TokenIsNullOrEmpty_ReturnFalse()
         {
             Assert.ThrowsAsync<EventsExpressException>(async () => await service.EmailConfirmAndAuthenticate(existingUser.Id, nullToken));

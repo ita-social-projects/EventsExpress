@@ -216,16 +216,8 @@ namespace EventsExpress.Test.ControllerTests
         {
             _authenticationController.ControllerContext = new ControllerContext();
             _authenticationController.ControllerContext.HttpContext = new DefaultHttpContext();
-            var authRequest = new RegisterCompleteViewModel
-            {
-                AccountId = Guid.NewGuid(),
-            };
-
-            var profileData = new RegisterCompleteDto
-            {
-                AccountId = authRequest.AccountId,
-            };
-
+            var authRequest = new RegisterCompleteViewModel();
+            var profileData = new RegisterCompleteDto();
             var authenticateResponseModel = new AuthenticateResponseModel(JwtToken, RefreshToken);
 
             _mapper.Setup(s =>

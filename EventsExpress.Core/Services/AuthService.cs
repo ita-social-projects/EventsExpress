@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Exceptions;
-using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
 using EventsExpress.Core.Notifications;
 using EventsExpress.Db.Bridge;
@@ -157,7 +155,9 @@ namespace EventsExpress.Core.Services
 
         public async Task RegisterComplete(RegisterCompleteDto registerCompleteDto)
         {
-            await _userService.Create(Mapper.Map<UserDto>(registerCompleteDto));
+            registerCompleteDto.AccountId = _securityContext.GetCurrentAccountId();
+            var userDto = Mapper.Map<UserDto>(registerCompleteDto);
+            await _userService.Create(userDto);
         }
 
         public async Task PasswordRecover(string email)

@@ -1,6 +1,5 @@
 import { SubmissionError } from 'redux-form';
 import moment from 'moment';
-import jwt from 'jsonwebtoken';
 import { AuthenticationService } from '../../services';
 import { setSuccessAllert, setErrorAllertFromResponse } from '../alert-action';
 import { buildValidationState } from '../../components/helpers/action-helpers';
@@ -14,7 +13,6 @@ export default function registerComplete(data, { shouldSaveMoreInfo }) {
         const body = {
             ...data,
             birthday: moment.utc(data.birthday).local().format('YYYY-MM-DD[T00:00:00]'),
-            accountId: getAccountIdFromJWT(),
         };
 
         const profileResponse = await api_serv.setRegisterComplete(body);
@@ -38,10 +36,4 @@ export default function registerComplete(data, { shouldSaveMoreInfo }) {
         dispatch(setSuccessAllert('Your profile was updated'));
         return Promise.resolve();
     };
-}
-
-export function getAccountIdFromJWT(){
-    const token = localStorage.getItem(jwtStorageKey);
-    const decoded = jwt.decode(token);
-    return decoded['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/sid'];
 }

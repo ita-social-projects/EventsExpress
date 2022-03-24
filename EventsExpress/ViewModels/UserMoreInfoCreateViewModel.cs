@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using EventsExpress.Db.Enums;
 
 namespace EventsExpress.ViewModels;
 
+[ExcludeFromCodeCoverage]
 public class UserMoreInfoCreateViewModel
 {
-    public Guid Id { get; set; }
-
-    public Guid UserId { get; set; }
-
     public ParentStatus? ParentStatus { get; set; }
 
     public IEnumerable<EventTypes> EventTypes { get; set; }

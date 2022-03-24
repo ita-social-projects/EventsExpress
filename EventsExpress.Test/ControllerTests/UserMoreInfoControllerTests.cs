@@ -34,8 +34,6 @@ internal class UserMoreInfoControllerTests
     {
         var userMoreInfoViewModel = new UserMoreInfoCreateViewModel
         {
-            Id = Guid.NewGuid(),
-            UserId = Guid.NewGuid(),
             ParentStatus = ParentStatus.Kids,
             EventTypes = new[] { EventTypes.Free, EventTypes.Online },
             RelationshipStatus = RelationShipStatus.InARelationship,
