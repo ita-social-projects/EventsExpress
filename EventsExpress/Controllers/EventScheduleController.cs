@@ -62,9 +62,9 @@ namespace EventsExpress.Controllers
         /// <response code="400">If Edit/Create process failed.</response>
         [HttpPost("{eventId:Guid}/[action]")]
         [UserAccessTypeFilterAttribute]
-        public async Task<IActionResult> Edit(Guid eventId, [FromForm] PreviewEventScheduleViewModel model)
+        public IActionResult Edit(Guid eventId, [FromForm] PreviewEventScheduleViewModel model)
         {
-            var result = await _eventScheduleManager.Edit(_mapper.Map<PreviewEventScheduleViewModel, EventScheduleDto>(model));
+            var result = _eventScheduleManager.Edit(_mapper.Map<PreviewEventScheduleViewModel, EventScheduleDto>(model));
 
             return Ok(result);
         }
@@ -78,14 +78,14 @@ namespace EventsExpress.Controllers
         /// <response code="400">Cancel All Events process failed.</response>
         [HttpPost("{eventId:Guid}/[action]")]
         [UserAccessTypeFilterAttribute]
-        public async Task<IActionResult> CancelAllEvents(Guid eventId)
+        public IActionResult CancelAllEvents(Guid eventId)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var result = await _eventScheduleManager.CancelEvents(eventId);
+            var result = _eventScheduleManager.CancelEvents(eventId);
 
             return Ok(result);
         }
@@ -99,14 +99,14 @@ namespace EventsExpress.Controllers
         /// <response code="400">Cancel Next Event process failed.</response>
         [HttpPost("{eventId:Guid}/[action]")]
         [UserAccessTypeFilterAttribute]
-        public async Task<IActionResult> CancelNextEvent(Guid eventId)
+        public IActionResult CancelNextEvent(Guid eventId)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var result = await _eventScheduleManager.CancelNextEvent(eventId);
+            var result = _eventScheduleManager.CancelNextEvent(eventId);
 
             return Ok(new { id = result });
         }

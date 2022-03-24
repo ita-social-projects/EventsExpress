@@ -234,7 +234,7 @@ namespace EventsExpress.Core.Services
             eventScheduleDto.NextRun = DateTimeExtensions
                 .AddDateUnit(eventScheduleDto.Periodicity, eventScheduleDto.Frequency, eventDto.DateTo.Value);
 
-            await _eventScheduleManager.Edit(eventScheduleDto);
+            _eventScheduleManager.Edit(eventScheduleDto);
 
             var createResult = await Create(eventDto);
 
@@ -267,13 +267,13 @@ namespace EventsExpress.Core.Services
                 {
                     if (ev.EventSchedule == null)
                     {
-                        await _eventScheduleManager.Create(Mapper.Map<EventScheduleDto>(eventDto));
+                        _eventScheduleManager.Create(Mapper.Map<EventScheduleDto>(eventDto));
                     }
                     else
                     {
                         var eventScheduleDto = Mapper.Map<EventScheduleDto>(eventDto);
                         eventScheduleDto.Id = ev.EventSchedule.Id;
-                        await _eventScheduleManager.Edit(eventScheduleDto);
+                        _eventScheduleManager.Edit(eventScheduleDto);
                     }
                 }
             }
@@ -281,7 +281,7 @@ namespace EventsExpress.Core.Services
             {
                 if (ev.EventSchedule != null)
                 {
-                    await _eventScheduleManager.Delete(ev.EventSchedule.Id);
+                    _eventScheduleManager.Delete(ev.EventSchedule.Id);
                 }
             }
 
@@ -343,7 +343,7 @@ namespace EventsExpress.Core.Services
                     .AddDateUnit(eventScheduleDto.Periodicity, eventScheduleDto.Frequency, eventDto.DateTo.Value);
             }
 
-            await _eventScheduleManager.Edit(eventScheduleDto);
+            _eventScheduleManager.Edit(eventScheduleDto);
 
             eventDto.IsReccurent = false;
             eventDto.Id = Guid.Empty;
