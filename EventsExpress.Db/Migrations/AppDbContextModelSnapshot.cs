@@ -41,7 +41,7 @@ namespace EventsExpress.Db.Migrations
                         .IsUnique()
                         .HasFilter("[UserId] IS NOT NULL");
 
-                    b.ToTable("Accounts", (string)null);
+                    b.ToTable("Accounts");
                 });
 
             modelBuilder.Entity("EventsExpress.Db.Entities.AccountRole", b =>
@@ -56,7 +56,7 @@ namespace EventsExpress.Db.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("AccountRoles", (string)null);
+                    b.ToTable("AccountRoles");
                 });
 
             modelBuilder.Entity("EventsExpress.Db.Entities.AuthExternal", b =>
@@ -78,7 +78,7 @@ namespace EventsExpress.Db.Migrations
 
                     b.HasIndex("AccountId");
 
-                    b.ToTable("AuthExternal", (string)null);
+                    b.ToTable("AuthExternal");
                 });
 
             modelBuilder.Entity("EventsExpress.Db.Entities.AuthLocal", b =>
@@ -109,7 +109,7 @@ namespace EventsExpress.Db.Migrations
                     b.HasIndex("AccountId")
                         .IsUnique();
 
-                    b.ToTable("AuthLocal", (string)null);
+                    b.ToTable("AuthLocal");
                 });
 
             modelBuilder.Entity("EventsExpress.Db.Entities.Category", b =>
@@ -129,7 +129,7 @@ namespace EventsExpress.Db.Migrations
 
                     b.HasIndex("CategoryGroupId");
 
-                    b.ToTable("Categories", (string)null);
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("EventsExpress.Db.Entities.CategoryGroup", b =>
@@ -143,7 +143,7 @@ namespace EventsExpress.Db.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("CategoryGroups", (string)null);
+                    b.ToTable("CategoryGroups");
 
                     b.HasData(
                         new
@@ -174,7 +174,7 @@ namespace EventsExpress.Db.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("CategoriesOfMeasurings", (string)null);
+                    b.ToTable("CategoriesOfMeasurings");
                 });
 
             modelBuilder.Entity("EventsExpress.Db.Entities.ChangeInfo", b =>
@@ -205,7 +205,7 @@ namespace EventsExpress.Db.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("ChangeInfos", (string)null);
+                    b.ToTable("ChangeInfos");
                 });
 
             modelBuilder.Entity("EventsExpress.Db.Entities.ChatRoom", b =>
@@ -219,7 +219,7 @@ namespace EventsExpress.Db.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ChatRoom", (string)null);
+                    b.ToTable("ChatRoom");
                 });
 
             modelBuilder.Entity("EventsExpress.Db.Entities.Comments", b =>
@@ -251,7 +251,7 @@ namespace EventsExpress.Db.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Comments", (string)null);
+                    b.ToTable("Comments");
                 });
 
             modelBuilder.Entity("EventsExpress.Db.Entities.ContactAdmin", b =>
@@ -297,7 +297,7 @@ namespace EventsExpress.Db.Migrations
 
                     b.HasIndex("SenderId");
 
-                    b.ToTable("ContactAdmin", (string)null);
+                    b.ToTable("ContactAdmin");
                 });
 
             modelBuilder.Entity("EventsExpress.Db.Entities.Event", b =>
@@ -318,11 +318,11 @@ namespace EventsExpress.Db.Migrations
                     b.Property<Guid?>("EventAudienceId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("EventLocationId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<bool?>("IsPublic")
                         .HasColumnType("bit");
+
+                    b.Property<Guid?>("LocationId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int?>("MaxParticipants")
                         .ValueGeneratedOnAdd()
@@ -336,9 +336,9 @@ namespace EventsExpress.Db.Migrations
 
                     b.HasIndex("EventAudienceId");
 
-                    b.HasIndex("EventLocationId");
+                    b.HasIndex("LocationId");
 
-                    b.ToTable("Events", (string)null);
+                    b.ToTable("Events");
                 });
 
             modelBuilder.Entity("EventsExpress.Db.Entities.EventAudience", b =>
@@ -352,7 +352,7 @@ namespace EventsExpress.Db.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("EventAudiences", (string)null);
+                    b.ToTable("EventAudiences");
                 });
 
             modelBuilder.Entity("EventsExpress.Db.Entities.EventCategory", b =>
@@ -367,27 +367,7 @@ namespace EventsExpress.Db.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("EventCategory", (string)null);
-                });
-
-            modelBuilder.Entity("EventsExpress.Db.Entities.EventLocation", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("OnlineMeeting")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Point>("Point")
-                        .HasColumnType("geography");
-
-                    b.Property<int?>("Type")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("EventLocations", (string)null);
+                    b.ToTable("EventCategory");
                 });
 
             modelBuilder.Entity("EventsExpress.Db.Entities.EventOrganizer", b =>
@@ -404,7 +384,35 @@ namespace EventsExpress.Db.Migrations
 
                     b.HasIndex("UserId", "EventId");
 
-                    b.ToTable("EventOrganizers", (string)null);
+                    b.ToTable("EventOrganizers");
+                });
+
+            modelBuilder.Entity("EventsExpress.Db.Entities.EventRelationship", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(450)")
+                        .HasDefaultValue("Rate");
+
+                    b.Property<Guid>("EventId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("UserFromId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Discriminator", "UserFromId", "EventId")
+                        .IsUnique();
+
+                    b.ToTable("EventRelationships");
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("EventRelationship");
                 });
 
             modelBuilder.Entity("EventsExpress.Db.Entities.EventSchedule", b =>
@@ -436,7 +444,7 @@ namespace EventsExpress.Db.Migrations
                     b.HasIndex("EventId")
                         .IsUnique();
 
-                    b.ToTable("EventSchedules", (string)null);
+                    b.ToTable("EventSchedules");
                 });
 
             modelBuilder.Entity("EventsExpress.Db.Entities.EventStatusHistory", b =>
@@ -466,7 +474,7 @@ namespace EventsExpress.Db.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("EventStatusHistory", (string)null);
+                    b.ToTable("EventStatusHistory");
                 });
 
             modelBuilder.Entity("EventsExpress.Db.Entities.Inventory", b =>
@@ -493,7 +501,27 @@ namespace EventsExpress.Db.Migrations
 
                     b.HasIndex("UnitOfMeasuringId");
 
-                    b.ToTable("Inventories", (string)null);
+                    b.ToTable("Inventories");
+                });
+
+            modelBuilder.Entity("EventsExpress.Db.Entities.Location", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("OnlineMeeting")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Point>("Point")
+                        .HasColumnType("geography");
+
+                    b.Property<int?>("Type")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Locations");
                 });
 
             modelBuilder.Entity("EventsExpress.Db.Entities.Message", b =>
@@ -531,7 +559,7 @@ namespace EventsExpress.Db.Migrations
 
                     b.HasIndex("SenderId");
 
-                    b.ToTable("Message", (string)null);
+                    b.ToTable("Message");
                 });
 
             modelBuilder.Entity("EventsExpress.Db.Entities.NotificationTemplate", b =>
@@ -556,7 +584,58 @@ namespace EventsExpress.Db.Migrations
                     b.HasIndex("Title")
                         .IsUnique();
 
-                    b.ToTable("NotificationTemplates", (string)null);
+                    b.ToTable("NotificationTemplates");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Message = "Dear {{UserEmail}}, your account was blocked for some reason!",
+                            Subject = "Your account was blocked",
+                            Title = "BlockedUser"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Message = "Follow the <a href='{{EventScheduleLink}}'>link</a> to create the recurrent event.",
+                            Subject = "Approve your recurrent event!",
+                            Title = "CreateEventVerification"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Message = "For confirm your email please follow the <a href='{{EmailLink}}'>link</a>",
+                            Subject = "EventExpress registration",
+                            Title = "RegisterVerification"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Message = "Dear {{UserEmail}}, congratulations, your account was Unblocked, so you can come back and enjoy spending your time in EventsExpress",
+                            Subject = "Your account was Unblocked",
+                            Title = "UnblockedUser"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Message = "Dear {{UserEmail}}, your <a href='{{EventLink}}'>event</a> has been changed.",
+                            Subject = "Your event was changed",
+                            Title = "OwnEventChanged"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Message = "Dear {{UserEmail}}, your joined <a href='{{EventLink}}'>event</a> has been changed.",
+                            Subject = "Joined event was changed",
+                            Title = "JoinedEventChanged"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Message = "Dear {{UserEmail}}, your roles were changed. Your current roles are: {{FormattedRoles}}.",
+                            Subject = "Your roles were changed",
+                            Title = "RolesChanged"
+                        });
                 });
 
             modelBuilder.Entity("EventsExpress.Db.Entities.NotificationType", b =>
@@ -570,13 +649,13 @@ namespace EventsExpress.Db.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("NotificationTypes", (string)null);
+                    b.ToTable("NotificationTypes");
 
                     b.HasData(
                         new
                         {
                             Id = 1,
-                            Name = "Profile Change"
+                            Name = "User Status Change"
                         },
                         new
                         {
@@ -586,7 +665,7 @@ namespace EventsExpress.Db.Migrations
                         new
                         {
                             Id = 3,
-                            Name = "Visited Event Change"
+                            Name = "Joined Event Change"
                         });
                 });
 
@@ -601,31 +680,7 @@ namespace EventsExpress.Db.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Permissions", (string)null);
-                });
-
-            modelBuilder.Entity("EventsExpress.Db.Entities.Rate", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("EventId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<byte>("Score")
-                        .HasColumnType("tinyint");
-
-                    b.Property<Guid>("UserFromId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("EventId");
-
-                    b.HasIndex("UserFromId");
-
-                    b.ToTable("Rates", (string)null);
+                    b.ToTable("Permissions");
                 });
 
             modelBuilder.Entity("EventsExpress.Db.Entities.Relationship", b =>
@@ -649,7 +704,7 @@ namespace EventsExpress.Db.Migrations
 
                     b.HasIndex("UserToId");
 
-                    b.ToTable("Relationships", (string)null);
+                    b.ToTable("Relationships");
                 });
 
             modelBuilder.Entity("EventsExpress.Db.Entities.Role", b =>
@@ -664,7 +719,7 @@ namespace EventsExpress.Db.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Roles", (string)null);
+                    b.ToTable("Roles");
 
                     b.HasData(
                         new
@@ -705,7 +760,7 @@ namespace EventsExpress.Db.Migrations
                         .IsUnique()
                         .HasFilter("IsDeleted = 0");
 
-                    b.ToTable("UnitOfMeasurings", (string)null);
+                    b.ToTable("UnitOfMeasurings");
                 });
 
             modelBuilder.Entity("EventsExpress.Db.Entities.User", b =>
@@ -729,6 +784,9 @@ namespace EventsExpress.Db.Migrations
                     b.Property<string>("LastName")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<Guid?>("LocationId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
@@ -737,7 +795,9 @@ namespace EventsExpress.Db.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users", (string)null);
+                    b.HasIndex("LocationId");
+
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("EventsExpress.Db.Entities.UserCategory", b =>
@@ -752,7 +812,7 @@ namespace EventsExpress.Db.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("UserCategory", (string)null);
+                    b.ToTable("UserCategory");
                 });
 
             modelBuilder.Entity("EventsExpress.Db.Entities.UserChat", b =>
@@ -773,7 +833,7 @@ namespace EventsExpress.Db.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserChat", (string)null);
+                    b.ToTable("UserChat");
                 });
 
             modelBuilder.Entity("EventsExpress.Db.Entities.UserEvent", b =>
@@ -794,7 +854,7 @@ namespace EventsExpress.Db.Migrations
 
                     b.HasIndex("EventId");
 
-                    b.ToTable("UserEvent", (string)null);
+                    b.ToTable("UserEvent");
                 });
 
             modelBuilder.Entity("EventsExpress.Db.Entities.UserEventInventory", b =>
@@ -815,7 +875,7 @@ namespace EventsExpress.Db.Migrations
 
                     b.HasIndex("UserId", "EventId");
 
-                    b.ToTable("UserEventInventories", (string)null);
+                    b.ToTable("UserEventInventories");
                 });
 
             modelBuilder.Entity("EventsExpress.Db.Entities.UserMoreInfo", b =>
@@ -830,17 +890,17 @@ namespace EventsExpress.Db.Migrations
                     b.Property<byte?>("EventTypes")
                         .HasColumnType("tinyint");
 
-                    b.Property<int?>("ParentStatus")
-                        .HasColumnType("int");
+                    b.Property<byte?>("ParentStatus")
+                        .HasColumnType("tinyint");
 
                     b.Property<byte?>("ReasonsForUsingTheSite")
                         .HasColumnType("tinyint");
 
-                    b.Property<int?>("RelationShipStatus")
-                        .HasColumnType("int");
+                    b.Property<byte?>("RelationShipStatus")
+                        .HasColumnType("tinyint");
 
-                    b.Property<int?>("TheTypeOfLeisure")
-                        .HasColumnType("int");
+                    b.Property<byte?>("TheTypeOfLeisure")
+                        .HasColumnType("tinyint");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
@@ -850,7 +910,7 @@ namespace EventsExpress.Db.Migrations
                     b.HasIndex("UserId")
                         .IsUnique();
 
-                    b.ToTable("UserMoreInfo", (string)null);
+                    b.ToTable("UserMoreInfo");
                 });
 
             modelBuilder.Entity("EventsExpress.Db.Entities.UserNotificationType", b =>
@@ -865,7 +925,7 @@ namespace EventsExpress.Db.Migrations
 
                     b.HasIndex("NotificationTypeId");
 
-                    b.ToTable("UserNotificationTypes", (string)null);
+                    b.ToTable("UserNotificationTypes");
                 });
 
             modelBuilder.Entity("EventsExpress.Db.Entities.UserToken", b =>
@@ -905,7 +965,32 @@ namespace EventsExpress.Db.Migrations
 
                     b.HasIndex("AccountId");
 
-                    b.ToTable("UserTokens", (string)null);
+                    b.ToTable("UserTokens");
+                });
+
+            modelBuilder.Entity("EventsExpress.Db.Entities.EventBookmark", b =>
+                {
+                    b.HasBaseType("EventsExpress.Db.Entities.EventRelationship");
+
+                    b.HasIndex("EventId");
+
+                    b.HasIndex("UserFromId");
+
+                    b.HasDiscriminator().HasValue("EventBookmark");
+                });
+
+            modelBuilder.Entity("EventsExpress.Db.Entities.Rate", b =>
+                {
+                    b.HasBaseType("EventsExpress.Db.Entities.EventRelationship");
+
+                    b.Property<byte>("Score")
+                        .HasColumnType("tinyint");
+
+                    b.HasIndex("EventId");
+
+                    b.HasIndex("UserFromId");
+
+                    b.HasDiscriminator().HasValue("Rate");
                 });
 
             modelBuilder.Entity("EventsExpress.Db.Entities.Account", b =>
@@ -1026,13 +1111,13 @@ namespace EventsExpress.Db.Migrations
                         .WithMany()
                         .HasForeignKey("EventAudienceId");
 
-                    b.HasOne("EventsExpress.Db.Entities.EventLocation", "EventLocation")
+                    b.HasOne("EventsExpress.Db.Entities.Location", "Location")
                         .WithMany()
-                        .HasForeignKey("EventLocationId");
+                        .HasForeignKey("LocationId");
 
                     b.Navigation("EventAudience");
 
-                    b.Navigation("EventLocation");
+                    b.Navigation("Location");
                 });
 
             modelBuilder.Entity("EventsExpress.Db.Entities.EventCategory", b =>
@@ -1145,25 +1230,6 @@ namespace EventsExpress.Db.Migrations
                     b.Navigation("Sender");
                 });
 
-            modelBuilder.Entity("EventsExpress.Db.Entities.Rate", b =>
-                {
-                    b.HasOne("EventsExpress.Db.Entities.Event", "Event")
-                        .WithMany("Rates")
-                        .HasForeignKey("EventId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("EventsExpress.Db.Entities.User", "UserFrom")
-                        .WithMany("Rates")
-                        .HasForeignKey("UserFromId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Event");
-
-                    b.Navigation("UserFrom");
-                });
-
             modelBuilder.Entity("EventsExpress.Db.Entities.Relationship", b =>
                 {
                     b.HasOne("EventsExpress.Db.Entities.User", "UserFrom")
@@ -1192,6 +1258,15 @@ namespace EventsExpress.Db.Migrations
                         .IsRequired();
 
                     b.Navigation("Category");
+                });
+
+            modelBuilder.Entity("EventsExpress.Db.Entities.User", b =>
+                {
+                    b.HasOne("EventsExpress.Db.Entities.Location", "Location")
+                        .WithMany()
+                        .HasForeignKey("LocationId");
+
+                    b.Navigation("Location");
                 });
 
             modelBuilder.Entity("EventsExpress.Db.Entities.UserCategory", b =>
@@ -1311,6 +1386,44 @@ namespace EventsExpress.Db.Migrations
                     b.Navigation("Account");
                 });
 
+            modelBuilder.Entity("EventsExpress.Db.Entities.EventBookmark", b =>
+                {
+                    b.HasOne("EventsExpress.Db.Entities.Event", "Event")
+                        .WithMany("EventBookmarks")
+                        .HasForeignKey("EventId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("EventsExpress.Db.Entities.User", "UserFrom")
+                        .WithMany("EventBookmarks")
+                        .HasForeignKey("UserFromId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Event");
+
+                    b.Navigation("UserFrom");
+                });
+
+            modelBuilder.Entity("EventsExpress.Db.Entities.Rate", b =>
+                {
+                    b.HasOne("EventsExpress.Db.Entities.Event", "Event")
+                        .WithMany("Rates")
+                        .HasForeignKey("EventId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("EventsExpress.Db.Entities.User", "UserFrom")
+                        .WithMany("Rates")
+                        .HasForeignKey("UserFromId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Event");
+
+                    b.Navigation("UserFrom");
+                });
+
             modelBuilder.Entity("EventsExpress.Db.Entities.Account", b =>
                 {
                     b.Navigation("AccountRoles");
@@ -1355,6 +1468,8 @@ namespace EventsExpress.Db.Migrations
                 {
                     b.Navigation("Categories");
 
+                    b.Navigation("EventBookmarks");
+
                     b.Navigation("EventSchedule");
 
                     b.Navigation("Inventories");
@@ -1397,6 +1512,8 @@ namespace EventsExpress.Db.Migrations
                     b.Navigation("ChangedStatusEvents");
 
                     b.Navigation("Chats");
+
+                    b.Navigation("EventBookmarks");
 
                     b.Navigation("Events");
 
