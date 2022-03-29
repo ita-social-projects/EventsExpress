@@ -10,6 +10,7 @@ import EditBirthdayContainer from '../../../containers/editProfileContainers/edi
 import ChangeAvatarButton from "../editProfile/change-avatar-button";
 import '../User-profile.css';
 import CustomAvatar from "../../avatar/custom-avatar"
+import ProfileAvatar from './profile-avatar'
 
 const useStyles = makeStyles(theme => ({
     sectionContent: {
@@ -55,8 +56,9 @@ const GeneralInfoSection = (props) => {
         <div className={classes.sectionContent}>
             <div className={classes.firstBlockContent}>
                 <div className={`${classes.blockStyle} ${classes.avatar}`}>
-                    <div className="user-profile-avatar">
-                        <CustomAvatar height="300px" width="300px" name={props.name} userId={props.id}/>
+                    <div >
+                        {/* <CustomAvatar height="300px" width="300px" name={props.name} userId={props.id}/> */}
+                            <ProfileAvatar name={props.name} userId={props.id}></ProfileAvatar>
                     </div>
                 </div>
                <ChangeAvatarButton></ChangeAvatarButton>
