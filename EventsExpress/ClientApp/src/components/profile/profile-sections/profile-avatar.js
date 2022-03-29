@@ -10,10 +10,13 @@ const useStyles = makeStyles({
     position:'absolute',
     display:'none',
     left:"50%" ,
-    top: "75%",
+    top: "80%",
     transform: "translateX(-50%)",
-    zIndex:100
-  
+    zIndex:10,
+    textAlign:"center",
+    '&:active':{
+      color :"red"
+    }
 
 },
 avatar:{
@@ -21,15 +24,14 @@ avatar:{
   backgroundClip: "content-box",
     '&:hover':{
        cursor: "pointer",
-       opacity : 0.5
-
     },
    '&:hover $deleteIcon':{
      display: 'block',
-     backgroundColor: "white",
-     borderRadius : "50%"
-     
+   },
+   '&:hover img':{
+     opacity: 0.3
    }
+
 },
 
 
@@ -39,12 +41,9 @@ export default function ProfileAvatar(props) {
   const classes = useStyles();
   return (
     <div className={classes.avatar}>
-        <div className= {classes.deleteIcon} >
-          
-            <IconButton aria-label="delete"  >
+            <IconButton aria-label="delete" className={classes.deleteIcon} >
               <DeleteIcon fontSize="large" />
            </IconButton>
-        </div>
         <CustomAvatar height= "300px" width=  "300px"  name={props.name} userId={props.userId}/>
     </div>
 )
