@@ -775,8 +775,14 @@ namespace EventsExpress.Db.Migrations
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("FirstName")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<byte>("Gender")
                         .HasColumnType("tinyint");
+
+                    b.Property<string>("LastName")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid?>("LocationId")
                         .HasColumnType("uniqueidentifier");
@@ -870,6 +876,41 @@ namespace EventsExpress.Db.Migrations
                     b.HasIndex("UserId", "EventId");
 
                     b.ToTable("UserEventInventories");
+                });
+
+            modelBuilder.Entity("EventsExpress.Db.Entities.UserMoreInfo", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("AdditionalInfo")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<byte?>("EventTypes")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte?>("ParentStatus")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte?>("ReasonsForUsingTheSite")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte?>("RelationShipStatus")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte?>("TheTypeOfLeisure")
+                        .HasColumnType("tinyint");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
+
+                    b.ToTable("UserMoreInfo");
                 });
 
             modelBuilder.Entity("EventsExpress.Db.Entities.UserNotificationType", b =>
@@ -1070,13 +1111,13 @@ namespace EventsExpress.Db.Migrations
                         .WithMany()
                         .HasForeignKey("EventAudienceId");
 
-                    b.HasOne("EventsExpress.Db.Entities.Location", "EventLocation")
+                    b.HasOne("EventsExpress.Db.Entities.Location", "Location")
                         .WithMany()
                         .HasForeignKey("LocationId");
 
                     b.Navigation("EventAudience");
 
-                    b.Navigation("EventLocation");
+                    b.Navigation("Location");
                 });
 
             modelBuilder.Entity("EventsExpress.Db.Entities.EventCategory", b =>
@@ -1304,6 +1345,17 @@ namespace EventsExpress.Db.Migrations
                     b.Navigation("UserEvent");
                 });
 
+            modelBuilder.Entity("EventsExpress.Db.Entities.UserMoreInfo", b =>
+                {
+                    b.HasOne("EventsExpress.Db.Entities.User", "User")
+                        .WithOne("UserMoreInfo")
+                        .HasForeignKey("EventsExpress.Db.Entities.UserMoreInfo", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("EventsExpress.Db.Entities.UserNotificationType", b =>
                 {
                     b.HasOne("EventsExpress.Db.Entities.NotificationType", "NotificationType")
@@ -1472,6 +1524,8 @@ namespace EventsExpress.Db.Migrations
                     b.Navigation("Rates");
 
                     b.Navigation("Relationships");
+
+                    b.Navigation("UserMoreInfo");
                 });
 
             modelBuilder.Entity("EventsExpress.Db.Entities.UserEvent", b =>

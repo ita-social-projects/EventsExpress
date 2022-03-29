@@ -4,6 +4,24 @@
     font-size: 14px;
 }
 
+.stepper-submit, .step-wrapper {
+    padding: 10px;
+}
+
+.stepper-submit {
+    margin-top: 2rem;
+    text-align: center;
+}
+
+.stepper-tellusmore-block {
+    border: 1px solid rgb(255, 153, 0);
+    box-shadow: 0 0 5px rgb(255, 153, 0);
+    border-radius: 3px;
+    margin: 30px auto;
+    padding: 20px;
+    background-color: ghostwhite;
+}
+
 .stepper-container-horizontal {
     border: 1px solid rgb(255, 153, 0);
     box-shadow: 0 0 13px #333;
@@ -11,13 +29,14 @@
     margin: 40px auto;
     padding: 30px;
     width: 65%;
+}
 
+.stepper-container-horizontal h1 {
+    font-size: 20px;
 }
 
 .buttons-container {
-    text-align: center;
-    margin: 40px auto;
-    padding: 30px;
+    padding: 30px 60px 0;
 }
 
 .previous {
@@ -26,7 +45,6 @@
     padding: 4px;
     background-color: rgb(255, 153, 0);
     border: none;
-    
 }
 
 .next {
@@ -35,5 +53,4 @@
     padding: 4px;
     background-color: rgb(255, 153, 0);
     border: none;
-    
 }

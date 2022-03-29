@@ -2,14 +2,15 @@
     margin: 0 10px;
 }
 
-h2 {
+.checkbox-group h2 {
     margin: 5px auto 10px 15px;
-    text-align: left;
+    font-size: 1rem;
+    text-align: center;
 }
 
 .checkbox-group > div {
     margin: 15px;
     display: flex;
     flex-wrap: wrap;
-    justify-content: flex-start;
+    justify-content: center;
 }

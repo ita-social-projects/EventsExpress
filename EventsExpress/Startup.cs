@@ -143,6 +143,7 @@ namespace EventsExpress
             services.AddScoped<IContactAdminService, ContactAdminService>();
             services.AddScoped<IIpProviderService, IpProviderService>();
             services.AddScoped<IBookmarkService, BookmarkService>();
+            services.AddScoped<IUserMoreInfoService, UserMoreInfoService>();
 
             services.AddScoped<ILocationManager, LocationManager>();
             services.AddSingleton<ICacheHelper, CacheHelper>();

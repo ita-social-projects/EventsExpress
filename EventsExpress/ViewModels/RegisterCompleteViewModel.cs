@@ -1,20 +1,21 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using EventsExpress.Db.Enums;
 
-namespace EventsExpress.ViewModels
+namespace EventsExpress.ViewModels;
+
+[ExcludeFromCodeCoverage]
+public class RegisterCompleteViewModel
 {
-    public class RegisterCompleteViewModel
-    {
-        public string Email { get; set; }
+    public string Email { get; set; }
 
-        public string Username { get; set; }
+    public string FirstName { get; set; }
 
-        public DateTime Birthday { get; set; }
+    public string LastName { get; set; }
 
-        public Gender Gender { get; set; }
+    public DateTime Birthday { get; set; }
 
-        public string Phone { get; set; }
+    public Gender Gender { get; set; }
 
-        public Guid AccountId { get; set; }
-    }
+    public string Phone { get; set; }
 }

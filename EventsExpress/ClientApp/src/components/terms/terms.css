@@ -1,20 +1,29 @@
 .terms {
     margin: 20px 30px;
 }
-.terms p, li, b , a, ol{
+
+.terms p,
+.terms li,
+.terms b,
+.terms a,
+.terms ol {
     font-size: 20px;
-  }
-  .terms p, li{
-     text-align:justify;
-  }
-  .terms h1{
-     margin:20px 0;
-  }
-  .terms li {
-     margin: 10px 0 10px 20px;
-  }
-  .terms h4{
-     margin-top:30px;
-     font-size: 24px;
-     font-weight:800;
-  }
+}
+
+.terms p, .terms li {
+    text-align: justify;
+}
+
+.terms h1 {
+    margin: 20px 0;
+}
+
+.terms li {
+    margin: 10px 0 10px 20px;
+}
+
+.terms h4 {
+    margin-top: 30px;
+    font-size: 24px;
+    font-weight: 800;
+}

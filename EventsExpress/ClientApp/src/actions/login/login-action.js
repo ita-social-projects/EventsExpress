@@ -8,53 +8,81 @@ import { updateEventsFilters } from '../event/event-list-action';
 import { initialConnection } from '../chat/chat-action';
 import { getUnreadMessages } from '../chat/chats-action';
 import { jwtStorageKey } from '../../constants/constants';
-import { getRequestInc, getRequestDec } from "../request-count-action";
+import { getRequestInc, getRequestDec } from '../request-count-action';
 
-
-export const SET_LOGIN_PENDING = "SET_LOGIN_PENDING";
-export const SET_LOGIN_SUCCESS = "SET_LOGIN_SUCCESS";
-export const SET_USER = "SET_USER";
+export const SET_LOGIN_PENDING = 'SET_LOGIN_PENDING';
+export const SET_LOGIN_SUCCESS = 'SET_LOGIN_SUCCESS';
+export const SET_USER = 'SET_USER';
 
 const history = createBrowserHistory({ forceRefresh: true });
 const api_serv = new AuthenticationService();
 
 export default function login(email, password) {
-    const call = () => api_serv.setLogin({
-        Email: email,
-        Password: password
-    });
-    return loginResponseHandler(call);
+    const call = () => {
+        return api_serv.setLogin({
+            Email: email,
+            Password: password,
+        });
+    };
+    return loginResponseHandler(call, { email });
 }
 
 export function loginGoogle(tokenId, profile) {
-    const call = () => api_serv.setGoogleLogin({
-        TokenId: tokenId,
-        Email: profile.email,
-        Name: profile.name,
-        PhotoUrl: profile.imageUrl
+    const call = () => {
+        return api_serv.setGoogleLogin({
+            TokenId: tokenId,
+            Email: profile.email,
+            Name: profile.name,
+            PhotoUrl: profile.imageUrl,
+        });
+    };
+    
+    return loginResponseHandler(call, {
+        email: profile.email,
+        name: profile.name,
+        firstName: profile.givenName,
+        lastName: profile.familyName,
+        type: 0,
     });
-    return loginResponseHandler(call, {email: profile.email, name: profile.name, type: 0});
 }
 
 export function loginFacebook(profile) {
-    const call = () => api_serv.setFacebookLogin({
-        Email: profile.email,
-        Name: profile.name,
-        PhotoUrl: profile.picture.data.url
+    const call = () => {
+        api_serv.setFacebookLogin({
+            Email: profile.email,
+            Name: profile.name,
+            PhotoUrl: profile.picture.data.url,
+        });
+    };
+    
+    return loginResponseHandler(call, {
+        email: profile.email,
+        name: profile.name,
+        firstName: profile.firstName,
+        lastName: profile.lastName,
+        birthday: profile.birthday,
+        gender: profile.gender,
+        type: 1,
     });
-    return loginResponseHandler(call, {email: profile.email, name: profile.name, birthday: profile.birthday, gender: profile.gender, type: 1});
 }
 
 export function loginTwitter(data) {
-    const res = () => api_serv.setTwitterLogin({
-        TokenId: data.oauth_token,
-        TokenSecret: data.oauth_token_secret,
-        UserId: data.user_id,
-        Email: data.email,
-        Name: typeof data.name !== 'undefined' ? data.name : data.screen_name,
-        PhotoUrl: data.image_url,
+    const call = () => {
+        return api_serv.setTwitterLogin({
+            TokenId: data.oauth_token,
+            TokenSecret: data.oauth_token_secret,
+            UserId: data.user_id,
+            Email: data.email,
+            Name: data.name || data.screen_name,
+            PhotoUrl: data.image_url,
+        });
+    };
+    
+    return loginResponseHandler(call, {
+        email: data.email,
+        name: data.name || data.screen_name,
+        type: 2,
     });
-    return loginResponseHandler(res, {email: data.email, name: typeof data.name !== 'undefined' ? data.name : data.screen_name, type: 2});
 }
 
 export function loginAfterEmailConfirmation(data) {
@@ -65,41 +93,43 @@ export function loginAfterEmailConfirmation(data) {
             return Promise.reject();
         }
         return setUserInfo(response, null, dispatch);
-    }
+    };
 }
 
 export function getUserInfo(profile) {
     return async dispatch => {
-        let response = await api_serv.getUserInfo();
+        const response = await api_serv.getUserInfo();
         if (!response.ok) {
             dispatch(setErrorAllertFromResponse(response));
             return Promise.reject();
         }
 
-        if (response.status == 204 && history.location.pathname != '/registerComplete') {
-            history.push('/registerComplete', { profile: profile})
+        if (response.status == 204) {
+            if (history.location.pathname != '/register/complete') {
+                history.push('/register/complete', { profile });
+            }
             return Promise.resolve();
         }
 
-        let userInfo = await response.json();
+        const userInfo = await response.json();
         const eventFilter = {
             ...filterHelper.getDefaultEventFilter(),
             categories: userInfo.categories.map(item => item.id),
         };
+
         dispatch(setUser(userInfo));
         dispatch(updateEventsFilters(eventFilter));
         localStorage.setItem('id', userInfo.id);
         dispatch(initialConnection());
         dispatch(getUnreadMessages(userInfo.id));
-
         return Promise.resolve();
-    }
+    };
 }
 
 export function setUser(data) {
     return {
         type: SET_USER,
-        payload: data
+        payload: data,
     };
 }
 
@@ -113,7 +143,7 @@ function loginResponseHandler(call, profile) {
             throw new SubmissionError(await buildValidationState(response));
         }
         return setUserInfo(response, profile, dispatch);
-    }
+    };
 }
 
 async function setUserInfo(response, profile, dispatch) {
