@@ -1,5 +1,5 @@
 import React from 'react';
-import MyVerticallyCenteredModal from './change-avatar-modalWindow';
+import ChangeAvatarModal from './change-avatar-modalWindow';
 import Button from '@material-ui/core/Button';
 
 export default function ChangeAvatarButton(props) {
@@ -11,7 +11,7 @@ export default function ChangeAvatarButton(props) {
           Update Avatar
         </Button>
   
-        <MyVerticallyCenteredModal
+        <ChangeAvatarModal
           show={modalShow}
           onHide={() => setModalShow(false)}
         />

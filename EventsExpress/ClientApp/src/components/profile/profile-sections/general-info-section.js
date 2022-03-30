@@ -61,7 +61,7 @@ const GeneralInfoSection = (props) => {
                             <ProfileAvatar name={props.name} userId={props.id}></ProfileAvatar>
                     </div>
                 </div>
-               <ChangeAvatarButton></ChangeAvatarButton>
+               {/* <ChangeAvatarButton></ChangeAvatarButton> */}
             </div>
             <div className={classes.secondBlockContent}>
                 <div className={classes.blockStyle}>

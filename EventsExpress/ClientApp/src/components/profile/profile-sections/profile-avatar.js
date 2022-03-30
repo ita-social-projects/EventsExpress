@@ -4,6 +4,7 @@ import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { makeStyles } from '@material-ui/core/styles';
 import SimpleModalWithDetails from '../../helpers/simple-modal-with-details';
+import ChangeAvatarModal from '../editProfile/change-avatar-modalWindow'
 
 const useStyles = makeStyles({
   deleteIcon: {
@@ -34,16 +35,21 @@ avatar:{
 
 export default function ProfileAvatar(props) {
   const classes = useStyles();
+  const [modalShow, setModalShow] = React.useState(false);
   return (
     <div className={classes.avatar}>
-      <SimpleModalWithDetails
-           data= "Are you sure?"
-           button={
-            <IconButton aria-label="delete" className={classes.deleteIcon} >
+            <IconButton aria-label="delete" className={classes.deleteIcon} onClick={() => setModalShow(true)} >
               <i class="fas fa-camera"></i>
            </IconButton>
-           }/>
+
         <CustomAvatar height= "300px" width=  "300px"  name={props.name} userId={props.userId}/>
+
+        <ChangeAvatarModal
+          show={modalShow}
+          onHide={() => setModalShow(false)}
+        />
+
+
     </div>
 )
 }
