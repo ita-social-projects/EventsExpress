@@ -6,6 +6,8 @@ using EventsExpress.Db.Configurations;
 using EventsExpress.Db.EF;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
+using NetTopologySuite.Geometries;
+using Location = EventsExpress.Db.Entities.Location;
 
 namespace EventsExpress.Db.DbInitialize
 {
@@ -83,6 +85,12 @@ namespace EventsExpress.Db.DbInitialize
                                 RoleId = Enums.Role.User,
                             },
                         },
+                    },
+                    LocationId = Guid.NewGuid(),
+                    Location = new Location
+                    {
+                        Type = LocationType.Map,
+                        Point = Point.Empty,
                     },
                 },
             };

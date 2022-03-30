@@ -1,0 +1,56 @@
+* {
+    padding: 0;
+    margin: 0;
+    font-size: 14px;
+}
+
+.stepper-submit, .step-wrapper {
+    padding: 10px;
+}
+
+.stepper-submit {
+    margin-top: 2rem;
+    text-align: center;
+}
+
+.stepper-tellusmore-block {
+    border: 1px solid rgb(255, 153, 0);
+    box-shadow: 0 0 5px rgb(255, 153, 0);
+    border-radius: 3px;
+    margin: 30px auto;
+    padding: 20px;
+    background-color: ghostwhite;
+}
+
+.stepper-container-horizontal {
+    border: 1px solid rgb(255, 153, 0);
+    box-shadow: 0 0 13px #333;
+    border-radius: 3px;
+    margin: 40px auto;
+    padding: 30px;
+    width: 65%;
+}
+
+.stepper-container-horizontal h1 {
+    font-size: 20px;
+}
+
+.buttons-container {
+    padding: 30px 60px 0;
+}
+
+.previous {
+    margin: 0 2rem;
+    width: 100px;
+    padding: 4px;
+    background-color: rgb(255, 153, 0);
+    border: none;
+}
+
+.next {
+    margin: 0 2rem;
+    width: 100px;
+    padding: 4px;
+    background-color: rgb(255, 153, 0);
+    border: none;
+}

@@ -8,5 +8,6 @@
         UnblockedUser,
         OwnEventChanged,
         JoinedEventChanged,
+        RoleChanged,
     }
 }

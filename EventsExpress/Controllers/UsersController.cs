@@ -7,10 +7,8 @@ using EventsExpress.Core.Exceptions;
 using EventsExpress.Core.IServices;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
-using EventsExpress.ExtensionMethods;
 using EventsExpress.Policies;
 using EventsExpress.ViewModels;
-using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -153,7 +151,6 @@ namespace EventsExpress.Controllers
         {
             var user = GetCurrentUserOrNull();
             var userInfo = _mapper.Map<UserDto, UserInfoViewModel>(user);
-
             return Ok(userInfo);
         }
 
@@ -329,19 +326,30 @@ namespace EventsExpress.Controllers
         }
 
         [NonAction]
-        private UserDto GetCurrentUserInfo() => _userService.GetCurrentUserInfo();
-
-        [NonAction]
         private UserDto GetCurrentUserOrNull()
         {
             try
             {
-                return GetCurrentUserInfo();
+                return _userService.GetCurrentUserInfo();
             }
             catch (EventsExpressException)
             {
                 return null;
             }
+        }
+
+        /// <summary>
+        /// This method edit Location users.
+        /// </summary>
+        /// <param name="location">Location user.</param>
+        /// <response code = "200">Edit is successful.</response>
+        /// <response code = "400">Edit is not successful.</response>
+        /// <returns>The method returns edited location for user.</returns>
+        [HttpPost("[action]")]
+        public async Task<IActionResult> EditLocation(EditLocationViewModel location)
+        {
+            await _userService.EditLocation(location.Location);
+            return Ok(location);
         }
     }
 }

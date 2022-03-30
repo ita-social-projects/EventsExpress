@@ -94,6 +94,7 @@ const initialState = {
             pageViewModel: {},
         },
         filter: filterHelper.getDefaultEventFilter(),
+        layout: 'matrix',
     },
     tracks: {
         isError: false,

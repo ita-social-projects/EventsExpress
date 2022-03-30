@@ -120,18 +120,6 @@ namespace EventsExpress.Controllers
             return Ok(new { Id = accountId });
         }
 
-        [Authorize]
-        [HttpPost("[action]")]
-        public async Task<IActionResult> RegisterBindExternalAccount(RegisterBindViewModel authRequest)
-        {
-            var accountData = _mapper.Map<RegisterBindDto>(authRequest);
-            var authResponseModel = await _authService.BindExternalAccount(accountData);
-
-            HttpContext.SetTokenCookie(authResponseModel);
-
-            return Ok(new { Token = authResponseModel.JwtToken });
-        }
-
         /// <summary>
         /// This method allows complete registration.
         /// </summary>
