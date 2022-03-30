@@ -116,7 +116,7 @@ namespace EventsExpress.Test.GraphQLTests
                 {
                     new EventCategory { Category = firstCategory },
                 },
-                EventLocation = new EventLocation
+                Location = new Db.Entities.Location
                 {
                     Point = new Point(48.24354257613047, 26.0101318359375) { SRID = 4326 },
                     Type = LocationType.Map,

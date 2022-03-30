@@ -34,7 +34,7 @@
                   statusHistory {
                     id
                   }
-                  eventLocation {
+                  location {
                     id
                     point {
                       x
@@ -93,7 +93,7 @@
               events(
                 first: 50
                 where: {
-                  eventLocation: {
+                  location: {
                     point: {
                       distance: {
                         geometry: {
@@ -109,7 +109,7 @@
               ) {
                 nodes {
                   title
-                  eventLocation {
+                  location {
                     point {
                       x
                       y
