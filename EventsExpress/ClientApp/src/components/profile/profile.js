@@ -21,6 +21,7 @@ import LinkedAuthsWrapper from '../../containers/linked-auths-wrapper';
 import { InterestsSection } from './profile-sections/interests-section';
 import { MoreInfoSection } from './profile-sections/more-info-section';
 import GeneralInfoSection from './profile-sections/general-info-section';
+import SpinnerWrapper from "../../containers/spinner"
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -83,6 +84,9 @@ const Profile = (props) => {
     console.log(props);
     return (
         <div className={classes.root}>
+            <SpinnerWrapper
+            showContent={props.id != undefined}
+            >
             <div className={classes.profileHeader}>
                 <h1>Profile</h1>
             </div>
@@ -97,129 +101,8 @@ const Profile = (props) => {
                     <GeneralInfoSection />
                 </div>
             </div>
-            {/* <ExpansionPanel expanded={expanded === 'panel0'} onChange={handleChange('panel0')}>
-                <ExpansionPanelSummary
-                    expandIcon={<ExpandMoreIcon />}
-                    aria-controls="panel1bh-content"
-                    id="panel1bh-header"
-                >
-                    <Typography className={classes.heading}>Change Avatar</Typography>
-                </ExpansionPanelSummary>
-                <ExpansionPanelDetails>
-                    <Typography className="w-100">
-                        <MuiThemeProvider>
-                            <ChangeAvatarWrapper />
-                        </MuiThemeProvider>
-                    </Typography>
-                </ExpansionPanelDetails>
-            </ExpansionPanel>
-            <ExpansionPanel expanded={expanded === 'panel1'} onChange={handleChange('panel1')}>
-                <ExpansionPanelSummary
-                    expandIcon={<ExpandMoreIcon />}
-                    aria-controls="panel1bh-content"
-                    id="panel1bh-header"
-                >
-                    <Typography className={classes.heading}>Username</Typography>
-                    <Typography className={classes.secondaryHeading}>{props.name}</Typography>
-                </ExpansionPanelSummary>
-                <ExpansionPanelDetails>
-                    <Typography>
-                        <MuiThemeProvider>
-                            <EditUsernameContainer />
-                        </MuiThemeProvider>
-                    </Typography>
-                </ExpansionPanelDetails>
-            </ExpansionPanel>
-            <ExpansionPanel expanded={expanded === 'panel2'} onChange={handleChange('panel2')}>
-                <ExpansionPanelSummary
-                    expandIcon={<ExpandMoreIcon />}
-                    aria-controls="panel2bh-content"
-                    id="panel2bh-header">
-                    <Typography className={classes.heading}>Gender</Typography>
-                    <Typography className={classes.secondaryHeading}>{genders[props.gender]}</Typography>
-                </ExpansionPanelSummary>
-                <ExpansionPanelDetails>
-                    <Typography>
-                        <MuiThemeProvider>
-                            <EditGenderContainer />
-                        </MuiThemeProvider>
-                    </Typography>
-                </ExpansionPanelDetails>
-            </ExpansionPanel>
-            <ExpansionPanel expanded={expanded === 'panel3'} onChange={handleChange('panel3')}>
-                <ExpansionPanelSummary
-                    expandIcon={<ExpandMoreIcon />}
-                    aria-controls="panel3bh-content"
-                    id="panel3bh-header"
-                >
-                    <Typography className={classes.heading}>Date of Birth</Typography>
-                    <Typography className={classes.secondaryHeading}>
-                        <Moment format="D MMM YYYY" withTitle>{props.birthday}</Moment>
-                    </Typography>
-                </ExpansionPanelSummary>
-                <ExpansionPanelDetails>
-                    <Typography>
-                        <MuiThemeProvider>
-                            <EditBirthdayContainer />
-                        </MuiThemeProvider>
-                    </Typography>
-                </ExpansionPanelDetails>
-            </ExpansionPanel>
-            <ExpansionPanel expanded={expanded === 'panel4'} onChange={handleChange('panel4')}>
-                <ExpansionPanelSummary
-                    expandIcon={<ExpandMoreIcon />}
-                    aria-controls="panel4bh-content"
-                    id="panel4bh-header"
-                >
-                    <Typography className={classes.heading}>Favorite Categories</Typography>
-                    <Typography className={classes.secondaryHeading}>
-                        {props.categories.map(category => <div key={category.id}>{category.name}</div>)}
-                    </Typography>
-                </ExpansionPanelSummary>
-                <ExpansionPanelDetails>
-                    <Typography>
-                        <MuiThemeProvider>
-                            <SelectCategoriesWrapper />
-                        </MuiThemeProvider>
-                    </Typography>
-                </ExpansionPanelDetails>
-            </ExpansionPanel>
-            <ExpansionPanel expanded={expanded === 'panel5'} onChange={handleChange('panel5')}>
-                <ExpansionPanelSummary
-                    expandIcon={<ExpandMoreIcon />}
-                    aria-controls="panel5bh-content"
-                    id="panel5bh-header"
-                >
-                    <Typography className={classes.heading}>Manage notifications</Typography>
-                    <Typography className={classes.secondaryHeading}>
-                        {props.notificationTypes.map(notificatin => <div key={notificatin.id}>{notificatin.name}</div>)}
-                    </Typography>
-                </ExpansionPanelSummary>
-                <ExpansionPanelDetails>
-                    <Typography>
-                        <MuiThemeProvider>
-                            <SelectNotificationTypesWrapper />
-                        </MuiThemeProvider>
-                    </Typography>
-                </ExpansionPanelDetails>
-            </ExpansionPanel>
-            <ExpansionPanel expanded={expanded === 'panel6'} onChange={handleChange('panel6')}>
-                <ExpansionPanelSummary
-                    expandIcon={<ExpandMoreIcon />}
-                    aria-controls="panel6bh-content"
-                    id="panel6bh-header"
-                >
-                    <Typography className={classes.heading}>Linked accounts</Typography>
-                </ExpansionPanelSummary>
-                <ExpansionPanelDetails>
-                    <Typography>
-                        <MuiThemeProvider>
-                            <LinkedAuthsWrapper />
-                        </MuiThemeProvider>
-                    </Typography>
-                </ExpansionPanelDetails>
-            </ExpansionPanel>
-            {props.canChangePassword && <ChangePasswordContainer /> } */}
+            </SpinnerWrapper>
+            
         </div>
     );
 }
@@ -228,8 +111,5 @@ const mapStateToProps = state => {
     return state.user;
 };
 
-const mapDispatchToProps = dispatch => ({
-    getComments: (data, page) => dispatch(getComments(data, page))
-});
 
 export default connect(mapStateToProps)(Profile);
