@@ -1,7 +1,7 @@
 ﻿using EventsExpress.Db.EF;
-using EventsExpress.Db.Entities;
 using HotChocolate.Types;
 using NetTopologySuite.Geometries;
+using EventLocation = EventsExpress.Db.Entities.Location;
 
 namespace EventsExpress.Core.GraphQL.Types
 {

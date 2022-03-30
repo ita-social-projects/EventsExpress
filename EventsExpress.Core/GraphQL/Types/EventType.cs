@@ -13,11 +13,11 @@ namespace EventsExpress.Core.GraphQL.Types
             descriptor.Field(f => f.DateTo);
             descriptor.Field(f => f.IsPublic);
             descriptor.Field(f => f.MaxParticipants);
-            descriptor.Field(f => f.EventLocationId);
+            descriptor.Field(f => f.LocationId);
             descriptor.Field(f => f.EventAudienceId);
             descriptor.Field(f => f.EventAudience);
             descriptor.Field(f => f.EventSchedule);
-            descriptor.Field(f => f.EventLocation);
+            descriptor.Field(f => f.Location);
             descriptor.Field(f => f.Organizers);
             descriptor.Field(f => f.Visitors);
             descriptor.Field(f => f.Categories);
