@@ -14,12 +14,13 @@ namespace EventsExpress.Core.Services
 
         public string GetIpAdress()
         {
-            if (_httpContextAccessor.HttpContext.Request.Headers.ContainsKey("X-Forwarded-For"))
+            if (_httpContextAccessor.HttpContext?.Request.Headers != null
+                && _httpContextAccessor.HttpContext.Request.Headers.ContainsKey("X-Forwarded-For"))
             {
                 return _httpContextAccessor.HttpContext.Request.Headers["X-Forwarded-For"];
             }
 
-            return _httpContextAccessor.HttpContext.Connection.RemoteIpAddress.MapToIPv4().ToString();
+            return _httpContextAccessor.HttpContext?.Connection.RemoteIpAddress?.MapToIPv4().ToString();
         }
     }
 }
