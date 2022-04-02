@@ -19,7 +19,6 @@ const photoService = new PhotoService();
 class EventScheduleItemView extends Component {
     constructor(props) {
         super(props);
-
         this.state = {
             eventImage: eventDefaultImage
         }
@@ -40,7 +39,7 @@ class EventScheduleItemView extends Component {
     }
 
     componentWillMount() {
-        this.props.get_event(this.props.eventSchedule.data.eventId);
+
     }
 
     render() {
@@ -85,7 +84,7 @@ class EventScheduleItemView extends Component {
                     </Card>
                 </div>
                 <div className={"col-8 col-sm-10 col-md-8 col-xl-8 mt-3"}>
-                    {isMyEvent &&                        
+                    {isMyEvent &&
                         <SelectiveForm />
                     }
                 </div>
@@ -95,7 +94,7 @@ class EventScheduleItemView extends Component {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-    get_event: (id) => dispatch(get_event(id))
+
 })
 
 export default connect(null, mapDispatchToProps)(EventScheduleItemView);

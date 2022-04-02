@@ -4,8 +4,10 @@ const baseService = new EventsExpressService();
 
 export default class EventScheduleService {
 
-    getEventSchedule = id =>
-        baseService.getResource(`eventSchedule/${id}`);
+    getEventSchedule = id =>{
+        baseService.getResource(`eventSchedule/${id}`).then(res => res.json()).then(data => console.log(data))
+        return baseService.getResource(`eventSchedule/${id}`);
+    }
 
     getAllEventSchedules = () =>
         baseService.getResource(`eventSchedule/all`);
