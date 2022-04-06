@@ -1,0 +1,13 @@
+.field {
+    position: relative;
+}
+
+.content {
+
+}
+
+.editFieldButtons {
+    position: absolute;
+    right: -50px;
+    top: 20px;
+}

@@ -1,6 +1,7 @@
 ﻿import React from 'react';
 import { Field, reduxForm } from 'redux-form';
 import Button from '@material-ui/core/Button';
+import IconButton from "@material-ui/core/IconButton";
 import moment from 'moment';
 import ErrorMessages from '../../shared/errorMessage';
 import { renderDatePicker, parseEuDate } from '../../helpers/form-helpers';
@@ -33,7 +34,7 @@ const validate = values => {
     return errors;
 };
 
-const EditBirthday = ({ handleSubmit, pristine, reset, submitting, error }) => {
+const EditBirthday = ({ handleSubmit, pristine, reset, submitting, error, onClose }) => {
     return (
         <form onSubmit={handleSubmit}>
             <div>
@@ -52,8 +53,14 @@ const EditBirthday = ({ handleSubmit, pristine, reset, submitting, error }) => {
                     />
                 )}
             </div>
-            <div>
-                <Button
+            <div className='editFieldButtons'>
+                <IconButton className="text-success" size="small" type="submit" disabled={pristine || submitting} >
+                        <i className="fas fa-check" />
+                </IconButton>
+                <IconButton className="text-danger" size="small" onClick={reset && onClose}>
+                    <i className="fas fa-times" />
+                </IconButton>
+                {/* <Button
                     type="submit"
                     color="primary"
                     disabled={pristine || submitting}
@@ -67,7 +74,7 @@ const EditBirthday = ({ handleSubmit, pristine, reset, submitting, error }) => {
                     onClick={reset}
                 >
                     Clear
-                </Button>
+                </Button> */}
             </div>
         </form>
     );

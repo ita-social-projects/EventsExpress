@@ -3,9 +3,10 @@ import { Field, reduxForm } from "redux-form";
 import Button from "@material-ui/core/Button";
 import { renderSelectField } from '../../helpers/form-helpers'
 import ErrorMessages from '../../shared/errorMessage';
+import IconButton from "@material-ui/core/IconButton";
 
 let EditGender = props => {
-    const { handleSubmit, pristine, submitting } = props;
+    const { handleSubmit, pristine, submitting, onClose } = props;
     return (
         <form name= "EditGender" onSubmit={handleSubmit}>
             <div>
@@ -26,10 +27,16 @@ let EditGender = props => {
                 }
             </div>
             
-            <div>
-                <Button type="submit" color="primary" disabled={pristine || submitting}>
+            <div className='editFieldButtons'>
+                {/* <Button type="submit" color="primary" disabled={pristine || submitting}>
                     Submit
-                </Button>
+                </Button> */}
+                <IconButton className="text-success" size="small" type="submit" disabled={pristine || submitting} >
+                        <i className="fas fa-check" />
+                </IconButton>
+                <IconButton className="text-danger" size="small" onClick={onClose}>
+                    <i className="fas fa-times" />
+                </IconButton>
             </div>
         </form>
     );

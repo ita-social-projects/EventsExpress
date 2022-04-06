@@ -8,7 +8,16 @@ import EditIcon from '@material-ui/icons/Edit';
 const useStyles = makeStyles(theme => ({
     fieldStyle: {
         width: "100%",
+        height: "auto",
         position: "relative",
+        backgroundClip: "content-box",
+        borderBlock: "50%",
+        '&:hover':{
+            cursor: "pointer"
+        },
+        '&:hover $editButtonStyle': {
+            display: 'block',
+        }
     },
     fieldNameStyle: {
         display: "inline-block",
@@ -29,7 +38,7 @@ const useStyles = makeStyles(theme => ({
         right: "-45px",
         padding: "10px",
         top: "-5px",
-        //display: "none",
+        display: "none",
     },
     editFieldStyle: {
         padding: "5px",
@@ -43,8 +52,20 @@ export const InfoField = ({fieldName, info, editContainer, displayEditButton = f
 
     const [isOpen, setIsOpen] = useState(false);
 
+    const closeField = () =>{
+        console.log("Field closed!");
+        setIsOpen(false);
+    }
+
+    const openField = () => {
+        if(!isOpen) setIsOpen(true);
+    }
+
+
+    let Element = editContainer;
+
     return(
-        <div className={classes.fieldStyle}>
+        <div className={classes.fieldStyle} onClick={openField}>
             {!isOpen &&
                 <div className={classes.fieldNameStyle}>
                     <p className={classes.fontStyle}>{fieldName}</p>
@@ -55,14 +76,14 @@ export const InfoField = ({fieldName, info, editContainer, displayEditButton = f
                     <p className={classes.fontStyle}>{info}</p>
                 </div>
             }
-            {displayEditButton &&
-                <IconButton className={classes.editButtonStyle} onClick={() => {isOpen ? setIsOpen(false) : setIsOpen(true)}}>
+            {displayEditButton && !isOpen &&
+                <IconButton className={classes.editButtonStyle} onClick={() => {setIsOpen(true)}}>
                     <EditIcon />
                 </IconButton>
             }
             {isOpen &&
                 <div className={classes.editFieldStyle}>
-                    {editContainer}
+                    <Element close = {closeField} />
                 </div>
             }
         </div>

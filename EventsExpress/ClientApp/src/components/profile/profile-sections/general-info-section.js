@@ -57,16 +57,16 @@ const GeneralInfoSection = (props) => {
                     <h3>General information</h3>
                 </div>
                 <div className={classes.blockStyle}>
-                    <InfoField fieldName={"Name"} info={props.name} editContainer={<EditUsernameContainer />} displayEditButton={true} />
+                    <InfoField fieldName={"Name"} info={props.name} editContainer={EditUsernameContainer} displayEditButton={true} />
                 </div>
                 <div className={classes.blockStyle}>
                     <InfoField fieldName={"Surname"} info={props.name} />
                 </div>
                 <div className={classes.blockStyle}>
-                    <InfoField fieldName={"Date of birth"} info={birthday} editContainer={<EditBirthdayContainer />} displayEditButton={true} />
+                    <InfoField fieldName={"Date of birth"} info={birthday} editContainer={EditBirthdayContainer} displayEditButton={true} />
                 </div>
                 <div className={classes.blockStyle}>
-                    <InfoField fieldName={"Gender"} info={props.gender ? 'Male' : 'Female'} editContainer={<EditGenderContainer />} displayEditButton={true} />
+                    <InfoField fieldName={"Gender"} info={props.gender == 1 ? 'Male' : 'Female'} editContainer={EditGenderContainer} displayEditButton={true} />
                 </div>
                 <div className={classes.blockStyle}>
                     <InfoField fieldName={"Location"} info={<DisplayLocation
