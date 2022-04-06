@@ -198,13 +198,13 @@ namespace EventsExpress.Core.Services
             return Mapper.Map<IEnumerable<UserDto>>(users);
         }
 
-        public async Task ChangeAvatar(Guid userId, IFormFile avatar)
+        public async Task<Guid> ChangeAvatar(IFormFile avatar)
         {
-            var user = Context.Users
-                .Single(u => u.Id == userId);
             try
             {
-                await _photoService.AddUserPhoto(avatar, user.Id);
+                var userId = _securityContext.GetCurrentUserId();
+                await _photoService.AddUserPhoto(avatar, userId);
+                return userId;
             }
             catch (ArgumentException)
             {
