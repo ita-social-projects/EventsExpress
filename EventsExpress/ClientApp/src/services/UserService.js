@@ -16,11 +16,11 @@ export default class UserService {
 
     getSearchUsersShortInformation = filter => baseService.getResource(`users/searchUsersShortInformation${filter}`);
 
-    setAvatar = async(data) => {
+    setAvatar = async data => {
         let file = new FormData();
         file.append('Photo', data.image.file);
-        return baseService.setResourceWithData(`users/changeAvatar/${data.userId}`, file);
-    }
+        return baseService.setResourceWithData('users/changeAvatar', file);
+    };
 
     setChangeUserRole = data =>
         baseService.setResource('Account/ChangeRoles', data);

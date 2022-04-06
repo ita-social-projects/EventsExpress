@@ -5,6 +5,7 @@ import { setSuccessAllert, setErrorAllertFromResponse } from '../alert-action';
 import { buildValidationState } from '../../components/helpers/action-helpers';
 import { jwtStorageKey } from '../../constants/constants';
 import { getUserInfo } from '../login/login-action';
+import change_avatar from '../redactProfile/avatar-change-action';
 
 const api_serv = new AuthenticationService();
 
@@ -23,6 +24,10 @@ export default function registerComplete(data, { shouldSaveMoreInfo }) {
         
         const jsonRes = await profileResponse.json();
         localStorage.setItem(jwtStorageKey, jsonRes.token);
+
+        if (data.image !== undefined) {
+            dispatch(change_avatar(data));
+        }
 
         if (shouldSaveMoreInfo === true) {
             const moreInfoResponse = await api_serv.setMoreInfo(data);
