@@ -11,8 +11,9 @@ const api_serv = new AuthenticationService();
 
 export default function registerComplete(data, { shouldSaveMoreInfo }) {
     return async dispatch => {
+        const { image, ...profileData } = data;
         const body = {
-            ...data,
+            ...profileData,
             birthday: moment.utc(data.birthday).local().format('YYYY-MM-DD[T00:00:00]'),
         };
 
@@ -25,8 +26,8 @@ export default function registerComplete(data, { shouldSaveMoreInfo }) {
         const jsonRes = await profileResponse.json();
         localStorage.setItem(jwtStorageKey, jsonRes.token);
 
-        if (data.image !== undefined) {
-            dispatch(change_avatar(data));
+        if (image !== undefined) {
+            dispatch(change_avatar({ image }));
         }
 
         if (shouldSaveMoreInfo === true) {
