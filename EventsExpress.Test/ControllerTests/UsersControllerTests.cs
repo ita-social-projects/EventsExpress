@@ -197,14 +197,14 @@ namespace EventsExpress.Test.ControllerTests
 
             PhotoViewModel photoModel = new PhotoViewModel() { Photo = file };
 
-            var res = await _usersController.ChangeAvatar(_userDto.Id, photoModel);
+            var res = await _usersController.ChangeAvatar(photoModel);
 
             Assert.IsInstanceOf<OkObjectResult>(res);
             Assert.DoesNotThrowAsync(() => Task.FromResult(res));
             OkObjectResult okResult = res as OkObjectResult;
             Assert.IsNotNull(okResult);
             Assert.AreEqual(200, okResult.StatusCode);
-            _userService.Verify(user => user.ChangeAvatar(_userDto.Id, It.IsAny<IFormFile>()), Times.Exactly(1));
+            _userService.Verify(user => user.ChangeAvatar(It.IsAny<IFormFile>()), Times.Exactly(1));
         }
 
         [Test]

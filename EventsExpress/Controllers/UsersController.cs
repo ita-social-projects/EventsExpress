@@ -224,18 +224,15 @@ namespace EventsExpress.Controllers
         /// <summary>
         /// This method is to change user avatar.
         /// </summary>
-        /// <param name="userId">Param id defines the user identifier.</param>
         /// <param name="avatar">Param avatar defines the PhotoViewModel model.</param>
         /// <returns>The method returns edited profile photo.</returns>
         /// <response code="200">Changing is successful.</response>
         /// <response code="400">Changing process failed.</response>
-        [HttpPost("[action]/{userId:Guid}")]
-        public async Task<IActionResult> ChangeAvatar(Guid userId, [FromForm] PhotoViewModel avatar)
+        [HttpPost("[action]")]
+        public async Task<IActionResult> ChangeAvatar([FromForm] PhotoViewModel avatar)
         {
-            await _userService.ChangeAvatar(userId, avatar.Photo);
-
+            Guid userId = await _userService.ChangeAvatar(avatar.Photo);
             var updatedPhoto = await _photoService.GetPhotoFromAzureBlob($"users/{userId}/photo.png");
-
             return Ok(updatedPhoto);
         }
 

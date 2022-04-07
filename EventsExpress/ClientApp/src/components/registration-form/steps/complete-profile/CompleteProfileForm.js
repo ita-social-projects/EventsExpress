@@ -15,6 +15,7 @@ import {
     parseEuDate,
     renderPhoneInput
 } from '../../../helpers/form-helpers';
+import DropZoneField from '../../../helpers/DropZoneField';
 
 const validate = values => {
     let errors = {};
@@ -64,6 +65,18 @@ const CompleteProfileForm = ({ handleSubmit }) => {
                     <h1 style={{ fontSize: 20, textAlign: 'left' }}>
                         Step 2: Complete your profile
                     </h1>
+                </Grid>
+                <Grid item sm={12}>
+                    <h5>Choose avatar</h5>
+                </Grid>
+                <Grid item sm={12}>
+                    <Field
+                        name="image"
+                        component={DropZoneField}
+                        type="file"
+                        crop={true}
+                        cropShape="round"
+                    />
                 </Grid>
                 <Grid item sm={6}>
                     <Field
