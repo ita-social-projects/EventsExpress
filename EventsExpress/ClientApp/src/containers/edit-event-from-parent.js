@@ -12,12 +12,9 @@ import { validate } from './event-edit-validate-form '
 import { validateEventForm } from './event-validate-form'
 import get_categories from '../actions/category/category-list-action';
 import Button from "@material-ui/core/Button";
+import SpinnerWrapper from "./spinner";
 
 class EditFromParentEventWraper extends Component {
-
-    componentWillMount = () => {
-        this.props.get_categories();
-    }
 
     componentDidUpdate = () => {
         if (!this.props.edit_event_from_parent_status.eventFromParentError &&
@@ -34,6 +31,8 @@ class EditFromParentEventWraper extends Component {
         if (values.isReccurent) {
             values.isReccurent = false;
         }
+        console.log(values);
+        console.log(this.props.user_id);
         this.props.edit_event_from_parent({ ...validateEventForm(values), user_id: this.props.user_id });
     }
 
@@ -45,8 +44,7 @@ class EditFromParentEventWraper extends Component {
                 .add(new moment(this.props.eventSchedule.nextRun)
                     .diff(new moment(this.props.event.dateFrom), 'days'), 'days')
         }
-        return <>
-            <EventForm
+        return <EventForm
                 validate={validate}
                 all_categories={this.props.all_categories}
                 onSubmit={this.onSubmit}
@@ -74,7 +72,6 @@ class EditFromParentEventWraper extends Component {
                     </Button>
                 </div>
             </EventForm>
-        </>
     }
 }
 
@@ -90,13 +87,10 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => {
     return {
         edit_event_from_parent: (data) => dispatch(edit_event_from_parent(data)),
-        get_categories: () => dispatch(get_categories()),
-        reset: () => {
-            dispatch(reset('event-form'));
-            dispatch(setEventFromParentPending(true));
-            dispatch(setEventFromParentSuccess(false));
-        }
+        reset: () => dispatch(reset('event-form'))
     }
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(EditFromParentEventWraper);
+
+

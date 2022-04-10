@@ -8,7 +8,6 @@ import CancelNextEventWrapper from '../../containers/cancel-next-event'
 import CancelAllEventsWrapper from '../../containers/cancel-all-events'
 import EventSchedulePopover from './eventSchedule-popover'
 import EventScheduleModal from './eventSchedule-modal'
-import './eventSchedule.css'
 
 export default class SelectiveForm extends Component {
     constructor() {
@@ -27,12 +26,14 @@ export default class SelectiveForm extends Component {
     }
 
     onEdit = () => {
+        console.log(this.state)
         this.setState({
             show: true
         });
     }
 
     submitHandler = () => {
+        console.log(this.state)
         this.setState({
             show: false,
             submit: true
@@ -43,6 +44,7 @@ export default class SelectiveForm extends Component {
         return <>
             <div className="shadow-lg p-3 mb-5 bg-white rounded">
                 <div className="row">
+                    <div className="dropdown">
                     <div className="col-11">
                         <DropdownButton title="Select Option For Event">
                             <Dropdown.Item as={AddFromParentEventWrapper}></Dropdown.Item>
@@ -50,6 +52,7 @@ export default class SelectiveForm extends Component {
                             <Dropdown.Item as={CancelNextEventWrapper}></Dropdown.Item>
                             <Dropdown.Item as={CancelAllEventsWrapper}></Dropdown.Item>
                         </DropdownButton>
+                    </div>
                     </div>
                     <EventSchedulePopover />
                 </div>

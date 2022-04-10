@@ -6,16 +6,14 @@ import getEventSchedule, {
     resetEventSchedule
 } from '../actions/eventSchedule/eventSchedule-item-view-action';
 import get_event from "../actions/event/event-item-view-action";
-
+import get_categories from "../actions/category/category-list-action";
 const EventScheduleItemViewWrapper = (props) => {
-    console.log(props)
     const { id } = props.match.params;
     const { data } = props.eventSchedule;
 
     useEffect(() => {
         props.getEventSchedule(id);
-        console.log(props.eventSchedule);
-        console.log(props.current_user);
+        props.get_categories();
         return () => props.reset();
     },[])
 
@@ -44,6 +42,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
     getEventSchedule: (id) => dispatch(getEventSchedule(id)),
     get_event: (id) => dispatch(get_event(id)),
-    reset: () => dispatch(resetEventSchedule())
+    reset: () => dispatch(resetEventSchedule()),
+    get_categories: () => dispatch(get_categories())
 })
 export default connect(mapStateToProps, mapDispatchToProps)(EventScheduleItemViewWrapper);
