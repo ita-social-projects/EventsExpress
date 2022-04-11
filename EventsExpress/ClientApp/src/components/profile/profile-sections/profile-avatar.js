@@ -1,13 +1,12 @@
 import React from 'react'
 import CustomAvatar from '../../avatar/custom-avatar'
 import IconButton from '@material-ui/core/IconButton';
-import DeleteIcon from '@material-ui/icons/Delete';
 import { makeStyles } from '@material-ui/core/styles';
-import SimpleModalWithDetails from '../../helpers/simple-modal-with-details';
-import ChangeAvatarModal from '../editProfile/change-avatar-modalWindow'
+import EditAvatarModal from '../editProfile/editAvatarModals/edit-avatar-modal-with-options'
+
 
 const useStyles = makeStyles({
-  deleteIcon: {
+  editIcon: {
     position:'absolute',
     display:'block',
     left:"50%" ,
@@ -24,7 +23,7 @@ const useStyles = makeStyles({
 avatar:{
   position:'relative',
   backgroundClip: "content-box",
-   '&:hover $deleteIcon':{
+   '&:hover $editIcon':{
      backgroundColor:"white"
      
    },
@@ -36,20 +35,27 @@ avatar:{
 export default function ProfileAvatar(props) {
   const classes = useStyles();
   const [modalShow, setModalShow] = React.useState(false);
+  const handleOpen = () => {
+    setModalShow(true);
+  }
+  const handleClose = () =>{
+    setModalShow(false);
+  }
   return (
     <div className={classes.avatar}>
-            <IconButton aria-label="delete" className={classes.deleteIcon} onClick={() => setModalShow(true)} >
-              <i class="fas fa-camera"></i>
+            <IconButton aria-label="delete" className={classes.editIcon} onClick={() => setModalShow(true)} >
+              <i className="fas fa-camera"></i>
            </IconButton>
 
         <CustomAvatar height= "300px" width=  "300px"  name={props.name} userId={props.userId}/>
 
-        <ChangeAvatarModal
+        <EditAvatarModal
           show={modalShow}
-          onHide={() => setModalShow(false)}
+          onHide={handleClose}
+          Open={handleOpen}
+          name ={props.name}
+          id = {props.userId}
         />
-
-
     </div>
 )
 }

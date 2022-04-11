@@ -7,9 +7,7 @@ import DisplayLocation from '../../event/map/display-location';
 import EditUsernameContainer from '../../../containers/editProfileContainers/editUsernameContainer';
 import EditGenderContainer from '../../../containers/editProfileContainers/editGenderContainer';
 import EditBirthdayContainer from '../../../containers/editProfileContainers/editBirthdayContainer';
-import ChangeAvatarButton from "../editProfile/change-avatar-button";
 import '../User-profile.css';
-import CustomAvatar from "../../avatar/custom-avatar"
 import ProfileAvatar from './profile-avatar'
 
 const useStyles = makeStyles(theme => ({
@@ -57,11 +55,9 @@ const GeneralInfoSection = (props) => {
             <div className={classes.firstBlockContent}>
                 <div className={`${classes.blockStyle} ${classes.avatar}`}>
                     <div >
-                        {/* <CustomAvatar height="300px" width="300px" name={props.name} userId={props.id}/> */}
                             <ProfileAvatar name={props.name} userId={props.id}></ProfileAvatar>
                     </div>
                 </div>
-               {/* <ChangeAvatarButton></ChangeAvatarButton> */}
             </div>
             <div className={classes.secondBlockContent}>
                 <div className={classes.blockStyle}>
