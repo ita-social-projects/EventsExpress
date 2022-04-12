@@ -93,7 +93,7 @@ class DropZoneField extends Component {
         const { handleOnCrop, handleOnDrop, handleOnClear } = this;
         const containerClass = error && touched ? "invalid" : "valid";
         return (
-            <Fragment className={`preview-container ${containerClass}`}>
+            <div className={`preview-container ${containerClass}`}>
                 <div >  
                     {imagefile.length && crop && !cropped ? (
                         <div>
@@ -135,7 +135,7 @@ class DropZoneField extends Component {
                 </div>
                 {renderFieldError({ touched, error})}
 
-            </Fragment>
+            </div>
         )
     }
 }
