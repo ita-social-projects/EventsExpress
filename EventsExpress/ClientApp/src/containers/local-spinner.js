@@ -6,7 +6,6 @@ class LocalSpinnerWrapper extends Component {
 
     render() {
         const { localCounter, showContent } = this.props;
-        console.log(this.props);
         return localCounter > 0 || !showContent
             ? <Spinner />
             : this.props.children

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using AutoMapper;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Exceptions;
@@ -11,16 +10,15 @@ using EventsExpress.Db.Bridge;
 using EventsExpress.Db.EF;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 
 namespace EventsExpress.Core.Services
 {
-    public class EventScheduleService : BaseService<EventSchedule>, IEventScheduleService
+    public class EventScheduleManager : BaseService<EventSchedule>, IEventScheduleManager
     {
         private readonly ISecurityContext _securityContextService;
 
-        public EventScheduleService(AppDbContext context, IMapper mapper, ISecurityContext securityContextService)
+        public EventScheduleManager(AppDbContext context, IMapper mapper, ISecurityContext securityContextService)
             : base(context, mapper)
         {
             _securityContextService = securityContextService;
@@ -66,17 +64,16 @@ namespace EventsExpress.Core.Services
                 .ToList());
         }
 
-        public async Task<Guid> Create(EventScheduleDto eventScheduleDTO)
+        public Guid Create(EventScheduleDto eventScheduleDTO)
         {
             var eventScheduleEntity = Mapper.Map<EventScheduleDto, EventSchedule>(eventScheduleDTO);
 
             var result = Insert(eventScheduleEntity);
-            await Context.SaveChangesAsync();
 
             return result.Id;
         }
 
-        public async Task<Guid> Edit(EventScheduleDto eventScheduleDTO)
+        public Guid Edit(EventScheduleDto eventScheduleDTO)
         {
             var ev = Context.EventSchedules.Find(eventScheduleDTO.Id);
 
@@ -92,14 +89,12 @@ namespace EventsExpress.Core.Services
                 ev.NextRun = eventScheduleDTO.NextRun;
                 ev.IsActive = eventScheduleDTO.IsActive;
                 ev.EventId = eventScheduleDTO.EventId;
-
-                await Context.SaveChangesAsync();
             }
 
             return eventScheduleDTO.Id;
         }
 
-        public async Task<Guid> Delete(Guid id)
+        public Guid Delete(Guid id)
         {
             var eventSchedule = Context.EventSchedules.Find(id);
             if (eventSchedule == null)
@@ -109,27 +104,25 @@ namespace EventsExpress.Core.Services
 
             var result = Delete(eventSchedule);
 
-            await Context.SaveChangesAsync();
-
             return result.Id;
         }
 
-        public async Task<Guid> CancelEvents(Guid eventId)
+        public Guid CancelEvents(Guid eventId)
         {
             var eventScheduleDTO = EventScheduleByEventId(eventId);
             eventScheduleDTO.IsActive = false;
 
-            return await Edit(eventScheduleDTO);
+            return Edit(eventScheduleDTO);
         }
 
-        public async Task<Guid> CancelNextEvent(Guid eventId)
+        public Guid CancelNextEvent(Guid eventId)
         {
             var eventScheduleDTO = EventScheduleByEventId(eventId);
             eventScheduleDTO.LastRun = eventScheduleDTO.NextRun;
             eventScheduleDTO.NextRun = DateTimeExtensions
                 .AddDateUnit(eventScheduleDTO.Periodicity, eventScheduleDTO.Frequency, eventScheduleDTO.LastRun);
 
-            return await Edit(eventScheduleDTO);
+            return Edit(eventScheduleDTO);
         }
 
         private Guid CurrentUserId() =>

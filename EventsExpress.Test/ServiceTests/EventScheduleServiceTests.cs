@@ -17,7 +17,7 @@ namespace EventsExpress.Test.ServiceTests
     internal class EventScheduleServiceTests : TestInitializer
     {
         private static Mock<ISecurityContext> mockSecurityContextService;
-        private EventScheduleService service;
+        private EventScheduleManager service;
         private List<EventSchedule> eventSchedules;
         private EventScheduleDto esDTO;
         private Event activeEvent;
@@ -34,7 +34,7 @@ namespace EventsExpress.Test.ServiceTests
             base.Initialize();
             mockSecurityContextService = new Mock<ISecurityContext>();
 
-            service = new EventScheduleService(
+            service = new EventScheduleManager(
                 Context,
                 MockMapper.Object,
                 mockSecurityContextService.Object);
@@ -202,19 +202,19 @@ namespace EventsExpress.Test.ServiceTests
 
             esDTO.Id = Guid.NewGuid();
 
-            Assert.DoesNotThrowAsync(async () => await service.Create(esDTO));
+            Assert.DoesNotThrow(() => service.Create(esDTO));
         }
 
         [Test]
         public void Edit_EventSchedule_Success()
         {
-            Assert.DoesNotThrowAsync(async () => await service.Edit(esDTO));
+            Assert.DoesNotThrow(() => service.Edit(esDTO));
         }
 
         [Test]
         public void Edit_EventSchedule_NotFound_ThrouAsync()
         {
-            var ex = Assert.ThrowsAsync<EventsExpressException>(async () => await service.Edit(new EventScheduleDto()));
+            var ex = Assert.Throws<EventsExpressException>(() => service.Edit(new EventScheduleDto()));
             Assert.That(ex.Message, Contains.Substring("Not found"));
         }
 
@@ -222,39 +222,37 @@ namespace EventsExpress.Test.ServiceTests
         [Category("Delete event")]
         public void DeleteEventSchedule_ExistingId_Success()
         {
-            Assert.DoesNotThrowAsync(async () => await service.Delete(validEventScheduleId));
+            Assert.DoesNotThrow(() => service.Delete(validEventScheduleId));
         }
 
         [Test]
         [Category("Delete event")]
-        public async Task DeleteEventSchedule_ExistingId_ReturnsCorrectId()
+        public void DeleteEventSchedule_ExistingId_ReturnsCorrectId()
         {
-            var result = await service.Delete(validEventScheduleId);
-
+            var result = service.Delete(validEventScheduleId);
             Assert.AreEqual(validEventScheduleId, result);
-            var testEventSchedule = Context.EventSchedules.Find(result);
-            Assert.IsNull(testEventSchedule);
+            var res = Context.EventSchedules.Find(result);
         }
 
         [Test]
         [Category("Delete event")]
         public void DeleteEventSchedule_NotExistingId_ThrowsAsync()
         {
-            Assert.ThrowsAsync<EventsExpressException>(async () => await service.Delete(Guid.NewGuid()));
+            Assert.Throws<EventsExpressException>(() => service.Delete(Guid.NewGuid()));
         }
 
         [Test]
         [Category("Cancel events")]
         public void CancelEvents_WorksAsync()
         {
-            Assert.DoesNotThrowAsync(async () => await service.CancelEvents(validEventId));
+            Assert.DoesNotThrow(() => service.CancelEvents(validEventId));
         }
 
         [Test]
         [Category("Cancel events")]
-        public async Task CancelEvents_ScheduleIsInactive_Success()
+        public void CancelEvents_ScheduleIsInactive_Success()
         {
-            var result = await service.CancelEvents(validEventId);
+            var result = service.CancelEvents(validEventId);
 
             Assert.AreEqual(validEventScheduleId, result);
             var changedEventSchedule = Context.EventSchedules.Find(result);
@@ -265,17 +263,17 @@ namespace EventsExpress.Test.ServiceTests
         [Category("Cancel next event")]
         public void CancelNextEvent_WorksAsync()
         {
-            Assert.DoesNotThrowAsync(async () => await service.CancelNextEvent(validEventId));
+            Assert.DoesNotThrow(() => service.CancelNextEvent(validEventId));
         }
 
         [Test]
         [Category("Cancel next event")]
-        public async Task CancelNextEvent_NewScheduleRuns_Success()
+        public void CancelNextEvent_NewScheduleRuns_Success()
         {
             var expectedLastRun = eventSchedules[0].LastRun.AddDays(2);
             var expectedNextRun = eventSchedules[0].NextRun.AddDays(2);
 
-            var result = await service.CancelNextEvent(validEventId);
+            var result = service.CancelNextEvent(validEventId);
 
             Assert.AreEqual(validEventScheduleId, result);
             var actualEventSchedule = Context.EventSchedules.Find(result);

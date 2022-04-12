@@ -1,5 +1,6 @@
 ﻿using System;
 using EventsExpress.Core.DTOs;
+using EventsExpress.Core.Exceptions;
 using EventsExpress.Core.IServices;
 using EventsExpress.Core.Services;
 using EventsExpress.Test.ServiceTests.TestClasses.Location;
@@ -65,26 +66,9 @@ namespace EventsExpress.Test.ServiceTests
 
         [TestCaseSource(typeof(CreatingNotExistingLocation))]
         [Category("Create")]
-        public void Create_newLocation_IdEquals(LocationDto locationDto)
-        {
-            var result = service.Create(locationDto);
-
-            Assert.That(Guid.Equals(result, locationDto.Id), Is.True);
-        }
-
-        [TestCaseSource(typeof(CreatingNotExistingLocation))]
-        [Category("Create")]
         public void Create_newLocation_DoesNotThrowAsync(LocationDto locationDto)
         {
             Assert.DoesNotThrow(() => service.Create(locationDto));
-        }
-
-        [TestCaseSource(typeof(CreatingExistingLocation))]
-        [Category("Create")]
-        public void Create_ExistingLocation_Failed(LocationDto locationDto)
-        {
-            Assert.Throws<InvalidOperationException>(
-                 () => service.Create(locationDto));
         }
 
         [TestCaseSource(typeof(CreatingExistingLocation))]

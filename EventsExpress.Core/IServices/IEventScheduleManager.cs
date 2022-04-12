@@ -5,17 +5,17 @@ using EventsExpress.Core.DTOs;
 
 namespace EventsExpress.Core.IServices
 {
-    public interface IEventScheduleService
+    public interface IEventScheduleManager
     {
-        Task<Guid> Create(EventScheduleDto eventScheduleDTO);
+        Guid Create(EventScheduleDto eventScheduleDTO);
 
-        Task<Guid> CancelEvents(Guid eventId);
+        Guid CancelEvents(Guid eventId);
 
-        Task<Guid> Delete(Guid id);
+        Guid Delete(Guid id);
 
-        Task<Guid> CancelNextEvent(Guid eventId);
+        Guid CancelNextEvent(Guid eventId);
 
-        Task<Guid> Edit(EventScheduleDto eventScheduleDTO);
+        Guid Edit(EventScheduleDto eventScheduleDTO);
 
         EventScheduleDto EventScheduleById(Guid eventScheduleId);
 

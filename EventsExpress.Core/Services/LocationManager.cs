@@ -16,7 +16,7 @@ namespace EventsExpress.Core.Services
         public Guid Create(LocationDto locationDto)
         {
             var location = Mapper.Map<LocationDto, Db.Entities.Location>(locationDto);
-
+            location.Id = Guid.Empty;
             var result = Insert(location);
 
             return result.Id;

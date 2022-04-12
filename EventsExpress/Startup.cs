@@ -126,7 +126,7 @@ namespace EventsExpress
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<IEventService, EventService>();
-            services.AddScoped<IEventScheduleService, EventScheduleService>();
+            services.AddScoped<IEventScheduleManager, EventScheduleManager>();
             services.AddScoped<IEventStatusHistoryService, EventStatusHistoryService>();
             services.AddScoped<IMessageService, MessageService>();
             services.AddScoped<IUserService, UserService>();
