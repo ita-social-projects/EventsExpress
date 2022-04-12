@@ -86,12 +86,6 @@ namespace EventsExpress.Db.DbInitialize
                             },
                         },
                     },
-                    LocationId = Guid.NewGuid(),
-                    Location = new Location
-                    {
-                        Type = LocationType.Map,
-                        Point = Point.Empty,
-                    },
                 },
             };
 
