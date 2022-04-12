@@ -31,8 +31,6 @@ class EditFromParentEventWraper extends Component {
         if (values.isReccurent) {
             values.isReccurent = false;
         }
-        console.log(values);
-        console.log(this.props.user_id);
         this.props.edit_event_from_parent({ ...validateEventForm(values), user_id: this.props.user_id });
     }
 

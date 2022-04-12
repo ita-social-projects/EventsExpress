@@ -38,10 +38,6 @@ class EventScheduleItemView extends Component {
         URL.revokeObjectURL(this.state.eventImage);
     }
 
-    componentWillMount() {
-
-    }
-
     render() {
 
         const classes = useStyles;
@@ -93,8 +89,5 @@ class EventScheduleItemView extends Component {
     }
 }
 
-const mapDispatchToProps = (dispatch) => ({
 
-})
-
-export default connect(null, mapDispatchToProps)(EventScheduleItemView);
+export default EventScheduleItemView;

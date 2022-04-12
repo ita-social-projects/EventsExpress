@@ -26,14 +26,12 @@ export default class SelectiveForm extends Component {
     }
 
     onEdit = () => {
-        console.log(this.state)
         this.setState({
             show: true
         });
     }
 
     submitHandler = () => {
-        console.log(this.state)
         this.setState({
             show: false,
             submit: true
