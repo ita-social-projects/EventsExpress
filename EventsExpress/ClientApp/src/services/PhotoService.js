@@ -14,4 +14,6 @@ export default class PhotoService {
         photo.append(`Photo`, data);
         return baseService.setResourceWithData(`event/SetEventTempPhoto/${id}`, photo)
     };
+
+    deleteUserPhoto = id => baseService.setResource(`photo/DeleteUserPhoto?id=${id}`)
 }

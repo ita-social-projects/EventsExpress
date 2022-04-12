@@ -106,5 +106,10 @@ namespace EventsExpress.Core.Services
             var fullPhoto = GetResizedBytesFromFile(uploadedFile, _widthOptions.Value.Image);
             await UploadPhotoToBlob(fullPhoto, $"events/{id}/fullTemp.png");
         }
+
+        public async Task DeletePhotoFromAzureBlob(string url)
+        {
+            await _blobContainerClient.DeleteBlobIfExistsAsync(url);
+        }
     }
 }

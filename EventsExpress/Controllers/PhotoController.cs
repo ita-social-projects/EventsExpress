@@ -62,5 +62,15 @@ namespace EventsExpress.Controllers
 
             return File(photo, "image/png");
         }
+
+        [HttpPost("[action]")]
+        public async Task<IActionResult> DeleteUserPhoto([FromQuery]string id)
+        {
+            string url = $"users/{id}/photo.png";
+
+            await _photoService.DeletePhotoFromAzureBlob(url);
+
+            return Ok();
+        }
     }
 }

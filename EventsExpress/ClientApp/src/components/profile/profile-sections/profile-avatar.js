@@ -14,7 +14,7 @@ const useStyles = makeStyles({
     transform: "translateX(-50%)",
     zIndex:10,
     textAlign:"center",
-    backgroundColor:"white",
+    backgroundColor:"#B8B8B8",
     '&:active svg':{
       color :"red"
     }
@@ -24,7 +24,7 @@ avatar:{
   position:'relative',
   backgroundClip: "content-box",
    '&:hover $editIcon':{
-     backgroundColor:"white"
+     backgroundColor:"#B8B8B8"
      
    },
 },

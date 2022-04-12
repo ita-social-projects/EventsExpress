@@ -15,5 +15,7 @@ namespace EventsExpress.Core.IServices
         Task ChangeTempToImagePhoto(Guid id);
 
         Task<byte[]> GetPhotoFromAzureBlob(string url);
+
+        Task DeletePhotoFromAzureBlob(string url);
     }
 }
