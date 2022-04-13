@@ -1,18 +1,22 @@
 import React from "react";
 import Modal from "react-bootstrap/Modal";
-import ChangeAvatarWrapper from "../../../../containers/editProfileContainers/change-avatar";
+import Button from "@material-ui/core/Button";
 import KeyboardBackspaceIcon from '@material-ui/icons/KeyboardBackspace';
 import IconButton from '@material-ui/core/IconButton';
 
 
 
-export default function ChangeAvatarModal(props) {
+export default function DeleteAvatarModal(props) {
+    const CancelButtonClick = () => {
+        props.onHide();
+    }
+    const ConfirmButtonClick = () =>{
+        props.onConfirm();
+    }
   return (
     <Modal
         show={props.show}
         onHide={props.onHide}
-        size="lg"
-        aria-labelledby="contained-modal-title-vcenter"
         centered
       >
         <Modal.Header closeButton>
@@ -23,12 +27,16 @@ export default function ChangeAvatarModal(props) {
           >
             <KeyboardBackspaceIcon />
           </IconButton>
-            {props.header}
+            Delete Avatar
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <ChangeAvatarWrapper></ChangeAvatarWrapper>
+          Are you sure?
         </Modal.Body>
+        <Modal.Footer>
+          <Button variant="contained" color="secondary" onClick={CancelButtonClick}>Cancel</Button>
+          <Button variant="contained" color="primary" onClick={ConfirmButtonClick}>Confirm</Button>
+        </Modal.Footer>
       </Modal>
   )
 }
