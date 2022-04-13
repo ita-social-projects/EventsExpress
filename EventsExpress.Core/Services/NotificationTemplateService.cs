@@ -30,6 +30,7 @@ namespace EventsExpress.Core.Services
                 { NotificationProfile.CreateEventVerification, () => new CreateEventVerificationNotificationTemplateModel() },
                 { NotificationProfile.OwnEventChanged, () => new EventChangeNotificationTemplateModel() },
                 { NotificationProfile.JoinedEventChanged, () => new EventChangeNotificationTemplateModel() },
+                { NotificationProfile.RoleChanged, () => new RoleChangeNotificationTemplateModel() },
             };
 
         private static string AddBraces(string property)

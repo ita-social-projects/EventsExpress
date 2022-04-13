@@ -6,7 +6,6 @@ using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Enums;
 using EventsExpress.Core.Exceptions;
 using EventsExpress.Core.IServices;
-using EventsExpress.Core.Notifications;
 using EventsExpress.Core.Services;
 using EventsExpress.Db.Bridge;
 using EventsExpress.Db.Entities;
@@ -22,8 +21,8 @@ namespace EventsExpress.Test.ServiceTests
     internal class EventServiceTests : TestInitializer
     {
         private Mock<IPhotoService> mockPhotoService;
-        private Mock<ILocationService> mockLocationService;
-        private Mock<IEventScheduleService> mockEventScheduleService;
+        private Mock<ILocationManager> mockLocationService;
+        private Mock<IEventScheduleManager> mockEventScheduleService;
         private Mock<IMediator> mockMediator;
         private Mock<ISecurityContext> mockSecurityContext;
 
@@ -36,8 +35,8 @@ namespace EventsExpress.Test.ServiceTests
 
             mockMediator = new Mock<IMediator>();
             mockPhotoService = new Mock<IPhotoService>();
-            mockLocationService = new Mock<ILocationService>();
-            mockEventScheduleService = new Mock<IEventScheduleService>();
+            mockLocationService = new Mock<ILocationManager>();
+            mockEventScheduleService = new Mock<IEventScheduleManager>();
             mockSecurityContext = new Mock<ISecurityContext>();
 
             service = new EventService(
@@ -49,7 +48,7 @@ namespace EventsExpress.Test.ServiceTests
                 mockEventScheduleService.Object,
                 mockSecurityContext.Object);
 
-            Context.EventLocations.AddRange(EventTestData.Locations);
+            Context.Locations.AddRange(EventTestData.Locations);
             Context.Events.AddRange(EventTestData.Events);
             Context.Rates.AddRange(EventTestData.Rates);
             Context.Users.AddRange(EventTestData.Users);

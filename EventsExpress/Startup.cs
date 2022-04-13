@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Text.Json;
 using System.Threading.Tasks;
 using AutoMapper;
+using EventsExpress.Core.GraphQL.Extensions;
 using EventsExpress.Core.HostedService;
 using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
@@ -113,17 +114,19 @@ namespace EventsExpress
 
             #endregion
 
-            services.AddDbContext<AppDbContext>(options =>
+            services.AddDbContextFactory<AppDbContext>(
+                options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection"),
-                    x => x.UseNetTopologySuite()));
+                    x => x.UseNetTopologySuite()),
+                ServiceLifetime.Scoped);
 
             #region Configure our services...
             services.AddScoped<ISecurityContext, SecurityContextService>();
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<IEventService, EventService>();
-            services.AddScoped<IEventScheduleService, EventScheduleService>();
+            services.AddScoped<IEventScheduleManager, EventScheduleManager>();
             services.AddScoped<IEventStatusHistoryService, EventStatusHistoryService>();
             services.AddScoped<IMessageService, MessageService>();
             services.AddScoped<IUserService, UserService>();
@@ -133,7 +136,6 @@ namespace EventsExpress
             services.AddScoped<ITrackService, TrackService>();
             services.AddScoped<ICommentService, CommentService>();
             services.AddScoped<IInventoryService, InventoryService>();
-            services.AddScoped<ILocationService, LocationService>();
             services.AddScoped<IUnitOfMeasuringService, UnitOfMeasuringService>();
             services.AddScoped<ICategoryOfMeasuringService, CategoryOfMeasuringService>();
             services.AddScoped<IUserEventInventoryService, UserEventInventoryService>();
@@ -144,7 +146,9 @@ namespace EventsExpress
             services.AddScoped<IContactAdminService, ContactAdminService>();
             services.AddScoped<IIpProviderService, IpProviderService>();
             services.AddScoped<IBookmarkService, BookmarkService>();
+            services.AddScoped<IUserMoreInfoService, UserMoreInfoService>();
 
+            services.AddScoped<ILocationManager, LocationManager>();
             services.AddSingleton<ICacheHelper, CacheHelper>();
             services.AddScoped<IPhotoService, PhotoService>();
             services.AddScoped<IPasswordHasher, PasswordHasherService>();
@@ -237,7 +241,7 @@ namespace EventsExpress
 
                 c.DocumentFilter<ApplyDocumentExtension>();
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                var xmlPath = System.IO.Path.Combine(AppContext.BaseDirectory, xmlFile);
 
                 c.IncludeXmlComments(xmlPath);
             });
@@ -246,6 +250,8 @@ namespace EventsExpress
             services.AddSwaggerGenNewtonsoftSupport();
             services.AddSignalR();
             services.AddSingleton<IUserIdProvider, SignalRUserIdProvider>();
+
+            services.AddGraphQLService();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -283,8 +289,9 @@ namespace EventsExpress
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapGraphQL("/graphql");
                 endpoints.MapControllerRoute("default", "{controller}/{action=Index}/{id?}");
-                endpoints.MapHub<ChatRoom>("/chatRoom");
+                endpoints.MapHub<Hubs.ChatRoom>("/chatRoom");
                 endpoints.MapHub<UsersHub>("/usersHub");
             });
 

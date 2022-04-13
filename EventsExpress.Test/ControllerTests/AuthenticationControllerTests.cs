@@ -199,31 +199,6 @@ namespace EventsExpress.Test.ControllerTests
         }
 
         [Test]
-        [Category("RegisterBindExternalAccount")]
-        public void RegisterBind_CantBindAccount_ThrowExceptionAsync()
-        {
-            _authService.Setup(s => s.BindExternalAccount(It.IsAny<RegisterBindDto>())).Throws<EventsExpressException>();
-
-            Assert.ThrowsAsync<EventsExpressException>(() =>
-            _authenticationController.RegisterBindExternalAccount(new RegisterBindViewModel()));
-        }
-
-        [Test]
-        [Category("RegisterBindExternalAccount")]
-        public async Task RegisterBind_AllOk_DoesNotThrowExceptionAsync()
-        {
-            _authenticationController.ControllerContext = new ControllerContext();
-            _authenticationController.ControllerContext.HttpContext = new DefaultHttpContext();
-            _authService.Setup(s => s.BindExternalAccount(It.IsAny<RegisterBindDto>())).ReturnsAsync(new AuthenticateResponseModel(JwtToken, RefreshToken));
-
-            var res = await _authenticationController.RegisterBindExternalAccount(new RegisterBindViewModel());
-
-            Assert.DoesNotThrowAsync(() => Task.FromResult(res));
-            Assert.IsInstanceOf<OkObjectResult>(res);
-            _authService.Verify(s => s.BindExternalAccount(It.IsAny<RegisterBindDto>()), Times.Once);
-        }
-
-        [Test]
         [Category("RegisterComplete")]
         public void RegisterComplete_CantMap_ThrowException()
         {
@@ -241,16 +216,8 @@ namespace EventsExpress.Test.ControllerTests
         {
             _authenticationController.ControllerContext = new ControllerContext();
             _authenticationController.ControllerContext.HttpContext = new DefaultHttpContext();
-            var authRequest = new RegisterCompleteViewModel
-            {
-                AccountId = Guid.NewGuid(),
-            };
-
-            var profileData = new RegisterCompleteDto
-            {
-                AccountId = authRequest.AccountId,
-            };
-
+            var authRequest = new RegisterCompleteViewModel();
+            var profileData = new RegisterCompleteDto();
             var authenticateResponseModel = new AuthenticateResponseModel(JwtToken, RefreshToken);
 
             _mapper.Setup(s =>

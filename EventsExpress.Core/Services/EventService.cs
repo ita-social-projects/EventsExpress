@@ -22,9 +22,9 @@ namespace EventsExpress.Core.Services
     public class EventService : BaseService<Event>, IEventService
     {
         private readonly IPhotoService _photoService;
-        private readonly ILocationService _locationService;
+        private readonly ILocationManager _locationManager;
         private readonly IMediator _mediator;
-        private readonly IEventScheduleService _eventScheduleService;
+        private readonly IEventScheduleManager _eventScheduleManager;
         private readonly ISecurityContext _securityContextService;
 
         public EventService(
@@ -32,15 +32,15 @@ namespace EventsExpress.Core.Services
             IMapper mapper,
             IMediator mediator,
             IPhotoService photoService,
-            ILocationService locationService,
-            IEventScheduleService eventScheduleService,
+            ILocationManager locationManager,
+            IEventScheduleManager eventScheduleManager,
             ISecurityContext securityContextService)
             : base(context, mapper)
         {
             _photoService = photoService;
-            _locationService = locationService;
+            _locationManager = locationManager;
             _mediator = mediator;
-            _eventScheduleService = eventScheduleService;
+            _eventScheduleManager = eventScheduleManager;
             _securityContextService = securityContextService;
         }
 
@@ -173,10 +173,10 @@ namespace EventsExpress.Core.Services
             eventDto.DateTo = (eventDto.DateTo < eventDto.DateFrom) ? eventDto.DateFrom : eventDto.DateTo;
 
             var locationDto = eventDto.Location;
-            var locationId = await _locationService.AddLocationToEvent(locationDto);
+            var locationId = _locationManager.Create(locationDto);
 
             var ev = Mapper.Map<EventDto, Event>(eventDto);
-            ev.EventLocationId = locationId;
+            ev.LocationId = locationId;
 
             ev.StatusHistory = new List<EventStatusHistory>
             {
@@ -216,7 +216,7 @@ namespace EventsExpress.Core.Services
         {
             var eventDto = EventById(eventId);
 
-            var eventScheduleDto = _eventScheduleService.EventScheduleByEventId(eventId);
+            var eventScheduleDto = _eventScheduleManager.EventScheduleByEventId(eventId);
 
             long ticksDiff = 0;
             if (eventDto.DateTo != null && eventDto.DateFrom != null)
@@ -234,7 +234,7 @@ namespace EventsExpress.Core.Services
             eventScheduleDto.NextRun = DateTimeExtensions
                 .AddDateUnit(eventScheduleDto.Periodicity, eventScheduleDto.Frequency, eventDto.DateTo.Value);
 
-            await _eventScheduleService.Edit(eventScheduleDto);
+            _eventScheduleManager.Edit(eventScheduleDto);
 
             var createResult = await Create(eventDto);
 
@@ -244,17 +244,21 @@ namespace EventsExpress.Core.Services
         public async Task<Guid> Edit(EventDto eventDto)
         {
             var ev = Context.Events
-                .Include(e => e.EventLocation)
                 .Include(e => e.Categories)
                     .ThenInclude(c => c.Category)
                 .Include(e => e.EventSchedule)
                 .Include(e => e.EventAudience)
                 .First(x => x.Id == eventDto.Id);
 
-            if (eventDto.Location != null)
+            if (ev.LocationId == null)
             {
-                var locationId = await _locationService.AddLocationToEvent(eventDto.Location);
-                ev.EventLocationId = locationId;
+                var locationId = _locationManager.Create(eventDto.Location);
+                ev.LocationId = locationId;
+            }
+            else
+            {
+                eventDto.Location.Id = ev.LocationId.Value;
+                _locationManager.EditLocation(eventDto.Location);
             }
 
             if (eventDto.IsReccurent)
@@ -263,13 +267,13 @@ namespace EventsExpress.Core.Services
                 {
                     if (ev.EventSchedule == null)
                     {
-                        await _eventScheduleService.Create(Mapper.Map<EventScheduleDto>(eventDto));
+                        _eventScheduleManager.Create(Mapper.Map<EventScheduleDto>(eventDto));
                     }
                     else
                     {
                         var eventScheduleDto = Mapper.Map<EventScheduleDto>(eventDto);
                         eventScheduleDto.Id = ev.EventSchedule.Id;
-                        await _eventScheduleService.Edit(eventScheduleDto);
+                        _eventScheduleManager.Edit(eventScheduleDto);
                     }
                 }
             }
@@ -277,7 +281,7 @@ namespace EventsExpress.Core.Services
             {
                 if (ev.EventSchedule != null)
                 {
-                    await _eventScheduleService.Delete(ev.EventSchedule.Id);
+                    _eventScheduleManager.Delete(ev.EventSchedule.Id);
                 }
             }
 
@@ -298,6 +302,7 @@ namespace EventsExpress.Core.Services
                 .ToList();
 
             ev.Categories = eventCategories;
+
             await Context.SaveChangesAsync();
             await _photoService.ChangeTempToImagePhoto(eventDto.Id);
             await _mediator.Publish(new OwnEventMessage(eventDto.Id));
@@ -309,7 +314,7 @@ namespace EventsExpress.Core.Services
         public async Task<Guid> Publish(Guid eventId)
         {
             var ev = Context.Events
-               .Include(e => e.EventLocation)
+               .Include(e => e.Location)
                .Include(e => e.StatusHistory)
                .Include(e => e.EventAudience)
                .Include(e => e.Categories)
@@ -330,7 +335,7 @@ namespace EventsExpress.Core.Services
 
         public async Task<Guid> EditNextEvent(EventDto eventDto)
         {
-            var eventScheduleDto = _eventScheduleService.EventScheduleByEventId(eventDto.Id);
+            var eventScheduleDto = _eventScheduleManager.EventScheduleByEventId(eventDto.Id);
             if (eventDto.DateTo != null)
             {
                 eventScheduleDto.LastRun = eventDto.DateTo.Value;
@@ -338,7 +343,7 @@ namespace EventsExpress.Core.Services
                     .AddDateUnit(eventScheduleDto.Periodicity, eventScheduleDto.Frequency, eventDto.DateTo.Value);
             }
 
-            await _eventScheduleService.Edit(eventScheduleDto);
+            _eventScheduleManager.Edit(eventScheduleDto);
 
             eventDto.IsReccurent = false;
             eventDto.Id = Guid.Empty;
@@ -352,7 +357,7 @@ namespace EventsExpress.Core.Services
         {
             var events = Context.Events
                 .Include(e => e.EventSchedule)
-                .Include(e => e.EventLocation)
+                .Include(e => e.Location)
                 .Include(e => e.EventAudience)
                 .Include(e => e.Organizers)
                     .ThenInclude(o => o.User)
@@ -365,8 +370,8 @@ namespace EventsExpress.Core.Services
                     .ThenInclude(v => v.User)
                         .ThenInclude(u => u.Relationships)
                 .Include(e => e.StatusHistory)
+                .AsNoTracking()
                 .AsQueryable();
-
             var ev = events.FirstOrDefault(x => x.Id == eventId);
             return Mapper.Map<EventDto>(ev);
         }
@@ -374,7 +379,7 @@ namespace EventsExpress.Core.Services
         public IEnumerable<EventDto> GetAll(EventFilterViewModel model, out int count)
         {
             var events = Context.Events
-                .Include(e => e.EventLocation)
+                .Include(e => e.Location)
                 .Include(e => e.EventAudience)
                 .Include(e => e.Organizers)
                     .ThenInclude(o => o.User)
@@ -408,7 +413,7 @@ namespace EventsExpress.Core.Services
         public IEnumerable<EventDto> GetAllDraftEvents(int page, int pageSize, out int count)
         {
             var events = Context.Events
-                .Include(e => e.EventLocation)
+                .Include(e => e.Location)
                 .Include(e => e.Organizers)
                     .ThenInclude(o => o.User)
                 .Include(e => e.Categories)
@@ -498,7 +503,7 @@ namespace EventsExpress.Core.Services
         public IEnumerable<EventDto> GetEvents(List<Guid> eventIds, PaginationViewModel paginationViewModel)
         {
             var events = Context.Events
-                .Include(e => e.EventLocation)
+                .Include(e => e.Location)
                 .Include(e => e.Organizers)
                     .ThenInclude(o => o.User)
                 .Include(e => e.Categories)
@@ -593,11 +598,11 @@ namespace EventsExpress.Core.Services
                     .AddFilter(e => e.Visitors.Any(v => v.UserId == model.VisitorId))
                 .Then()
                     .IfNotNull(model.X, model.Y, model.Radius)
-                    .AddFilter(e => e.EventLocation.Point
+                    .AddFilter(e => e.Location.Point
                         .Distance(MapPointFromFilter(model)) <= model.Radius * 1000)
                 .Then()
                     .IfNotNull(model.LocationType)
-                    .AddFilter(e => e.EventLocation.Type == model.LocationType)
+                    .AddFilter(e => e.Location.Type == model.LocationType)
                 .Then()
                     .IfNotNull(model.IsOnlyForAdults)
                     .AddFilter(e => e.EventAudience.IsOnlyForAdults == model.IsOnlyForAdults)

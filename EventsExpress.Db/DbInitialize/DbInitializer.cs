@@ -6,6 +6,8 @@ using EventsExpress.Db.Configurations;
 using EventsExpress.Db.EF;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
+using NetTopologySuite.Geometries;
+using Location = EventsExpress.Db.Entities.Location;
 
 namespace EventsExpress.Db.DbInitialize
 {

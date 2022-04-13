@@ -44,10 +44,16 @@ namespace EventsExpress.Test.ControllerTests
         private EditUserBirthViewModel _editUserBirthViewModel;
         private DateTime _birthdeay = new DateTime(2000, 9, 6);
         private EditUserNameViewModel _editUserNameViewModel;
+        private EditLocationViewModel _editLocationViewModel;
         private string _userName = "some name of user";
         private UsersFilterViewModel _usersFilterViewModel;
         private int _pageSize = 5;
         private int _page = 8;
+
+        private LocationDto _location = new LocationDto
+        {
+            Point = null, OnlineMeeting = "string", Type = LocationType.Online,
+        };
 
         [SetUp]
         public void Initialize()
@@ -101,8 +107,8 @@ namespace EventsExpress.Test.ControllerTests
             _editUserGenderViewModel = new EditUserGenderViewModel { Gender = _gender };
             _editUserBirthViewModel = new EditUserBirthViewModel { Birthday = _birthdeay };
             _editUserNameViewModel = new EditUserNameViewModel { Name = _userName };
+            _editLocationViewModel = new EditLocationViewModel { Location = _location };
             _usersFilterViewModel = new UsersFilterViewModel { Page = _page, PageSize = _pageSize };
-
             var user = new ClaimsPrincipal(new ClaimsIdentity());
             _usersController.ControllerContext.HttpContext = new DefaultHttpContext { User = user };
         }
@@ -191,14 +197,14 @@ namespace EventsExpress.Test.ControllerTests
 
             PhotoViewModel photoModel = new PhotoViewModel() { Photo = file };
 
-            var res = await _usersController.ChangeAvatar(_userDto.Id, photoModel);
+            var res = await _usersController.ChangeAvatar(photoModel);
 
             Assert.IsInstanceOf<OkObjectResult>(res);
             Assert.DoesNotThrowAsync(() => Task.FromResult(res));
             OkObjectResult okResult = res as OkObjectResult;
             Assert.IsNotNull(okResult);
             Assert.AreEqual(200, okResult.StatusCode);
-            _userService.Verify(user => user.ChangeAvatar(_userDto.Id, It.IsAny<IFormFile>()), Times.Exactly(1));
+            _userService.Verify(user => user.ChangeAvatar(It.IsAny<IFormFile>()), Times.Exactly(1));
         }
 
         [Test]
@@ -250,6 +256,19 @@ namespace EventsExpress.Test.ControllerTests
             Assert.DoesNotThrowAsync(() => Task.FromResult(res));
             Assert.IsInstanceOf<OkResult>(res);
             _userService.Verify(us => us.EditUserName(It.IsAny<string>()), Times.Exactly(1));
+        }
+
+        [Test]
+        [Category("EditLocation")]
+        public async Task EditLocation_UserDto_OkObjectResultAsync()
+        {
+            _userService.Setup(user => user.EditLocation(It.IsAny<LocationDto>()));
+
+            var res = await _usersController.EditLocation(_editLocationViewModel);
+
+            Assert.DoesNotThrowAsync(() => Task.FromResult(res));
+            Assert.IsInstanceOf<IActionResult>(res);
+            _userService.Verify(us => us.EditLocation(It.IsAny<LocationDto>()), Times.Exactly(1));
         }
 
         [Test]

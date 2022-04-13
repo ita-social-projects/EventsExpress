@@ -6,4 +6,19 @@
     -ms-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
 }
+.container-fluid .dropdown .dropdown-menu.show{
+    background-color: #0269D9;
+    border-radius: 10px;
+}
+.dropdown .dropdown-menu.show .dropdown-item{
+    color: white;
+}
+.dropdown .dropdown-menu.show .dropdown-item:hover{
+    color: black;
+}
+
+
+
+
+
 

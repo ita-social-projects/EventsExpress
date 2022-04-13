@@ -1,6 +1,7 @@
 ﻿import React from "react";
 import SpinnerWrapper from "./spinner";
 import TileRow from "./tile-row/TileRow";
+import './css/TileGroup.css';
 
 export const TileGroup = (props) => {
   const renderRows = (data) => {

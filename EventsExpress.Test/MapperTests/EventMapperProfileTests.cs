@@ -64,7 +64,7 @@ namespace EventsExpress.Test.MapperTests
                 DateTo = DateTime.Now,
                 IsPublic = true,
                 MaxParticipants = 8,
-                EventLocationId = idEventLocation,
+                LocationId = idEventLocation,
                 EventAudienceId = idEventAudience,
                 EventSchedule = new EventSchedule
                 {
@@ -77,7 +77,7 @@ namespace EventsExpress.Test.MapperTests
                     EventId = idEvent,
                     Event = new Event(),
                 },
-                EventLocation = new EventLocation
+                Location = new Db.Entities.Location
                 {
                     Id = idEventLocation,
                     Type = LocationType.Map,
@@ -349,9 +349,9 @@ namespace EventsExpress.Test.MapperTests
             var e = Mapper.Map<Event, EventDto>(firstEvent);
 
             Assert.That(e.Photo, Is.Null);
-            Assert.That(e.Location.Point, Is.EqualTo(firstEvent.EventLocation.Point));
-            Assert.That(e.Location.Type, Is.EqualTo(firstEvent.EventLocation.Type));
-            Assert.That(e.Location.OnlineMeeting, Is.EqualTo(firstEvent.EventLocation.OnlineMeeting));
+            Assert.That(e.Location.Point, Is.EqualTo(firstEvent.Location.Point));
+            Assert.That(e.Location.Type, Is.EqualTo(firstEvent.Location.Type));
+            Assert.That(e.Location.OnlineMeeting, Is.EqualTo(firstEvent.Location.OnlineMeeting));
             Assert.That(e.Organizers, Has.All.Matches<User>(ex =>
                                                         firstEvent.Organizers
                                                         .All(f =>
@@ -395,8 +395,8 @@ namespace EventsExpress.Test.MapperTests
                                                           ex.UnitOfMeasuringId == f.UnitOfMeasuring.Id)));
             Assert.That(resEven.Visitors, Is.Null);
             Assert.That(resEven.Categories, Is.Null);
-            Assert.That(resEven.EventLocationId, Is.Null);
-            Assert.That(resEven.EventLocation, Is.Null);
+            Assert.That(resEven.LocationId, Is.Null);
+            Assert.That(resEven.Location, Is.Null);
             Assert.That(resEven.EventAudienceId, Is.Null);
             Assert.That(resEven.EventAudience, Is.Null);
             Assert.That(resEven.EventSchedule, Is.Null);

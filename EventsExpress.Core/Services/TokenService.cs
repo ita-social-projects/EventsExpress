@@ -165,7 +165,7 @@ namespace EventsExpress.Core.Services
             refreshToken.Revoked = DateTime.Now;
             refreshToken.RevokedByIp = IpAddress;
             await Context.SaveChangesAsync();
-            _httpContextAccessor.HttpContext.Response.Cookies.Delete("refreshToken");
+            _httpContextAccessor.HttpContext?.Response.Cookies.Delete("refreshToken");
 
             return true;
         }

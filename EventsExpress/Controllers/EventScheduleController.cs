@@ -16,14 +16,14 @@ namespace EventsExpress.Controllers
     [ApiController]
     public class EventScheduleController : ControllerBase
     {
-        private readonly IEventScheduleService _eventScheduleService;
+        private readonly IEventScheduleManager _eventScheduleManager;
         private readonly IMapper _mapper;
 
         public EventScheduleController(
-            IEventScheduleService eventScheduleService,
+            IEventScheduleManager eventScheduleService,
             IMapper mapper)
         {
-            _eventScheduleService = eventScheduleService;
+            _eventScheduleManager = eventScheduleService;
             _mapper = mapper;
         }
 
@@ -42,7 +42,7 @@ namespace EventsExpress.Controllers
                 var viewModel = new IndexViewModel<PreviewEventScheduleViewModel>
                 {
                     Items = _mapper.Map<IEnumerable<PreviewEventScheduleViewModel>>(
-                        _eventScheduleService.GetAll()),
+                        _eventScheduleManager.GetAll()),
                 };
                 return Ok(viewModel);
             }
@@ -62,9 +62,9 @@ namespace EventsExpress.Controllers
         /// <response code="400">If Edit/Create process failed.</response>
         [HttpPost("{eventId:Guid}/[action]")]
         [UserAccessTypeFilterAttribute]
-        public async Task<IActionResult> Edit(Guid eventId, [FromForm] PreviewEventScheduleViewModel model)
+        public IActionResult Edit(Guid eventId, [FromForm] PreviewEventScheduleViewModel model)
         {
-            var result = await _eventScheduleService.Edit(_mapper.Map<PreviewEventScheduleViewModel, EventScheduleDto>(model));
+            var result = _eventScheduleManager.Edit(_mapper.Map<PreviewEventScheduleViewModel, EventScheduleDto>(model));
 
             return Ok(result);
         }
@@ -78,14 +78,14 @@ namespace EventsExpress.Controllers
         /// <response code="400">Cancel All Events process failed.</response>
         [HttpPost("{eventId:Guid}/[action]")]
         [UserAccessTypeFilterAttribute]
-        public async Task<IActionResult> CancelAllEvents(Guid eventId)
+        public IActionResult CancelAllEvents(Guid eventId)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var result = await _eventScheduleService.CancelEvents(eventId);
+            var result = _eventScheduleManager.CancelEvents(eventId);
 
             return Ok(result);
         }
@@ -99,14 +99,14 @@ namespace EventsExpress.Controllers
         /// <response code="400">Cancel Next Event process failed.</response>
         [HttpPost("{eventId:Guid}/[action]")]
         [UserAccessTypeFilterAttribute]
-        public async Task<IActionResult> CancelNextEvent(Guid eventId)
+        public IActionResult CancelNextEvent(Guid eventId)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var result = await _eventScheduleService.CancelNextEvent(eventId);
+            var result = _eventScheduleManager.CancelNextEvent(eventId);
 
             return Ok(new { id = result });
         }
@@ -120,6 +120,6 @@ namespace EventsExpress.Controllers
         [AllowAnonymous]
         [HttpGet("{eventScheduleId:Guid}")]
         public IActionResult Get(Guid eventScheduleId) =>
-            Ok(_mapper.Map<EventScheduleViewModel>(_eventScheduleService.EventScheduleById(eventScheduleId)));
+            Ok(_mapper.Map<EventScheduleViewModel>(_eventScheduleManager.EventScheduleById(eventScheduleId)));
     }
 }

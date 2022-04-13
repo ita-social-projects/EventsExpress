@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.Exceptions;
-using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.IServices;
 using EventsExpress.Core.Notifications;
 using EventsExpress.Db.Bridge;
@@ -113,65 +111,6 @@ namespace EventsExpress.Core.Services
             return new AuthenticateResponseModel(jwtToken, refreshToken.Token);
         }
 
-        public async Task<AuthenticateResponseModel> BindExternalAccount(RegisterBindDto registerBindDto)
-        {
-            var localAccount = Context.Accounts
-                .Include(a => a.AuthLocal)
-                .Include(a => a.AuthExternal)
-                .Include(a => a.RefreshTokens)
-                .Include(a => a.AccountRoles)
-                    .ThenInclude(ar => ar.Role)
-                .Where(a => a.AuthLocal.Email == registerBindDto.Email)
-                .FirstOrDefault();
-            if (localAccount == null)
-            {
-                throw new EventsExpressException("Incorrect login or password");
-            }
-
-            if (localAccount.IsBlocked)
-            {
-                throw new EventsExpressException("Your account was blocked.");
-            }
-
-            if (!localAccount.AuthLocal.EmailConfirmed)
-            {
-                throw new EventsExpressException($"{registerBindDto.Email} is not confirmed, please confirm");
-            }
-
-            if (!VerifyPassword(localAccount.AuthLocal, registerBindDto.Password))
-            {
-                throw new EventsExpressException("Incorrect login or password");
-            }
-
-            if (localAccount.AuthExternal.Any(a => a.Type == registerBindDto.Type))
-            {
-                throw new EventsExpressException($"Account already have binded {Enum.GetName(typeof(AuthExternalType), registerBindDto.Type)} account");
-            }
-
-            var externalAccount = Context.Accounts
-                .Include(a => a.AuthExternal)
-                .Include(a => a.RefreshTokens)
-                .Include(a => a.AccountRoles)
-                .Where(a => a.Id == _securityContext.GetCurrentAccountId())
-                .Single();
-
-            var authExternal = externalAccount.AuthExternal.First();
-            authExternal.AccountId = localAccount.Id;
-
-            Context.UserTokens.RemoveRange(externalAccount.RefreshTokens);
-            Context.Accounts.Remove(externalAccount);
-
-            await Context.SaveChangesAsync();
-
-            var jwtToken = _tokenService.GenerateAccessToken(localAccount);
-            var refreshToken = _tokenService.GenerateRefreshToken();
-
-            // save refresh token
-            localAccount.RefreshTokens.Add(refreshToken);
-            await Context.SaveChangesAsync();
-            return new AuthenticateResponseModel(jwtToken, refreshToken.Token);
-        }
-
         public async Task<AuthenticateResponseModel> EmailConfirmAndAuthenticate(Guid accountId, string token)
         {
             var localAccountId = Context.AuthLocal.FirstOrDefault(al => al.AccountId == accountId)?.AccountId;
@@ -216,7 +155,9 @@ namespace EventsExpress.Core.Services
 
         public async Task RegisterComplete(RegisterCompleteDto registerCompleteDto)
         {
-            await _userService.Create(Mapper.Map<UserDto>(registerCompleteDto));
+            registerCompleteDto.AccountId = _securityContext.GetCurrentAccountId();
+            var userDto = Mapper.Map<UserDto>(registerCompleteDto);
+            await _userService.Create(userDto);
         }
 
         public async Task PasswordRecover(string email)
