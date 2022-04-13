@@ -3,16 +3,22 @@ import Modal from "react-bootstrap/Modal";
 import Button from "@material-ui/core/Button";
 import KeyboardBackspaceIcon from '@material-ui/icons/KeyboardBackspace';
 import IconButton from '@material-ui/core/IconButton';
+import { connect } from 'react-redux';
+import delete_avatar from "../../../../actions/redactProfile/avatar-delete-action";
 
 
+// const photoService = new PhotoService();
+// const history = createBrowserHistory({ forceRefresh: true });
 
-export default function DeleteAvatarModal(props) {
+ function DeleteAvatarModal(props) {
     const CancelButtonClick = () => {
         props.onHide();
     }
     const ConfirmButtonClick = () =>{
-        props.onConfirm();
-    }
+        props.delete_avatar(props.id);
+        
+    };
+
   return (
     <Modal
         show={props.show}
@@ -40,3 +46,11 @@ export default function DeleteAvatarModal(props) {
       </Modal>
   )
 }
+
+const mapDispatchToProps = dispatch => {
+  return {
+      delete_avatar: (data) => dispatch(delete_avatar(data))
+  };
+}
+
+export default connect(null, mapDispatchToProps)(DeleteAvatarModal);

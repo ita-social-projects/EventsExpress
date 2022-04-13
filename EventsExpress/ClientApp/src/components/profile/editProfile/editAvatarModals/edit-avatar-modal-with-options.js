@@ -60,11 +60,6 @@ export default function EditAvatarModal(props) {
     props.Open();
   }
 
-  const handleDeleteAvatar = () =>{
-    photoService.deleteUserPhoto(props.id);
-    history.push(`/editProfile`);
-  }
-
   React.useEffect(() => {
      photoService.getUserPhoto(props.id).then((image) => {
       if (image) {
@@ -74,17 +69,15 @@ export default function EditAvatarModal(props) {
         setDisplayDeleteButton(true);
       } 
     })
-    
-
   });
 
  const header = (displayDeleteButton ? "Add" : "Edit") + " Avatar";
- 
+
   return (
     <div>
       <Modal
         show = {props.show}
-        size="sm"
+        size="lg"
         aria-labelledby="contained-modal-title-vcenter"
         centered 
         onHide = {props.onHide}
@@ -96,7 +89,7 @@ export default function EditAvatarModal(props) {
         </Modal.Header>
         <Modal.Body>
           <div className={classes.startWindow}>
-            <CustomAvatar width="150px" height="150px" name = {props.name} userId={props.id} />
+            <CustomAvatar width="200px" height="200px" name = {props.name} userId={props.id} />
             <div>
               <Button className={classes.button} 
               onClick={handleChangeButtonClick}
@@ -125,7 +118,7 @@ export default function EditAvatarModal(props) {
       show={showDeleteAvatarModal}
       onHide = {handleDeleteAvatarModalClose}
       onReturn = {handleReturnButtonInDeleteModalClick}
-      onConfirm = {handleDeleteAvatar}
+      id ={props.id}
 
       />
     </div>
