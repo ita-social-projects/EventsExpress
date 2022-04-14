@@ -7,6 +7,7 @@ import DisplayLocation from '../../event/map/display-location';
 import EditUsernameContainer from '../../../containers/editProfileContainers/editUsernameContainer';
 import EditGenderContainer from '../../../containers/editProfileContainers/editGenderContainer';
 import EditBirthdayContainer from '../../../containers/editProfileContainers/editBirthdayContainer';
+import SimpleModalWithDetails from "../../helpers/simple-modal-with-details";
 
 const useStyles = makeStyles(theme => ({
     sectionContent: {
@@ -69,9 +70,12 @@ const GeneralInfoSection = (props) => {
                     <InfoField fieldName={"Gender"} info={props.gender == 1 ? 'Male' : 'Female'} editContainer={EditGenderContainer} displayEditButton={true} />
                 </div>
                 <div className={classes.blockStyle}>
-                    <InfoField fieldName={"Location"} info={<DisplayLocation
-                        location={props.location}
-                    />} />
+                    <InfoField fieldName={"Location"} info={   
+                       <DisplayLocation
+                        location={props.location}/>
+                    }
+                    displayEditButton={true}
+                    />
                 </div>
                 <div className={classes.blockStyle}>
                     <InfoField fieldName={"Email"} info={props.email} />
