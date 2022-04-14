@@ -19,9 +19,7 @@ namespace EventsExpress.Mapping
 
         public Point MapPoint(LocationViewModel l)
         {
-            Point location = null;
-            location = new Point(l.Latitude.Value, l.Longitude.Value) { SRID = 4326 };
-            return location;
+            return new Point(l.Latitude.Value, l.Longitude.Value) { SRID = 4326 };
         }
     }
 }
