@@ -14,6 +14,7 @@ using EventsExpress.Db.Bridge;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
 using EventsExpress.ViewModels;
+using EventsExpress.ViewModels.Base;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Primitives;
@@ -44,7 +45,7 @@ namespace EventsExpress.Test.ControllerTests
         private EditUserBirthViewModel _editUserBirthViewModel;
         private DateTime _birthdeay = new DateTime(2000, 9, 6);
         private EditUserNameViewModel _editUserNameViewModel;
-        private EditLocationViewModel _editLocationViewModel;
+        private LocationViewModel _editLocationViewModel;
         private string _userName = "some name of user";
         private UsersFilterViewModel _usersFilterViewModel;
         private int _pageSize = 5;
@@ -107,7 +108,7 @@ namespace EventsExpress.Test.ControllerTests
             _editUserGenderViewModel = new EditUserGenderViewModel { Gender = _gender };
             _editUserBirthViewModel = new EditUserBirthViewModel { Birthday = _birthdeay };
             _editUserNameViewModel = new EditUserNameViewModel { Name = _userName };
-            _editLocationViewModel = new EditLocationViewModel { Location = _location };
+            _editLocationViewModel = new LocationViewModel { Latitude = 0.0, Longitude = 0.0, Type = LocationType.Map, };
             _usersFilterViewModel = new UsersFilterViewModel { Page = _page, PageSize = _pageSize };
             var user = new ClaimsPrincipal(new ClaimsIdentity());
             _usersController.ControllerContext.HttpContext = new DefaultHttpContext { User = user };
