@@ -13,7 +13,8 @@ namespace EventsExpress.Mapping
         {
             CreateMap<LocationDto, Location>().ReverseMap();
             CreateMap<LocationViewModel, LocationDto>()
-                .ForMember(x => x.Point, opts => opts.MapFrom(src => MapPoint(src))).ReverseMap();
+                .ForMember(x => x.Id, opts => opts.Ignore())
+                .ForMember(x => x.Point, opts => opts.MapFrom(src => MapPoint(src)));
         }
 
         public Point MapPoint(LocationViewModel l)
