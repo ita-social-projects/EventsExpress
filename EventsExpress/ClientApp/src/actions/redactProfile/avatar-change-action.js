@@ -1,4 +1,4 @@
-import { UserService } from '../../services';
+import { UserService,PhotoService } from '../../services';
 import { setSuccessAllert} from '../alert-action';
 import { SubmissionError } from 'redux-form';
 import { buildValidationState } from '../../components/helpers/action-helpers.js'
@@ -10,13 +10,14 @@ export const changeAvatar = {
     UPDATE: "UPDATE_CHANGE_AVATAR"
 }
 
-const api_serv = new UserService();
+const userService = new UserService();
+const photoService = new PhotoService();
 
 export default function change_avatar(data) {
     return async dispatch => {
         dispatch(getRequestInc());
 
-        let response = await api_serv.setAvatar(data);
+        let response = await userService.setAvatar(data);
         if (!response.ok) {
             throw new SubmissionError(await buildValidationState(response));
         }
@@ -26,6 +27,21 @@ export default function change_avatar(data) {
         return Promise.resolve();
     }
 }
+
+export  function delete_avatar(data) {
+    return async dispatch => {
+        dispatch(getRequestInc());
+
+        let response = await photoService.deleteUserPhoto(data);
+        if (!response.ok) {
+            throw new SubmissionError(await buildValidationState(response));
+        }
+        dispatch(getRequestDec());
+        dispatch(setSuccessAllert('Avatar is successfully deleted'));
+        return Promise.resolve();
+    }
+}
+
 
 
 

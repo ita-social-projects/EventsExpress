@@ -3,7 +3,7 @@ import Button from "@material-ui/core/Button";
 import KeyboardBackspaceIcon from "@material-ui/icons/KeyboardBackspace";
 import IconButton from "@material-ui/core/IconButton";
 import { connect } from "react-redux";
-import delete_avatar from "../../../../actions/redactProfile/avatar-delete-action";
+import { delete_avatar } from "../../../../actions/redactProfile/avatar-change-action";
 import Dialog from "@material-ui/core/Dialog";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
