@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using Azure.Storage.Blobs;
@@ -11,19 +12,19 @@ namespace EventsExpress.Controllers
     [ApiController]
     public class PhotoController : ControllerBase
     {
-        private readonly IPhotoService _photoService;
+        private readonly IUserPhotoService _userPhotoService;
+        private readonly IEventPhotoService _eventPhotoService;
 
-        public PhotoController(IPhotoService photoService)
+        public PhotoController(IUserPhotoService userPhotoService, IEventPhotoService eventPhotoService)
         {
-            _photoService = photoService;
+            _userPhotoService = userPhotoService;
+            _eventPhotoService = eventPhotoService;
         }
 
-        [HttpGet("[action]")]
-        public async Task<IActionResult> GetPreviewEventPhoto(string id)
+        [HttpGet("[action]/{id:Guid}")]
+        public async Task<IActionResult> GetPreviewEventPhoto(Guid id)
         {
-            string url = $"events/{id}/preview.png";
-
-            var photo = await _photoService.GetPhotoFromAzureBlob(url);
+            var photo = await _eventPhotoService.GetPreviewEventPhoto(id);
 
             if (photo == null)
             {
@@ -33,12 +34,10 @@ namespace EventsExpress.Controllers
             return File(photo, "image/png");
         }
 
-        [HttpGet("[action]")]
-        public async Task<IActionResult> GetFullEventPhoto(string id)
+        [HttpGet("[action]/{id:Guid}")]
+        public async Task<IActionResult> GetFullEventPhoto(Guid id)
         {
-            string url = $"events/{id}/full.png";
-
-            var photo = await _photoService.GetPhotoFromAzureBlob(url);
+            var photo = await _eventPhotoService.GetFullEventPhoto(id);
 
             if (photo == null)
             {
@@ -48,12 +47,10 @@ namespace EventsExpress.Controllers
             return File(photo, "image/png");
         }
 
-        [HttpGet("[action]")]
-        public async Task<IActionResult> GetUserPhoto(string id)
+        [HttpGet("[action]/{id:Guid}")]
+        public async Task<IActionResult> GetUserPhoto(Guid id)
         {
-            string url = $"users/{id}/photo.png";
-
-            var photo = await _photoService.GetPhotoFromAzureBlob(url);
+            var photo = await _userPhotoService.GetUserPhoto(id);
 
             if (photo == null)
             {
@@ -63,12 +60,10 @@ namespace EventsExpress.Controllers
             return File(photo, "image/png");
         }
 
-        [HttpPost("[action]")]
-        public async Task<IActionResult> DeleteUserPhoto([FromQuery]string id)
+        [HttpPost("[action]/{id:Guid}")]
+        public async Task<IActionResult> DeleteUserPhoto(Guid id)
         {
-            string url = $"users/{id}/photo.png";
-
-            await _photoService.DeletePhotoFromAzureBlob(url);
+            await _userPhotoService.DeleteUserPhoto(id);
 
             return Ok();
         }

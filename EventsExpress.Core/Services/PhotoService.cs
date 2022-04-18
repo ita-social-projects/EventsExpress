@@ -17,35 +17,23 @@ using Microsoft.Extensions.Options;
 
 namespace EventsExpress.Core.Services
 {
-    public class PhotoService : IPhotoService
+    public abstract class PhotoService
     {
         private readonly BlobContainerClient _blobContainerClient;
-        private readonly IOptions<ImageOptionsModel> _widthOptions;
 
-        public PhotoService(
-            IOptions<ImageOptionsModel> opt,
-            BlobServiceClient blobServiceClient)
+        public PhotoService(BlobServiceClient blobServiceClient)
         {
-            _widthOptions = opt;
             _blobContainerClient = blobServiceClient.GetBlobContainerClient("images");
         }
 
-        public async Task ChangeTempToImagePhoto(Guid id)
+        protected static byte[] ImageToByteArray(FreeImageBitmap imageIn)
         {
-            byte[] photo = await GetPhotoFromAzureBlob($"events/{id}/previewTemp.png");
-            await UploadPhotoToBlob(photo, $"events/{id}/preview.png");
-            photo = await GetPhotoFromAzureBlob($"events/{id}/fullTemp.png");
-            await UploadPhotoToBlob(photo, $"events/{id}/full.png");
+            using var ms = new MemoryStream();
+            imageIn.Save(ms, FREE_IMAGE_FORMAT.FIF_PNG);
+            return ms.ToArray();
         }
 
-        public async Task AddUserPhoto(IFormFile uploadedFile, Guid id)
-        {
-            var photo = GetResizedBytesFromFile(uploadedFile, _widthOptions.Value.Thumbnail);
-
-            await UploadPhotoToBlob(photo, $"users/{id}/photo.png");
-        }
-
-        public byte[] GetResizedBytesFromFile(IFormFile file, int newWidth)
+        protected byte[] GetResizedBytesFromFile(IFormFile file, int newWidth)
         {
             using var memoryStream = file.ToMemoryStream();
             var oldBitMap = new FreeImageBitmap(memoryStream);
@@ -57,14 +45,7 @@ namespace EventsExpress.Core.Services
             return ImageToByteArray(newBitmap);
         }
 
-        private static byte[] ImageToByteArray(FreeImageBitmap imageIn)
-        {
-            using var ms = new MemoryStream();
-            imageIn.Save(ms, FREE_IMAGE_FORMAT.FIF_PNG);
-            return ms.ToArray();
-        }
-
-        private async Task UploadPhotoToBlob(byte[] photo, string url)
+        protected async Task UploadPhotoToBlob(byte[] photo, string url)
         {
             _blobContainerClient.CreateIfNotExists();
 
@@ -83,7 +64,7 @@ namespace EventsExpress.Core.Services
             }
         }
 
-        public async Task<byte[]> GetPhotoFromAzureBlob(string url)
+        protected async Task<byte[]> GetPhotoFromAzureBlob(string url)
         {
             try
             {
@@ -98,16 +79,7 @@ namespace EventsExpress.Core.Services
             }
         }
 
-        public async Task AddEventTempPhoto(IFormFile uploadedFile, Guid id)
-        {
-            var previewPhoto = GetResizedBytesFromFile(uploadedFile, _widthOptions.Value.Thumbnail);
-            await UploadPhotoToBlob(previewPhoto, $"events/{id}/previewTemp.png");
-
-            var fullPhoto = GetResizedBytesFromFile(uploadedFile, _widthOptions.Value.Image);
-            await UploadPhotoToBlob(fullPhoto, $"events/{id}/fullTemp.png");
-        }
-
-        public async Task DeletePhotoFromAzureBlob(string url)
+        protected async Task DeletePhotoFromAzureBlob(string url)
         {
             await _blobContainerClient.DeleteBlobIfExistsAsync(url);
         }

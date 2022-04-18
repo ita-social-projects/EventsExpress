@@ -23,15 +23,15 @@ namespace EventsExpress.Controllers
     {
         private readonly IUserService _userService;
         private readonly IMapper _mapper;
-        private readonly IPhotoService _photoService;
+        private readonly IUserPhotoService _userPhotoService;
 
         public UsersController(
             IUserService userSrv,
             IMapper mapper,
-            IPhotoService photoService)
+            IUserPhotoService userPhotoService)
         {
             _userService = userSrv;
-            _photoService = photoService;
+            _userPhotoService = userPhotoService;
             _mapper = mapper;
         }
 
@@ -237,7 +237,7 @@ namespace EventsExpress.Controllers
         {
             await _userService.ChangeAvatar(userId, avatar.Photo);
 
-            var updatedPhoto = await _photoService.GetPhotoFromAzureBlob($"users/{userId}/photo.png");
+            var updatedPhoto = await _userPhotoService.GetUserPhoto(userId);
 
             return Ok(updatedPhoto);
         }

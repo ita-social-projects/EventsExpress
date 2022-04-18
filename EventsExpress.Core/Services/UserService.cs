@@ -21,19 +21,19 @@ namespace EventsExpress.Core.Services
     public class UserService : BaseService<User>, IUserService
     {
         private readonly IMediator _mediator;
-        private readonly IPhotoService _photoService;
+        private readonly IUserPhotoService _userPhotoService;
         private readonly ISecurityContext _securityContext;
 
         public UserService(
             AppDbContext context,
             IMapper mapper,
             IMediator mediator,
-            IPhotoService photoSrv,
+            IUserPhotoService photoSrv,
             ISecurityContext securityContext)
             : base(context, mapper)
         {
             _mediator = mediator;
-            _photoService = photoSrv;
+            _userPhotoService = photoSrv;
             _securityContext = securityContext;
         }
 
@@ -201,7 +201,7 @@ namespace EventsExpress.Core.Services
                 .Single(u => u.Id == userId);
             try
             {
-                await _photoService.AddUserPhoto(avatar, user.Id);
+                await _userPhotoService.AddUserPhoto(avatar, user.Id);
             }
             catch (ArgumentException)
             {

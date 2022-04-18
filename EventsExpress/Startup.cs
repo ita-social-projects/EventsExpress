@@ -146,7 +146,8 @@ namespace EventsExpress
             services.AddScoped<IBookmarkService, BookmarkService>();
 
             services.AddSingleton<ICacheHelper, CacheHelper>();
-            services.AddScoped<IPhotoService, PhotoService>();
+            services.AddScoped<IUserPhotoService, UserPhotoService>();
+            services.AddScoped<IEventPhotoService, EventPhotoService>();
             services.AddScoped<IPasswordHasher, PasswordHasherService>();
             services.AddScoped<INotificationTypeService, NotificationTypeService>();
             services.Configure<ImageOptionsModel>(Configuration.GetSection("ImageWidths"));
