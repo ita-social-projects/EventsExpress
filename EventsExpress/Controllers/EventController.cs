@@ -27,25 +27,15 @@ namespace EventsExpress.Controllers
     [ApiController]
     public class EventController : ControllerBase
     {
-        private readonly IEventPhotoService _eventPhotoService;
         private readonly IEventService _eventService;
         private readonly IMapper _mapper;
         private readonly ISecurityContext _securityContextService;
 
-        public EventController(IEventService eventService, IMapper mapper, ISecurityContext securityContextService, IEventPhotoService eventPhotoService)
+        public EventController(IEventService eventService, IMapper mapper, ISecurityContext securityContextService)
         {
-            _eventPhotoService = eventPhotoService;
             _eventService = eventService;
             _mapper = mapper;
             _securityContextService = securityContextService;
-        }
-
-        [HttpPost("[action]/{eventId:Guid}")]
-        public async Task<IActionResult> SetEventTempPhoto(Guid eventId, [FromForm] PhotoViewModel photo)
-        {
-            await _eventPhotoService.AddEventTempPhoto(photo.Photo, eventId);
-
-            return Ok();
         }
 
         /// <summary>

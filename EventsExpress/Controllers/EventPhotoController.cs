@@ -4,20 +4,19 @@ using System.Text;
 using System.Threading.Tasks;
 using Azure.Storage.Blobs;
 using EventsExpress.Core.IServices;
+using EventsExpress.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EventsExpress.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class PhotoController : ControllerBase
+    public class EventPhotoController : ControllerBase
     {
-        private readonly IUserPhotoService _userPhotoService;
         private readonly IEventPhotoService _eventPhotoService;
 
-        public PhotoController(IUserPhotoService userPhotoService, IEventPhotoService eventPhotoService)
+        public EventPhotoController(IEventPhotoService eventPhotoService)
         {
-            _userPhotoService = userPhotoService;
             _eventPhotoService = eventPhotoService;
         }
 
@@ -47,23 +46,10 @@ namespace EventsExpress.Controllers
             return File(photo, "image/png");
         }
 
-        [HttpGet("[action]/{id:Guid}")]
-        public async Task<IActionResult> GetUserPhoto(Guid id)
+        [HttpPost("[action]/{eventId:Guid}")]
+        public async Task<IActionResult> SetEventTempPhoto(Guid eventId, [FromForm] PhotoViewModel photo)
         {
-            var photo = await _userPhotoService.GetUserPhoto(id);
-
-            if (photo == null)
-            {
-                return NotFound();
-            }
-
-            return File(photo, "image/png");
-        }
-
-        [HttpPost("[action]/{id:Guid}")]
-        public async Task<IActionResult> DeleteUserPhoto(Guid id)
-        {
-            await _userPhotoService.DeleteUserPhoto(id);
+            await _eventPhotoService.AddEventTempPhoto(photo.Photo, eventId);
 
             return Ok();
         }
