@@ -37,6 +37,7 @@ export  function delete_avatar(data) {
             throw new SubmissionError(await buildValidationState(response));
         }
         dispatch(getRequestDec());
+        dispatch(updateAvatar());
         dispatch(setSuccessAllert('Avatar is successfully deleted'));
         return Promise.resolve();
     }

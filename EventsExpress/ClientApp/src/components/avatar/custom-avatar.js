@@ -22,6 +22,9 @@ export class CustomAvatar extends Component {
                 if (avatarImage != null) {
                     this.setState({ avatarImage: URL.createObjectURL(avatarImage) });
                 }
+                else{
+                    this.setState({avatarImage : null})
+                }
             }
         );
     }
