@@ -13,9 +13,9 @@ namespace EventsExpress.Core.Services
 {
     public class EventPhotoService : PhotoService, IEventPhotoService
     {
-        private readonly IOptions<ImageOptionsModel> _widthOptions;
+        private readonly IOptions<EventImageOptionsModel> _widthOptions;
 
-        public EventPhotoService(IOptions<ImageOptionsModel> opt, BlobServiceClient blobServiceClient)
+        public EventPhotoService(IOptions<EventImageOptionsModel> opt, BlobServiceClient blobServiceClient)
             : base(blobServiceClient)
         {
             _widthOptions = opt;

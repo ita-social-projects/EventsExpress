@@ -13,9 +13,9 @@ namespace EventsExpress.Core.Services
 {
     public class UserPhotoService : PhotoService, IUserPhotoService
     {
-        private readonly IOptions<ImageOptionsModel> _widthOptions;
+        private readonly IOptions<UserImageOptionsModel> _widthOptions;
 
-        public UserPhotoService(IOptions<ImageOptionsModel> opt, BlobServiceClient blobServiceClient)
+        public UserPhotoService(IOptions<UserImageOptionsModel> opt, BlobServiceClient blobServiceClient)
             : base(blobServiceClient)
         {
             _widthOptions = opt;
@@ -23,7 +23,7 @@ namespace EventsExpress.Core.Services
 
         public async Task AddUserPhoto(IFormFile uploadedFile, Guid id)
         {
-            var photo = GetResizedBytesFromFile(uploadedFile, _widthOptions.Value.Thumbnail);
+            var photo = GetResizedBytesFromFile(uploadedFile, _widthOptions.Value.Image);
 
             await UploadPhotoToBlob(photo, $"users/{id}/photo.png");
         }

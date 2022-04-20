@@ -1,6 +1,6 @@
 ﻿namespace EventsExpress.Core.Infrastructure
 {
-    public class ImageOptionsModel
+    public class EventImageOptionsModel
     {
         public virtual int Thumbnail { get; set; }
 
