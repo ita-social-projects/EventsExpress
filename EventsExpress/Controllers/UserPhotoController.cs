@@ -48,7 +48,7 @@ namespace EventsExpress.Controllers
         /// <response code="200">Changing is successful.</response>
         /// <response code="400">Changing process failed.</response>
         [HttpPost("[action]/{userId:Guid}")]
-        public async Task<IActionResult> ChangeAvatar(Guid userId, [FromForm] PhotoViewModel avatar)
+        public async Task<IActionResult> ChangeAvatar(Guid userId, [FromForm] UserPhotoViewModel avatar)
         {
             if (ModelState.IsValid)
             {

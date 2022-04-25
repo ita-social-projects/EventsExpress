@@ -47,7 +47,7 @@ namespace EventsExpress.Controllers
         }
 
         [HttpPost("[action]/{eventId:Guid}")]
-        public async Task<IActionResult> SetEventTempPhoto(Guid eventId, [FromForm] PhotoViewModel photo)
+        public async Task<IActionResult> SetEventTempPhoto(Guid eventId, [FromForm] EventPhotoViewModel photo)
         {
             await _eventPhotoService.AddEventTempPhoto(photo.Photo, eventId);
 
