@@ -8,6 +8,8 @@ import UnitOfMeasuring from "../unitOfMeasuring/unitsOfMeasuring";
 import NotificationTemplateWrapper from "../../containers/notification-template/notification-template";
 import NotificationInfoWrapper from "../../containers/notification-template/notification-info";
 import Track from "../tracks/track";
+import CategoriesGroups from "../categoryGroup/categories-groups";
+import CategoryGroupInfoWrapper from "../../containers/categoryGroupInfo/category-group-info-wrapper";
 export default class Admin extends Component {
   render() {
     return (
@@ -19,6 +21,13 @@ export default class Admin extends Component {
           <div className="admin-sidebar col-sm-2">
             <ul className="list-unstyled">
               <nav id="sub-nav">
+                <div>
+                  <NavItem
+                      to={"/admin/categoriesGroups/"}
+                      icon={"fa fa-object-group"}
+                      text={"Categories groups"}
+                  />
+                </div>
                 <div>
                   <NavItem
                     to={"/admin/categories/"}
@@ -64,6 +73,11 @@ export default class Admin extends Component {
                 path="/admin"
                 render={() => <Redirect to={`/admin/categories`} />}
               />
+              <Route path="/admin/categoriesGroups/" component={CategoriesGroups} />
+              <Route
+                  path="/admin/categoriesGroup/:id"
+                  component={CategoryGroupInfoWrapper}
+              />
               <Route path="/admin/categories/" component={Category} />
               <Route
                 path="/admin/unitsOfMeasuring"
@@ -78,6 +92,7 @@ export default class Admin extends Component {
                 path="/admin/notificationTemplate/:id"
                 component={NotificationInfoWrapper}
               />
+
               <Route path="/admin/tracks" component={Track} />
             </Switch>
           </div>
