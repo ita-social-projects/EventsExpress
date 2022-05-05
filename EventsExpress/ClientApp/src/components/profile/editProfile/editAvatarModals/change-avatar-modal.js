@@ -26,7 +26,7 @@ export default function ChangeAvatarModal(props) {
     <>
       <Dialog
         fullWidth
-        maxWidth="md"
+        maxWidth="sm"
         open={props.show}
         onClose={props.onHide}
         aria-labelledby="dialog-delete-confirm-title"
