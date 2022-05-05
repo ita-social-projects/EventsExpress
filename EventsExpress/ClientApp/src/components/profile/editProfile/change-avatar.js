@@ -40,8 +40,7 @@ let ChangeAvatar = (props) => {
           type="submit"
           disabled={pristine || submitting || invalid}
         >
-          {" "}
-          Submit{" "}
+          Submit
         </Button>
       </div>
     </form>
