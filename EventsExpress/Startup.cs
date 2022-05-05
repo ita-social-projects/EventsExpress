@@ -151,7 +151,6 @@ namespace EventsExpress
             services.AddScoped<IPasswordHasher, PasswordHasherService>();
             services.AddScoped<INotificationTypeService, NotificationTypeService>();
             services.Configure<EventImageOptionsModel>(Configuration.GetSection("EventPhotoWidths"));
-            services.Configure<UserImageOptionsModel>(Configuration.GetSection("UserPhotoWidths"));
 
             services.AddSingleton<IEmailService, EmailService>();
             services.Configure<EmailOptionsModel>(Configuration.GetSection("EmailSenderOptions"));

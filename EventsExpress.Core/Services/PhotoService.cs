@@ -45,6 +45,13 @@ namespace EventsExpress.Core.Services
             return ImageToByteArray(newBitmap);
         }
 
+        protected byte[] GetBytesFromFile(IFormFile file)
+        {
+            using var memoryStream = file.ToMemoryStream();
+            var bitMap = new FreeImageBitmap(memoryStream);
+            return ImageToByteArray(bitMap);
+        }
+
         protected async Task UploadPhotoToBlob(byte[] photo, string url)
         {
             _blobContainerClient.CreateIfNotExists();
