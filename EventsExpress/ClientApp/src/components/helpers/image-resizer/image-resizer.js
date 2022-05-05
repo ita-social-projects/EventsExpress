@@ -64,7 +64,7 @@ class ImageResizer extends Component {
     const image = await this.createImage(url);
     const { getCompressionRatio } = this.props;
 
-    if (getCompressionRatio !== null) {
+    if (getCompressionRatio) {
       let result = getCompressionRatio(image, ".crop-container");
       maxZoom = result > 1 ? result : 1;
     }
@@ -75,7 +75,6 @@ class ImageResizer extends Component {
     const { cropShape, cropSize } = this.props;
     const { showGrid, crop, aspect, maxZoom } = this.state;
     const { onCropChange, onCropComplete, onZoomChange, cropImage } = this;
-    console.log(this.state.zoom);
 
     return (
       <div>
