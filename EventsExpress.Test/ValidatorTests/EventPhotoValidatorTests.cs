@@ -14,16 +14,16 @@
     using NUnit.Framework;
 
     [TestFixture]
-    internal class PhotoValidatorTests
+    internal class EventPhotoValidatorTests
     {
-        private IValidator<PhotoViewModel> validator;
-        private PhotoViewModel photoModel;
+        private IValidator<EventPhotoViewModel> validator;
+        private EventPhotoViewModel eventPhotoModel;
 
         [SetUp]
         public void Setup()
         {
-            validator = new PhotoValidator();
-            photoModel = new PhotoViewModel();
+            validator = new EventPhotoValidator();
+            eventPhotoModel = new EventPhotoViewModel();
         }
 
         [Test]
@@ -41,9 +41,9 @@
                 Headers = new HeaderDictionary(),
                 ContentType = GetContentType(fileName),
             };
-            photoModel.Photo = file;
+            eventPhotoModel.Photo = file;
 
-            var result = validator.TestValidate(photoModel);
+            var result = validator.TestValidate(eventPhotoModel);
             result.ShouldHaveAnyValidationError();
         }
 
@@ -60,9 +60,9 @@
                 Headers = new HeaderDictionary(),
                 ContentType = GetContentType(fileName),
             };
-            photoModel.Photo = file;
+            eventPhotoModel.Photo = file;
 
-            var result = validator.TestValidate(photoModel);
+            var result = validator.TestValidate(eventPhotoModel);
             result.ShouldNotHaveAnyValidationErrors();
         }
 
