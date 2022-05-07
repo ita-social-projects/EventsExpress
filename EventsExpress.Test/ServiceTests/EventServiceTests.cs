@@ -21,7 +21,7 @@ namespace EventsExpress.Test.ServiceTests
     [TestFixture]
     internal class EventServiceTests : TestInitializer
     {
-        private Mock<IPhotoService> mockPhotoService;
+        private Mock<IEventPhotoService> mockEventPhotoService;
         private Mock<ILocationService> mockLocationService;
         private Mock<IEventScheduleService> mockEventScheduleService;
         private Mock<IMediator> mockMediator;
@@ -35,7 +35,7 @@ namespace EventsExpress.Test.ServiceTests
             base.Initialize();
 
             mockMediator = new Mock<IMediator>();
-            mockPhotoService = new Mock<IPhotoService>();
+            mockEventPhotoService = new Mock<IEventPhotoService>();
             mockLocationService = new Mock<ILocationService>();
             mockEventScheduleService = new Mock<IEventScheduleService>();
             mockSecurityContext = new Mock<ISecurityContext>();
@@ -44,7 +44,7 @@ namespace EventsExpress.Test.ServiceTests
                 Context,
                 MockMapper.Object,
                 mockMediator.Object,
-                mockPhotoService.Object,
+                mockEventPhotoService.Object,
                 mockLocationService.Object,
                 mockEventScheduleService.Object,
                 mockSecurityContext.Object);
@@ -158,7 +158,7 @@ namespace EventsExpress.Test.ServiceTests
             dto.Photo = EventTestHelpers.GetPhoto(@"./Images/valid-image.jpg");
 
             Assert.DoesNotThrowAsync(async () => await service.Create(dto));
-            mockPhotoService.Verify(x => x.ChangeTempToImagePhoto(dto.Id), Times.Once);
+            mockEventPhotoService.Verify(x => x.ChangeTempToImagePhoto(dto.Id), Times.Once);
         }
 
         [Test]
@@ -170,7 +170,7 @@ namespace EventsExpress.Test.ServiceTests
             eventDto.Photo = EventTestHelpers.GetPhoto(@"./Images/valid-image.jpg");
 
             Assert.DoesNotThrowAsync(async () => await service.Edit(eventDto));
-            mockPhotoService.Verify(x => x.ChangeTempToImagePhoto(eventDto.Id), Times.Once);
+            mockEventPhotoService.Verify(x => x.ChangeTempToImagePhoto(eventDto.Id), Times.Once);
         }
 
         [Test]

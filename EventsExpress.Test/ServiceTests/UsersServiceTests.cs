@@ -24,7 +24,7 @@ namespace EventsExpress.Test.ServiceTests
     [TestFixture]
     internal class UsersServiceTests : TestInitializer
     {
-        private static Mock<IPhotoService> mockPhotoService;
+        private static Mock<IUserPhotoService> mockUserPhotoService;
         private Guid secondUserId = Guid.NewGuid();
         private Mock<ISecurityContext> mockSecurityContext;
         private UserService service;
@@ -50,7 +50,7 @@ namespace EventsExpress.Test.ServiceTests
         {
             base.Initialize();
             Context.UserCategory.Clear();
-            mockPhotoService = new Mock<IPhotoService>();
+            mockUserPhotoService = new Mock<IUserPhotoService>();
             mockMediator = new Mock<IMediator>();
             mockSecurityContext = new Mock<ISecurityContext>();
             MockMapper.Setup(opts => opts.Map<IEnumerable<CategoryDto>>(It.IsAny<IEnumerable<UserCategory>>()))
@@ -74,7 +74,7 @@ namespace EventsExpress.Test.ServiceTests
                 Context,
                 MockMapper.Object,
                 mockMediator.Object,
-                mockPhotoService.Object,
+                mockUserPhotoService.Object,
                 mockSecurityContext.Object);
 
             existingUser = new User
@@ -429,13 +429,13 @@ namespace EventsExpress.Test.ServiceTests
             };
 
             Assert.DoesNotThrowAsync(async () => await service.ChangeAvatar(userId, file));
-            mockPhotoService.Verify(x => x.AddUserPhoto(file, userId));
+            mockUserPhotoService.Verify(x => x.AddUserPhoto(file, userId));
         }
 
         [Test]
         public void ChangeAvatar_ThrowException()
         {
-            mockPhotoService.Setup(ps => ps.AddUserPhoto(It.IsAny<IFormFile>(), It.IsAny<Guid>())).Throws<ArgumentException>();
+            mockUserPhotoService.Setup(ps => ps.AddUserPhoto(It.IsAny<IFormFile>(), It.IsAny<Guid>())).Throws<ArgumentException>();
             var ex = Assert.ThrowsAsync<EventsExpressException>(async () => await service.ChangeAvatar(userId, new FormFile(new MemoryStream(), 0, 0, null, "tset")));
             Assert.That(ex.Message, Contains.Substring("Bad image file"));
         }

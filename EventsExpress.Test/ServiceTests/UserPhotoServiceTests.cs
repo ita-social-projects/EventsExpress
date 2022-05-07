@@ -1,31 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Net;
+using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Azure;
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
-using EventsExpress.Core.Extensions;
-using EventsExpress.Core.Infrastructure;
-using EventsExpress.Core.IServices;
-using EventsExpress.Core.Services;
+using EventsExpress.Test;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.StaticFiles;
-using Microsoft.Extensions.Options;
 using Moq;
-using Moq.Protected;
 using NUnit.Framework;
 
-namespace EventsExpress.Test.ServiceTests
+namespace EventsExpress.Core.Services
 {
-    [TestFixture]
-    internal class PhotoServiceTests : TestInitializer
+    internal class UserPhotoServiceTests : TestInitializer
     {
-        public PhotoService PhotoService { get; set; }
+        public UserPhotoService UserPhotoService { get; set; }
 
         private Mock<BlobClient> BlobClientMock { get; set; }
 
@@ -56,32 +49,29 @@ namespace EventsExpress.Test.ServiceTests
             mockBlobContainer
                 .Setup(c => c.GetBlobClient(It.IsAny<string>()))
                 .Returns(BlobClientMock.Object);
+
+            UserPhotoService = new UserPhotoService(mockBlobServiceClient.Object);
         }
 
         [Test]
-        [TestCase(@"./Images/invalidFile.txt")]
-        [TestCase(@"./Images/invalidFile.html")]
-        [TestCase(@"./Images/tooSmallImage.jpg")]
-        public void IsImage_FalseValidation(string testFilePath)
+        public void AddUserPhoto_ValidFormFile_DoesNotThrows()
         {
+            string testFilePath = @"./Images/valid-image.jpg";
             byte[] bytes = File.ReadAllBytes(testFilePath);
             string base64 = Convert.ToBase64String(bytes);
             string fileName = Path.GetFileName(testFilePath);
             using var stream = new MemoryStream(Encoding.UTF8.GetBytes(base64));
-            IFormFile file = new FormFile(stream, 0, stream.Length, null, fileName)
+            var file = new FormFile(stream, 0, stream.Length, null, fileName)
             {
                 Headers = new HeaderDictionary(),
                 ContentType = GetContentType(fileName),
             };
-            Assert.IsFalse(file.IsImage());
+            Guid id = Guid.NewGuid();
+
+            Assert.DoesNotThrowAsync(async () => await UserPhotoService.AddUserPhoto(file, id));
+            BlobClientMock.Verify(x => x.UploadAsync(It.IsAny<MemoryStream>(), It.IsAny<BlobUploadOptions>(), It.IsAny<CancellationToken>()), Times.Once);
         }
 
-        // [Test]
-        // public void GetPhotoFromBlob_DoesNotThrows()
-        // {
-        //    Assert.DoesNotThrowAsync(async () => await PhotoService.GetPhotoFromAzureBlob($"events/{Guid.NewGuid()}/preview.png"));
-        //    BlobClientMock.Verify(x => x.DownloadToAsync(It.IsAny<MemoryStream>()), Times.Once);
-        // }
         public string GetContentType(string fileName)
         {
             var provider = new FileExtensionContentTypeProvider();
