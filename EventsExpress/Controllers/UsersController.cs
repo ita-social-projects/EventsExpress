@@ -23,15 +23,12 @@ namespace EventsExpress.Controllers
     {
         private readonly IUserService _userService;
         private readonly IMapper _mapper;
-        private readonly IUserPhotoService _userPhotoService;
 
         public UsersController(
             IUserService userSrv,
-            IMapper mapper,
-            IUserPhotoService userPhotoService)
+            IMapper mapper)
         {
             _userService = userSrv;
-            _userPhotoService = userPhotoService;
             _mapper = mapper;
         }
 
