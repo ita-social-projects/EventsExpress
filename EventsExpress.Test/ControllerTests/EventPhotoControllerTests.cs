@@ -51,7 +51,7 @@ namespace EventsExpress.Test.ControllerTests
         }
 
         [Test]
-        [TestCase(@"./Images/valid-image.jpg")]
+        [TestCase(@"./Images/valid-event-image.jpg")]
         public void SetEventTempPhoto_ValidPhoto(string testFilePath)
         {
             byte[] bytes = File.ReadAllBytes(testFilePath);

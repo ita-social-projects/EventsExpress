@@ -158,7 +158,7 @@ namespace EventsExpress.Test.ServiceTests
             var dto = EventTestHelpers.DeepCopyDto(eventDto);
             dto.Id = Guid.Empty;
             using var stream = new MemoryStream();
-            dto.Photo = PhotoHelpers.GetPhoto(@"./Images/valid-image.jpg", stream);
+            dto.Photo = PhotoHelpers.GetPhoto(@"./Images/valid-event-image.jpg", stream);
 
             Assert.DoesNotThrowAsync(async () => await service.Create(dto));
             mockEventPhotoService.Verify(x => x.ChangeTempToImagePhoto(dto.Id), Times.Once);
@@ -171,7 +171,7 @@ namespace EventsExpress.Test.ServiceTests
             MockMapper.Setup(m => m.Map<EventScheduleDto>(It.IsAny<EventDto>()))
                 .Returns<EventDto>(EventTestHelpers.MapEventScheduleDtoFromEventDto);
             using var stream = new MemoryStream();
-            eventDto.Photo = PhotoHelpers.GetPhoto(@"./Images/valid-image.jpg", stream);
+            eventDto.Photo = PhotoHelpers.GetPhoto(@"./Images/valid-event-image.jpg", stream);
 
             Assert.DoesNotThrowAsync(async () => await service.Edit(eventDto));
             mockEventPhotoService.Verify(x => x.ChangeTempToImagePhoto(eventDto.Id), Times.Once);
