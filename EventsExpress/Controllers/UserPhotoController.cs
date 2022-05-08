@@ -60,7 +60,7 @@ namespace EventsExpress.Controllers
             }
             else
             {
-                return NoContent();
+                return BadRequest();
             }
         }
     }

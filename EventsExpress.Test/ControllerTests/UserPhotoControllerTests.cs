@@ -36,9 +36,12 @@ namespace EventsExpress.Test.ControllerTests
             photoService = new Mock<IUserPhotoService>();
             userService = new Mock<IUserService>();
 
-            // service
-            //    .Setup(p => p.GetPhotoFromAzureBlob(It.IsAny<string>()))
-            //    .Returns(Task.FromResult(new byte[] { 0 }));
+            // photoService
+            //   .Setup(p => p.GetPhotoFromAzureBlob(It.IsAny<string>()))
+            //   .Returns(Task.FromResult(new byte[] { 0 }));
+            photoService
+                .Setup(p => p.GetUserPhoto(It.IsAny<Guid>()))
+                .Returns(Task.FromResult(new byte[] { 0 }));
             controller = new UserPhotoController(photoService.Object, userService.Object);
         }
 
@@ -67,6 +70,14 @@ namespace EventsExpress.Test.ControllerTests
             Assert.IsNotNull(okResult);
             Assert.AreEqual(200, okResult.StatusCode);
             userService.Verify(user => user.ChangeAvatar(_userDto.Id, It.IsAny<IFormFile>()), Times.Exactly(1));
+        }
+
+        [Test]
+        public void DeleteAvatar_SuccsesfulUserPhotoDeletion()
+        {
+            var result = controller.DeleteUserPhoto(_userDto.Id);
+
+            Assert.IsInstanceOf<OkResult>(result.Result);
         }
     }
 }
