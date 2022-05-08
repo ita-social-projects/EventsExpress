@@ -10,6 +10,7 @@ using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 using EventsExpress.Core.Infrastructure;
 using EventsExpress.Core.Services;
+using EventsExpress.Test.ServiceTests.TestClasses.Photo;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.Options;
@@ -78,7 +79,7 @@ namespace EventsExpress.Test.ServiceTests
             var file = new FormFile(stream, 0, stream.Length, null, fileName)
             {
                 Headers = new HeaderDictionary(),
-                ContentType = GetContentType(fileName),
+                ContentType = PhotoHelpers.GetContentType(fileName),
             };
             Guid id = Guid.NewGuid();
 
@@ -86,15 +87,34 @@ namespace EventsExpress.Test.ServiceTests
             BlobClientMock.Verify(x => x.UploadAsync(It.IsAny<MemoryStream>(), It.IsAny<BlobUploadOptions>(), It.IsAny<CancellationToken>()), Times.Exactly(2));
         }
 
-        public string GetContentType(string fileName)
+        [Test]
+        public void GetPreviewEventPhoto_GetBytes()
         {
-            var provider = new FileExtensionContentTypeProvider();
-            if (!provider.TryGetContentType(fileName, out var contentType))
-            {
-                contentType = "application/octet-stream";
-            }
+            var result = EventPhotoService.GetPreviewEventPhoto(Guid.NewGuid());
 
-            return contentType;
+            Assert.IsInstanceOf<byte[]>(result.Result);
+        }
+
+        [Test]
+        public void GetPreviewEventPhoto_DoesNotThrows()
+        {
+            Assert.DoesNotThrowAsync(async () => await EventPhotoService.GetPreviewEventPhoto(Guid.NewGuid()));
+            BlobClientMock.Verify(x => x.DownloadToAsync(It.IsAny<MemoryStream>()), Times.Once);
+        }
+
+        [Test]
+        public void GetFullEventPhoto_GetBytes()
+        {
+            var result = EventPhotoService.GetFullEventPhoto(Guid.NewGuid());
+
+            Assert.IsInstanceOf<byte[]>(result.Result);
+        }
+
+        [Test]
+        public void GetFullEventPhoto_DoesNotThrows()
+        {
+            Assert.DoesNotThrowAsync(async () => await EventPhotoService.GetFullEventPhoto(Guid.NewGuid()));
+            BlobClientMock.Verify(x => x.DownloadToAsync(It.IsAny<MemoryStream>()), Times.Once);
         }
     }
 }

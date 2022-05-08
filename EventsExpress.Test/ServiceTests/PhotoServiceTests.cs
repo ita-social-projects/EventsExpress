@@ -1,23 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Net;
+﻿using System.IO;
 using System.Net.Http;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using Azure;
 using Azure.Storage.Blobs;
-using Azure.Storage.Blobs.Models;
 using EventsExpress.Core.Extensions;
-using EventsExpress.Core.Infrastructure;
-using EventsExpress.Core.IServices;
 using EventsExpress.Core.Services;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.StaticFiles;
-using Microsoft.Extensions.Options;
+using EventsExpress.Test.ServiceTests.TestClasses.Photo;
 using Moq;
-using Moq.Protected;
 using NUnit.Framework;
 
 namespace EventsExpress.Test.ServiceTests
@@ -64,33 +51,18 @@ namespace EventsExpress.Test.ServiceTests
         [TestCase(@"./Images/tooSmallImage.jpg")]
         public void IsImage_FalseValidation(string testFilePath)
         {
-            byte[] bytes = File.ReadAllBytes(testFilePath);
-            string base64 = Convert.ToBase64String(bytes);
-            string fileName = Path.GetFileName(testFilePath);
-            using var stream = new MemoryStream(Encoding.UTF8.GetBytes(base64));
-            IFormFile file = new FormFile(stream, 0, stream.Length, null, fileName)
-            {
-                Headers = new HeaderDictionary(),
-                ContentType = GetContentType(fileName),
-            };
+            using var stream = new MemoryStream();
+            var file = PhotoHelpers.GetPhoto(testFilePath, stream);
             Assert.IsFalse(file.IsImage());
         }
 
-        // [Test]
-        // public void GetPhotoFromBlob_DoesNotThrows()
-        // {
-        //    Assert.DoesNotThrowAsync(async () => await PhotoService.GetPhotoFromAzureBlob($"events/{Guid.NewGuid()}/preview.png"));
-        //    BlobClientMock.Verify(x => x.DownloadToAsync(It.IsAny<MemoryStream>()), Times.Once);
-        // }
-        public string GetContentType(string fileName)
+        [Test]
+        [TestCase(@"./Images/valid-image.jpg")]
+        public void IsImage_TrueValidation(string testFilePath)
         {
-            var provider = new FileExtensionContentTypeProvider();
-            if (!provider.TryGetContentType(fileName, out var contentType))
-            {
-                contentType = "application/octet-stream";
-            }
-
-            return contentType;
+            using var stream = new MemoryStream();
+            var file = PhotoHelpers.GetPhoto(testFilePath, stream);
+            Assert.IsTrue(file.IsImage());
         }
     }
 }

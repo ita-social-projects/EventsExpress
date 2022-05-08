@@ -12,6 +12,7 @@ using EventsExpress.Db.Bridge;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
 using EventsExpress.Test.ServiceTests.TestClasses.Comparers;
+using EventsExpress.Test.ServiceTests.TestClasses.Photo;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.StaticFiles;
@@ -418,15 +419,8 @@ namespace EventsExpress.Test.ServiceTests
         public void ChangeAvatar_UserInDbFound_Success()
         {
             string testFilePath = @"./Images/valid-image.jpg";
-            byte[] bytes = File.ReadAllBytes(testFilePath);
-            string base64 = Convert.ToBase64String(bytes);
-            string fileName = Path.GetFileName(testFilePath);
-            using var stream = new MemoryStream(Encoding.UTF8.GetBytes(base64));
-            var file = new FormFile(stream, 0, stream.Length, null, fileName)
-            {
-                Headers = new HeaderDictionary(),
-                ContentType = GetContentType(fileName),
-            };
+            using var stream = new MemoryStream();
+            var file = PhotoHelpers.GetPhoto(testFilePath, stream);
 
             Assert.DoesNotThrowAsync(async () => await service.ChangeAvatar(userId, file));
             mockUserPhotoService.Verify(x => x.AddUserPhoto(file, userId));
@@ -438,17 +432,6 @@ namespace EventsExpress.Test.ServiceTests
             mockUserPhotoService.Setup(ps => ps.AddUserPhoto(It.IsAny<IFormFile>(), It.IsAny<Guid>())).Throws<ArgumentException>();
             var ex = Assert.ThrowsAsync<EventsExpressException>(async () => await service.ChangeAvatar(userId, new FormFile(new MemoryStream(), 0, 0, null, "tset")));
             Assert.That(ex.Message, Contains.Substring("Bad image file"));
-        }
-
-        private string GetContentType(string fileName)
-        {
-            var provider = new FileExtensionContentTypeProvider();
-            if (!provider.TryGetContentType(fileName, out var contentType))
-            {
-                contentType = "application/octet-stream";
-            }
-
-            return contentType;
         }
     }
 

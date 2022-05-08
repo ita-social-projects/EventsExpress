@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 using EventsExpress.Test;
+using EventsExpress.Test.ServiceTests.TestClasses.Photo;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.StaticFiles;
 using Moq;
@@ -57,30 +58,28 @@ namespace EventsExpress.Core.Services
         public void AddUserPhoto_ValidFormFile_DoesNotThrows()
         {
             string testFilePath = @"./Images/valid-image.jpg";
-            byte[] bytes = File.ReadAllBytes(testFilePath);
-            string base64 = Convert.ToBase64String(bytes);
-            string fileName = Path.GetFileName(testFilePath);
-            using var stream = new MemoryStream(Encoding.UTF8.GetBytes(base64));
-            var file = new FormFile(stream, 0, stream.Length, null, fileName)
-            {
-                Headers = new HeaderDictionary(),
-                ContentType = GetContentType(fileName),
-            };
+            using var stream = new MemoryStream();
+            var file = PhotoHelpers.GetPhoto(testFilePath, stream);
             Guid id = Guid.NewGuid();
 
             Assert.DoesNotThrowAsync(async () => await UserPhotoService.AddUserPhoto(file, id));
             BlobClientMock.Verify(x => x.UploadAsync(It.IsAny<MemoryStream>(), It.IsAny<BlobUploadOptions>(), It.IsAny<CancellationToken>()), Times.Once);
         }
 
-        public string GetContentType(string fileName)
+        [Test]
+        public void GetUserPhoto_GetBytes()
         {
-            var provider = new FileExtensionContentTypeProvider();
-            if (!provider.TryGetContentType(fileName, out var contentType))
-            {
-                contentType = "application/octet-stream";
-            }
+            var result = UserPhotoService.GetUserPhoto(Guid.NewGuid());
 
-            return contentType;
+            Assert.IsInstanceOf<byte[]>(result.Result);
+        }
+
+        [Test]
+        public async Task GetUserPhoto_PassEmptyGuid_MustReturnArrayWithZeroSize()
+        {
+            var res = await UserPhotoService.GetUserPhoto(Guid.Empty);
+
+            Assert.That(res.Length == 0);
         }
     }
 }
