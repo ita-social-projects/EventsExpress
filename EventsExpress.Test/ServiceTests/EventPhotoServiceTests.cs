@@ -71,16 +71,9 @@ namespace EventsExpress.Test.ServiceTests
         [Test]
         public void AddEventTempPhoto_DoesntThrowExceptions()
         {
-            string testFilePath = @"./Images/valid-image.jpg";
-            byte[] bytes = File.ReadAllBytes(testFilePath);
-            string base64 = Convert.ToBase64String(bytes);
-            string fileName = Path.GetFileName(testFilePath);
-            using var stream = new MemoryStream(Encoding.UTF8.GetBytes(base64));
-            var file = new FormFile(stream, 0, stream.Length, null, fileName)
-            {
-                Headers = new HeaderDictionary(),
-                ContentType = PhotoHelpers.GetContentType(fileName),
-            };
+            string testFilePath = @"./Images/valid-event-image.jpg";
+            using var stream = new MemoryStream();
+            var file = PhotoHelpers.GetPhoto(testFilePath, stream);
             Guid id = Guid.NewGuid();
 
             Assert.DoesNotThrowAsync(async () => await EventPhotoService.AddEventTempPhoto(file, id));

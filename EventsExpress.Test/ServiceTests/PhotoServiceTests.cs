@@ -48,7 +48,6 @@ namespace EventsExpress.Test.ServiceTests
         [Test]
         [TestCase(@"./Images/invalidFile.txt")]
         [TestCase(@"./Images/invalidFile.html")]
-        [TestCase(@"./Images/tooSmallImage.jpg")]
         public void IsImage_FalseValidation(string testFilePath)
         {
             using var stream = new MemoryStream();
@@ -57,7 +56,7 @@ namespace EventsExpress.Test.ServiceTests
         }
 
         [Test]
-        [TestCase(@"./Images/valid-image.jpg")]
+        [TestCase(@"./Images/valid-event-image.jpg")]
         public void IsImage_TrueValidation(string testFilePath)
         {
             using var stream = new MemoryStream();

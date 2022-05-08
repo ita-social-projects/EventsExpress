@@ -418,7 +418,7 @@ namespace EventsExpress.Test.ServiceTests
         [Test]
         public void ChangeAvatar_UserInDbFound_Success()
         {
-            string testFilePath = @"./Images/valid-image.jpg";
+            string testFilePath = @"./Images/valid-event-image.jpg";
             using var stream = new MemoryStream();
             var file = PhotoHelpers.GetPhoto(testFilePath, stream);
 
