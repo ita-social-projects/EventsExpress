@@ -1,5 +1,5 @@
 import { makeStyles } from "@material-ui/core";
-import React from "react";
+import React  from "react";
 import { Button } from '@material-ui/core';
 import { InfoField } from "./info-field";
 import { connect } from 'react-redux';
@@ -7,6 +7,7 @@ import DisplayLocation from '../../event/map/display-location';
 import EditUsernameContainer from '../../../containers/editProfileContainers/editUsernameContainer';
 import EditGenderContainer from '../../../containers/editProfileContainers/editGenderContainer';
 import EditBirthdayContainer from '../../../containers/editProfileContainers/editBirthdayContainer';
+import EditLocationContainer from "../../../containers/editProfileContainers/editLocationContainer";
 
 const useStyles = makeStyles(theme => ({
     sectionContent: {
@@ -42,8 +43,8 @@ const GeneralInfoSection = (props) => {
     var birthday;
     if(props.birthday !== null){
         birthday = props.birthday.slice(0, 10);
-    } 
-    console.log(props);
+    }
+
     return (
         <div className={classes.sectionContent}>
             <div className={classes.firstBlockContent}>
@@ -57,24 +58,29 @@ const GeneralInfoSection = (props) => {
                     <h3>General information</h3>
                 </div>
                 <div className={classes.blockStyle}>
-                    <InfoField fieldName={"Name"} info={props.name} editContainer={EditUsernameContainer} displayEditButton={true} />
+                    <InfoField fieldName={"Name"} info={props.name} editContainer={EditUsernameContainer} displayEditButton={true} showEdit ={true} />
                 </div>
                 <div className={classes.blockStyle}>
                     <InfoField fieldName={"Surname"} info={props.name} />
                 </div>
                 <div className={classes.blockStyle}>
-                    <InfoField fieldName={"Date of birth"} info={birthday} editContainer={EditBirthdayContainer} displayEditButton={true} />
+                    <InfoField fieldName={"Date of birth"} info={birthday} editContainer={EditBirthdayContainer} displayEditButton={true} showEdit ={true}/>
                 </div>
                 <div className={classes.blockStyle}>
-                    <InfoField fieldName={"Gender"} info={props.gender == 1 ? 'Male' : 'Female'} editContainer={EditGenderContainer} displayEditButton={true} />
+                    <InfoField fieldName={"Gender"} info={props.gender == 1 ? 'Male' : 'Female'} editContainer={EditGenderContainer} displayEditButton={true} showEdit ={true} />
                 </div>
                 <div className={classes.blockStyle}>
-                    <InfoField fieldName={"Location"} info={<DisplayLocation
-                        location={props.location}
-                    />} />
+                    <InfoField fieldName={"Location"} info={
+                       <DisplayLocation
+                        location={props.location}/>
+                    }
+                    editContainer = {EditLocationContainer}
+                    displayEditButton={true}
+                    showEdit ={false}
+                    />
                 </div>
                 <div className={classes.blockStyle}>
-                    <InfoField fieldName={"Email"} info={props.email} />
+                    <InfoField fieldName={"Email"} info={props.email} showEdit ={true}/>
                 </div>
             </div>
         </div>

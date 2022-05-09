@@ -9,6 +9,7 @@ using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
 using EventsExpress.Policies;
 using EventsExpress.ViewModels;
+using EventsExpress.ViewModels.Base;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -343,9 +344,9 @@ namespace EventsExpress.Controllers
         /// <response code = "400">Edit is not successful.</response>
         /// <returns>The method returns edited location for user.</returns>
         [HttpPost("[action]")]
-        public async Task<IActionResult> EditLocation(EditLocationViewModel location)
+        public async Task<IActionResult> EditLocation(LocationViewModel location)
         {
-            await _userService.EditLocation(location.Location);
+            await _userService.EditLocation(_mapper.Map<LocationViewModel, LocationDto>(location));
             return Ok(location);
         }
     }

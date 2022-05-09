@@ -50,4 +50,11 @@ export default class UserService {
     });
 
     setUserNotificationType = data => baseService.setResource('Users/EditUserNotificationType', data);
+
+    setLocation = data => baseService.setResource('Users/EditLocation',{
+        latitude: data.latitude,
+        longitude: data.longitude,
+        type: 0,
+        onlineMeeting : null
+    });
 }
