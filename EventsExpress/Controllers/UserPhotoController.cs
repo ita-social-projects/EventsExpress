@@ -52,7 +52,7 @@ namespace EventsExpress.Controllers
         {
             if (ModelState.IsValid)
             {
-                await _userService.ChangeAvatar(userId, avatar.Photo);
+                await _userService.ChangeAvatar(avatar.Photo);
 
                 var updatedPhoto = await _userPhotoService.GetUserPhoto(userId);
 

@@ -46,20 +46,7 @@ class DropZoneField extends Component {
       }
     }
   };
-        const validationMessage = ValidateImage(file[0]);
-        if (validationMessage) {
-            this.props.setErrorAlert(validationMessage);
-            return;
-        }
-
-        const imagefile = {
-            file: file[0],
-            name: file[0].name,
-            preview: URL.createObjectURL(file[0]),
-        };
-        this.setState({ imagefile: [imagefile] });
-    };
-
+       
   handleOnCrop = async (croppedImage) => {
     URL.revokeObjectURL(this.state.imagefile[0].preview);
     const file = new File(croppedImage, "image.jpg", { type: "image/jpeg" });

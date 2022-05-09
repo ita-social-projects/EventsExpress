@@ -16,6 +16,7 @@ import {
     renderPhoneInput
 } from '../../../helpers/form-helpers';
 import DropZoneField from '../../../helpers/DropZoneField';
+import {UserImageResizer} from '../../../helpers/image-resizer'
 
 const validate = values => {
     let errors = {};
@@ -76,6 +77,7 @@ const CompleteProfileForm = ({ handleSubmit }) => {
                         type="file"
                         crop={true}
                         cropShape="round"
+                        imageResizer={UserImageResizer}
                     />
                 </Grid>
                 <Grid item sm={6}>

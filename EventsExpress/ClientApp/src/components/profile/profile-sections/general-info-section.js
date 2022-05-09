@@ -8,6 +8,7 @@ import EditUsernameContainer from '../../../containers/editProfileContainers/edi
 import EditGenderContainer from '../../../containers/editProfileContainers/editGenderContainer';
 import EditBirthdayContainer from '../../../containers/editProfileContainers/editBirthdayContainer';
 import EditLocationContainer from "../../../containers/editProfileContainers/editLocationContainer";
+import ProfileAvatar from "./profile-avatar"
 
 const useStyles = makeStyles((theme) => ({
   sectionContent: {
@@ -102,7 +103,6 @@ const GeneralInfoSection = (props) => {
     </div>
   );
 };
-}
 
 const mapStateToProps = (state) => {
   return state.user;
