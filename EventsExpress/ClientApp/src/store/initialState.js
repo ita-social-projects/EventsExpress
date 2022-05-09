@@ -27,7 +27,8 @@ const initialState = {
         token: null,
         categories: [],
         notificationTypes: [],
-        bookmarkedEvents: []
+        bookmarkedEvents: [],
+        location: null
     },
     roles: {
         data: []
@@ -77,12 +78,7 @@ const initialState = {
         data: [],
     },
     eventSchedule: {
-        cancelationModalStatus: false,
-        cancelation: {},
-        data: {
-            lastRun: null,
-            nextRun: null,
-        }
+        data: null
     },
     edit_event_from_parent: {
         isEventFromParentPending: false,
@@ -94,6 +90,7 @@ const initialState = {
             pageViewModel: {},
         },
         filter: filterHelper.getDefaultEventFilter(),
+        layout: 'matrix',
     },
     tracks: {
         isError: false,

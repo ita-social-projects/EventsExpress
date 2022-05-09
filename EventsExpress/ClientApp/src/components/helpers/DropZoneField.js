@@ -1,13 +1,13 @@
-import React, { Component, Fragment } from "react";
-import PropTypes from "prop-types";
-import DropZone from "react-dropzone";
-import ImagePreview from "./ImagePreview";
-import Placeholder from "./Placeholder";
-import Button from "@material-ui/core/Button";
-import renderFieldError from "./form-helpers/render-field-error";
-import { setErrorAlert } from "../../actions/alert-action";
-import { connect } from "react-redux";
-import ValidateImage from "../helpers/validators/ValidateImage";
+import React, { Component, Fragment } from 'react';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import DropZone from 'react-dropzone';
+import Button from '@material-ui/core/Button';
+import ImagePreview from './ImagePreview';
+import Placeholder from './Placeholder';
+import renderFieldError from './form-helpers/render-field-error';
+import ValidateImage from '../helpers/validators/ValidateImage';
+import { setErrorAlert } from '../../actions/alert-action';
 
 class DropZoneField extends Component {
   state = {
@@ -46,6 +46,19 @@ class DropZoneField extends Component {
       }
     }
   };
+        const validationMessage = ValidateImage(file[0]);
+        if (validationMessage) {
+            this.props.setErrorAlert(validationMessage);
+            return;
+        }
+
+        const imagefile = {
+            file: file[0],
+            name: file[0].name,
+            preview: URL.createObjectURL(file[0]),
+        };
+        this.setState({ imagefile: [imagefile] });
+    };
 
   handleOnCrop = async (croppedImage) => {
     URL.revokeObjectURL(this.state.imagefile[0].preview);

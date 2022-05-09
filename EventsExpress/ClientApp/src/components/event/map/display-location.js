@@ -12,7 +12,6 @@ class DisplayLocation extends Component {
 
         if (this.props.location && this.props.location.type == enumLocationType.map) {
             return (
-
                 <DisplayMap location={this.props.location} />
             )
         }

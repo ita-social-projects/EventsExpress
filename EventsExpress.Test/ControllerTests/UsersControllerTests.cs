@@ -14,6 +14,7 @@ using EventsExpress.Db.Bridge;
 using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
 using EventsExpress.ViewModels;
+using EventsExpress.ViewModels.Base;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Primitives;
@@ -43,10 +44,16 @@ namespace EventsExpress.Test.ControllerTests
         private EditUserBirthViewModel _editUserBirthViewModel;
         private DateTime _birthdeay = new DateTime(2000, 9, 6);
         private EditUserNameViewModel _editUserNameViewModel;
+        private LocationViewModel _editLocationViewModel;
         private string _userName = "some name of user";
         private UsersFilterViewModel _usersFilterViewModel;
         private int _pageSize = 5;
         private int _page = 8;
+
+        private LocationDto _location = new LocationDto
+        {
+            Point = null, OnlineMeeting = "string", Type = LocationType.Online,
+        };
 
         [SetUp]
         public void Initialize()
@@ -99,8 +106,8 @@ namespace EventsExpress.Test.ControllerTests
             _editUserGenderViewModel = new EditUserGenderViewModel { Gender = _gender };
             _editUserBirthViewModel = new EditUserBirthViewModel { Birthday = _birthdeay };
             _editUserNameViewModel = new EditUserNameViewModel { Name = _userName };
+            _editLocationViewModel = new LocationViewModel { Latitude = 0.0, Longitude = 0.0, Type = LocationType.Map, };
             _usersFilterViewModel = new UsersFilterViewModel { Page = _page, PageSize = _pageSize };
-
             var user = new ClaimsPrincipal(new ClaimsIdentity());
             _usersController.ControllerContext.HttpContext = new DefaultHttpContext { User = user };
         }
@@ -181,6 +188,8 @@ namespace EventsExpress.Test.ControllerTests
             Assert.AreEqual(200, okResult.StatusCode);
         }
 
+       
+
         [Test]
         [Category("EditUserCategory")]
         public async Task EditUserCategory_UserDto_OkObjectResultAsync()
@@ -230,6 +239,19 @@ namespace EventsExpress.Test.ControllerTests
             Assert.DoesNotThrowAsync(() => Task.FromResult(res));
             Assert.IsInstanceOf<OkResult>(res);
             _userService.Verify(us => us.EditUserName(It.IsAny<string>()), Times.Exactly(1));
+        }
+
+        [Test]
+        [Category("EditLocation")]
+        public async Task EditLocation_UserDto_OkObjectResultAsync()
+        {
+            _userService.Setup(user => user.EditLocation(It.IsAny<LocationDto>()));
+
+            var res = await _usersController.EditLocation(_editLocationViewModel);
+
+            Assert.DoesNotThrowAsync(() => Task.FromResult(res));
+            Assert.IsInstanceOf<IActionResult>(res);
+            _userService.Verify(us => us.EditLocation(It.IsAny<LocationDto>()), Times.Exactly(1));
         }
 
         [Test]

@@ -1,5 +1,5 @@
 import { makeStyles } from "@material-ui/core";
-import React from "react";
+import React, { useEffect } from "react";
 import { Button } from '@material-ui/core';
 import { useState } from 'react';
 import { IconButton } from '@material-ui/core';
@@ -8,7 +8,16 @@ import EditIcon from '@material-ui/icons/Edit';
 const useStyles = makeStyles(theme => ({
     fieldStyle: {
         width: "100%",
+        height: "auto",
         position: "relative",
+        backgroundClip: "content-box",
+        borderBlock: "50%",
+        '&:hover':{
+            cursor: "pointer"
+        },
+        '&:hover $editButtonStyle': {
+            display: 'block',
+        }
     },
     fieldNameStyle: {
         display: "inline-block",
@@ -29,7 +38,7 @@ const useStyles = makeStyles(theme => ({
         right: "-45px",
         padding: "10px",
         top: "-5px",
-        //display: "none",
+        display: "none",
     },
     editFieldStyle: {
         padding: "5px",
@@ -37,34 +46,66 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-
-export const InfoField = ({fieldName, info, editContainer, displayEditButton = false}) => {
+export const InfoField = ({fieldName, info, editContainer, displayEditButton = false, showEdit = true}) => {
     const classes = useStyles();
-
     const [isOpen, setIsOpen] = useState(false);
 
+
+    const closeField = () =>{
+        setIsOpen(false);
+    }
+
+    const openField = () => {
+        if(!isOpen) {
+            setIsOpen(true);
+        }
+    }
+
+
+    let Element = editContainer;
     return(
-        <div className={classes.fieldStyle}>
-            {!isOpen &&
-                <div className={classes.fieldNameStyle}>
-                    <p className={classes.fontStyle}>{fieldName}</p>
-                </div>
+        <div className={classes.fieldStyle} onClick={openField}>
+            {
+                showEdit ? <>
+                    {!isOpen &&
+                        <div className={classes.fieldNameStyle}>
+                            <p className={classes.fontStyle}>{fieldName}</p>
+                        </div>
+                    }
+                    {!isOpen &&
+                        <div className={classes.infoBlockStyle}>
+                            <p className={classes.fontStyle}>{info}</p>
+                        </div>
+                    }
+                    {isOpen &&
+                        <div className={classes.editFieldStyle}>
+                            <Element close = {closeField} isOpen = {isOpen}/>
+                        </div>
+                    }
+                </>:
+                <>
+                    {<>
+                        <div className={classes.fieldNameStyle}>
+                            <p className={classes.fontStyle}>{fieldName}</p>
+                        </div>
+                        <div className={classes.infoBlockStyle}>
+                            <p className={classes.fontStyle}>{info}</p>
+                        </div>
+                    </>
+                    }
+                    {isOpen &&
+                        <div className={classes.editFieldStyle}>
+                            <Element close = {closeField} isOpen = {isOpen}/>
+                        </div>
+                    }
+                </>
             }
-            {!isOpen &&            
-                <div className={classes.infoBlockStyle}>
-                    <p className={classes.fontStyle}>{info}</p>
-                </div>
-            }
-            {displayEditButton &&
-                <IconButton className={classes.editButtonStyle} onClick={() => {isOpen ? setIsOpen(false) : setIsOpen(true)}}>
-                    <EditIcon />
-                </IconButton>
-            }
-            {isOpen &&
-                <div className={classes.editFieldStyle}>
-                    {editContainer}
-                </div>
-            }
+                {
+                    displayEditButton && !isOpen &&
+                    <IconButton className={classes.editButtonStyle} onClick={() => {setIsOpen(true)}}>
+                        <EditIcon />
+                    </IconButton>
+                }
         </div>
     );
 };

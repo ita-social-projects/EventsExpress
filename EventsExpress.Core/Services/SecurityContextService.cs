@@ -17,7 +17,7 @@ namespace EventsExpress.Core.Services
 
         public Guid GetCurrentUserId()
         {
-            Claim guidClaim = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Name);
+            Claim guidClaim = _httpContextAccessor.HttpContext?.User.FindFirst(ClaimTypes.Name);
 
             if (guidClaim == null || !Guid.TryParse(guidClaim.Value, out Guid result))
             {
@@ -29,7 +29,7 @@ namespace EventsExpress.Core.Services
 
         public Guid GetCurrentAccountId()
         {
-            Claim guidClaim = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Sid);
+            Claim guidClaim = _httpContextAccessor.HttpContext?.User.FindFirst(ClaimTypes.Sid);
 
             if (guidClaim == null || !Guid.TryParse(guidClaim.Value, out Guid result))
             {

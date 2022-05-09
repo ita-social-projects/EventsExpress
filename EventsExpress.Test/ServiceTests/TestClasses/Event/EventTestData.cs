@@ -68,21 +68,21 @@ namespace EventsExpress.Test.ServiceTests.TestClasses.Event
             },
         };
 
-        public static List<EventLocation> Locations => new ()
+        public static List<Db.Entities.Location> Locations => new ()
         {
-            new EventLocation
+            new Db.Entities.Location
             {
                 Id = EventLocationMapId,
                 Point = new Point(10.45, 12.34),
                 Type = LocationType.Map,
             },
-            new EventLocation
+            new Db.Entities.Location
             {
                 Id = VisitedEventId,
                 Point = new Point(50.45, 30.34),
                 Type = LocationType.Map,
             },
-            new EventLocation
+            new Db.Entities.Location
             {
                 Id = EventLocationOnlineId,
                 OnlineMeeting = "http://basin.example.com/#branch",
@@ -114,7 +114,7 @@ namespace EventsExpress.Test.ServiceTests.TestClasses.Event
                         UserId = EventOrganizerId,
                     },
                 },
-                EventLocationId = EventLocationMapId,
+                LocationId = EventLocationMapId,
                 IsPublic = true,
                 Categories = new List<EventCategory>
                 {
@@ -161,7 +161,7 @@ namespace EventsExpress.Test.ServiceTests.TestClasses.Event
                         UserId = FirstUserId,
                     },
                 },
-                EventLocationId = EventLocationOnlineId,
+                LocationId = EventLocationOnlineId,
                 IsPublic = true,
                 Categories = null,
                 MaxParticipants = 25,
@@ -188,7 +188,7 @@ namespace EventsExpress.Test.ServiceTests.TestClasses.Event
                         UserId = Guid.NewGuid(),
                     },
                 },
-                EventLocationId = EventLocationMapSecondId,
+                LocationId = EventLocationMapSecondId,
                 IsPublic = true,
                 EventAudience = new EventAudience
                 {
@@ -219,7 +219,7 @@ namespace EventsExpress.Test.ServiceTests.TestClasses.Event
                         UserId = Guid.NewGuid(),
                     },
                 },
-                EventLocationId = EventLocationOnlineId,
+                LocationId = EventLocationOnlineId,
                 IsPublic = false,
                 Categories = null,
                 MaxParticipants = 1,
@@ -273,7 +273,7 @@ namespace EventsExpress.Test.ServiceTests.TestClasses.Event
                         UserId = FirstUserId,
                     },
                 },
-                EventLocationId = EventLocationOnlineId,
+                LocationId = EventLocationOnlineId,
                 IsPublic = false,
                 Categories = null,
                 MaxParticipants = 25,
@@ -308,7 +308,7 @@ namespace EventsExpress.Test.ServiceTests.TestClasses.Event
                         UserId = FirstUserId,
                     },
                 },
-                EventLocationId = EventLocationOnlineId,
+                LocationId = EventLocationOnlineId,
                 IsPublic = null,
                 Categories = null,
                 MaxParticipants = 25,

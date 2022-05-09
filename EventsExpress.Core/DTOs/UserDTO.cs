@@ -11,6 +11,10 @@ namespace EventsExpress.Core.DTOs
 
         public string Name { get; set; }
 
+        public string FirstName { get; set; }
+
+        public string LastName { get; set; }
+
         public string Email { get; set; }
 
         public string Phone { get; set; }
@@ -28,6 +32,8 @@ namespace EventsExpress.Core.DTOs
         public Guid AccountId { get; set; }
 
         public Account Account { get; set; }
+
+        public LocationDto Location { get; set; }
 
         public IEnumerable<EventDto> Events { get; set; }
 

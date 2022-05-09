@@ -14,7 +14,6 @@ const api_serv = new EventService();
 export default function get_event(id) {
     return async dispatch => {
         dispatch(getRequestInc());
-
         let response = await api_serv.getEvent(id);
         if (!response.ok) {
             dispatch(setErrorAllertFromResponse(response));

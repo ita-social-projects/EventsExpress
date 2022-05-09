@@ -22,6 +22,7 @@ namespace EventsExpress.Core.Services
     {
         private readonly IMediator _mediator;
         private readonly IUserPhotoService _userPhotoService;
+        private readonly ILocationManager _locationManager;
         private readonly ISecurityContext _securityContext;
 
         public UserService(
@@ -29,11 +30,13 @@ namespace EventsExpress.Core.Services
             IMapper mapper,
             IMediator mediator,
             IUserPhotoService photoSrv,
+            ILocationManager locationManager,
             ISecurityContext securityContext)
             : base(context, mapper)
         {
             _mediator = mediator;
             _userPhotoService = photoSrv;
+            _locationManager = locationManager;
             _securityContext = securityContext;
         }
 
@@ -83,10 +86,10 @@ namespace EventsExpress.Core.Services
 
             var user = Context.Users
                 .Include(u => u.EventBookmarks)
+                .Include(u => u.Location)
                 .Include(u => u.Account)
-                    .ThenInclude(a => a.AccountRoles)
+                .ThenInclude(a => a.AccountRoles)
                         .ThenInclude(ar => ar.Role)
-                .AsNoTracking()
                 .FirstOrDefault(x => x.Id == userId);
 
             var userDto = Mapper.Map<UserDto>(user);
@@ -195,13 +198,13 @@ namespace EventsExpress.Core.Services
             return Mapper.Map<IEnumerable<UserDto>>(users);
         }
 
-        public async Task ChangeAvatar(Guid userId, IFormFile avatar)
+        public async Task<Guid> ChangeAvatar(IFormFile avatar)
         {
-            var user = Context.Users
-                .Single(u => u.Id == userId);
             try
             {
-                await _userPhotoService.AddUserPhoto(avatar, user.Id);
+                var userId = _securityContext.GetCurrentUserId();
+                await _userPhotoService.AddUserPhoto(avatar, userId);
+                return userId;
             }
             catch (ArgumentException)
             {
@@ -234,6 +237,32 @@ namespace EventsExpress.Core.Services
             var user = CurrentUser();
 
             user.Gender = gender;
+
+            Context.Update(user);
+            await Context.SaveChangesAsync();
+        }
+
+        public async Task EditLocation(LocationDto location)
+        {
+            var user = CurrentUser();
+
+            if (location.Type == LocationType.Map)
+            {
+                if (user.LocationId == null)
+                {
+                    var locationId = _locationManager.Create(location);
+                    user.LocationId = locationId;
+                }
+                else
+                {
+                    location.Id = user.LocationId.Value;
+                    _locationManager.EditLocation(location);
+                }
+            }
+            else
+            {
+                throw new EventsExpressException("Uri-based location is not applicable to users");
+            }
 
             Context.Update(user);
             await Context.SaveChangesAsync();

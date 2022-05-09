@@ -153,7 +153,6 @@ namespace EventsExpress.Test.MapperTests
             mockUser.Setup(sp => sp.GetRating(It.IsAny<Guid>())).Returns(5);
 
             services.AddDbContext<AppDbContext>(o => o.UseInMemoryDatabase(databaseName: "db"));
-            services.AddDbContext<AppDbContext>(options => options.UseInMemoryDatabase(databaseName: "db"));
             services.AddTransient(sp => mockAuth.Object);
             services.AddTransient(sp => mockAccessor.Object);
             services.AddTransient(sp => mockUser.Object);

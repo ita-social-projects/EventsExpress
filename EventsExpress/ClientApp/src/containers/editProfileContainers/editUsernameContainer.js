@@ -5,10 +5,10 @@ import editUsername from "../../actions/redactProfile/userName-edit-action";
 
 class EditUsernameContainer extends React.Component {
     submit = value => {
-        return this.props.editUsername(value);
+        return this.props.editUsername(value).then(this.props.close);
     }
     render() {
-        return <EditUsername onSubmit={this.submit} />;
+        return <EditUsername onSubmit={this.submit} onClose = {this.props.close} />;
     }   
 }
 

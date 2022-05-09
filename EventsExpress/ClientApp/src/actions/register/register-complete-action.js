@@ -1,32 +1,45 @@
-import { AuthenticationService } from '../../services';
-import { createBrowserHistory } from 'history';
-import { setSuccessAllert } from '../alert-action';
-import { buildValidationState } from '../../components/helpers/action-helpers';
 import { SubmissionError } from 'redux-form';
+import moment from 'moment';
+import { AuthenticationService } from '../../services';
+import { setSuccessAllert, setErrorAllertFromResponse } from '../alert-action';
+import { buildValidationState } from '../../components/helpers/action-helpers';
 import { jwtStorageKey } from '../../constants/constants';
-import jwt from 'jsonwebtoken';
+import { getUserInfo } from '../login/login-action';
+import change_avatar from '../redactProfile/avatar-change-action';
 
 const api_serv = new AuthenticationService();
-const history = createBrowserHistory({ forceRefresh: true });
 
-export default function registerComplete(data) {
+export default function registerComplete(data, { shouldSaveMoreInfo }) {
     return async dispatch => {
-        data.accountId = getAccountIdFromJWT()
+        const { image, ...profileData } = data;
+        const body = {
+            ...profileData,
+            birthday: moment.utc(data.birthday).local().format('YYYY-MM-DD[T00:00:00]'),
+        };
 
-        let response = await api_serv.setRegisterComplete(data);
-        if (!response.ok) {
-            throw new SubmissionError(await buildValidationState(response));
+        const profileResponse = await api_serv.setRegisterComplete(body);
+        if (!profileResponse.ok) {
+            dispatch(setErrorAllertFromResponse(profileResponse.clone()));
+            throw new SubmissionError(await buildValidationState(profileResponse));
         }
-        let jsonRes = await response.json();
+        
+        const jsonRes = await profileResponse.json();
         localStorage.setItem(jwtStorageKey, jsonRes.token);
+
+        if (image !== undefined) {
+            dispatch(change_avatar({ image }));
+        }
+
+        if (shouldSaveMoreInfo === true) {
+            const moreInfoResponse = await api_serv.setMoreInfo(data);
+            if (!moreInfoResponse.ok) {
+                dispatch(setErrorAllertFromResponse(moreInfoResponse.clone()));
+                throw new SubmissionError(await buildValidationState(moreInfoResponse));
+            }
+        }
+
+        dispatch(getUserInfo());
         dispatch(setSuccessAllert('Your profile was updated'));
-        dispatch(history.push('/home'))
         return Promise.resolve();
     };
-}
-
-export function getAccountIdFromJWT(){
-    let token = localStorage.getItem(jwtStorageKey);
-    let decoded = jwt.decode(token);
-    return decoded["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/sid"];
 }

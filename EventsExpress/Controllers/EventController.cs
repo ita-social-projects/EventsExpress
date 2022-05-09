@@ -48,7 +48,7 @@ namespace EventsExpress.Controllers
         /// <response code="400">If Create process failed.</response>
         [HttpPost("[action]/{eventId:Guid}")]
         [UserAccessTypeFilterAttribute]
-        public async Task<IActionResult> CreateNextFromParentWithEdit(Guid eventId, [FromForm] EventEditViewModel model)
+        public async Task<IActionResult> CreateNextFromParentWithEdit(Guid eventId, EventEditViewModel model)
         {
             if (!ModelState.IsValid)
             {

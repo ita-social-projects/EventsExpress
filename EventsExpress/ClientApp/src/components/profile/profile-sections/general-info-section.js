@@ -1,13 +1,13 @@
 import { makeStyles } from "@material-ui/core";
-import React from "react";
+import React  from "react";
+import { Button } from '@material-ui/core';
 import { InfoField } from "./info-field";
-import { connect } from "react-redux";
-import DisplayLocation from "../../event/map/display-location";
-import EditUsernameContainer from "../../../containers/editProfileContainers/editUsernameContainer";
-import EditGenderContainer from "../../../containers/editProfileContainers/editGenderContainer";
-import EditBirthdayContainer from "../../../containers/editProfileContainers/editBirthdayContainer";
-import "../User-profile.css";
-import ProfileAvatar from "./profile-avatar";
+import { connect } from 'react-redux';
+import DisplayLocation from '../../event/map/display-location';
+import EditUsernameContainer from '../../../containers/editProfileContainers/editUsernameContainer';
+import EditGenderContainer from '../../../containers/editProfileContainers/editGenderContainer';
+import EditBirthdayContainer from '../../../containers/editProfileContainers/editBirthdayContainer';
+import EditLocationContainer from "../../../containers/editProfileContainers/editLocationContainer";
 
 const useStyles = makeStyles((theme) => ({
   sectionContent: {
@@ -46,7 +46,6 @@ const GeneralInfoSection = (props) => {
   if (props.birthday !== null) {
     birthday = props.birthday.slice(0, 10);
   }
-  console.log(props);
   return (
     <div className={classes.sectionContent}>
       <div className={classes.firstBlockContent}>
@@ -64,7 +63,7 @@ const GeneralInfoSection = (props) => {
           <InfoField
             fieldName={"Name"}
             info={props.name}
-            editContainer={<EditUsernameContainer />}
+            editContainer={EditUsernameContainer}
             displayEditButton={true}
           />
         </div>
@@ -75,7 +74,7 @@ const GeneralInfoSection = (props) => {
           <InfoField
             fieldName={"Date of birth"}
             info={birthday}
-            editContainer={<EditBirthdayContainer />}
+            editContainer={EditBirthdayContainer}
             displayEditButton={true}
           />
         </div>
@@ -83,14 +82,17 @@ const GeneralInfoSection = (props) => {
           <InfoField
             fieldName={"Gender"}
             info={props.gender ? "Male" : "Female"}
-            editContainer={<EditGenderContainer />}
+            editContainer={EditGenderContainer}
             displayEditButton={true}
           />
         </div>
         <div className={classes.blockStyle}>
           <InfoField
             fieldName={"Location"}
-            info={<DisplayLocation location={props.location} />}
+                      info={<DisplayLocation location={props.location} />}
+                      editContainer={EditLocationContainer}
+                      displayEditButton={true}
+                      showEdit={false}
           />
         </div>
         <div className={classes.blockStyle}>
@@ -100,6 +102,7 @@ const GeneralInfoSection = (props) => {
     </div>
   );
 };
+}
 
 const mapStateToProps = (state) => {
   return state.user;

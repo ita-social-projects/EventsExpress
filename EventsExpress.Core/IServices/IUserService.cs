@@ -15,7 +15,7 @@ namespace EventsExpress.Core.IServices
 
         Task<int> CountUsersAsync(AccountStatus status);
 
-        Task ChangeAvatar(Guid userId, IFormFile avatar);
+        Task<Guid> ChangeAvatar(IFormFile avatar);
 
         Task EditFavoriteCategories(IEnumerable<Category> categories);
 
@@ -48,5 +48,7 @@ namespace EventsExpress.Core.IServices
         Task EditBirthday(DateTime birthday);
 
         Task EditGender(Gender gender);
+
+        Task EditLocation(LocationDto location);
     }
 }
