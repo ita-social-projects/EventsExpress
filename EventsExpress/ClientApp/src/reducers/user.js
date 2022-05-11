@@ -1,7 +1,7 @@
 import initialState from '../store/initialState';
 import { SET_USER } from '../actions/login/login-action';
 import { SET_LOGOUT } from '../actions/login/logout-action';
-import { addUserCategory, addUserNotificationType, editBirthday, editGender, editUsername, changeAvatar,editLocation } from '../actions/redactProfile';
+import { addUserCategory, addUserNotificationType, editBirthday, editGender, editUsername, changeAvatar,editLocation, editFirstname,editLastname } from '../actions/redactProfile';
 import { GET_USER_NOTIFICATION_TYPES_DATA } from '../actions/notificationType/userNotificationType-action';
 import { GET_USER_CATEGORIES_DATA } from '../actions/category/userCategory-action';
 
@@ -35,6 +35,16 @@ export const reducer = (state = initialState.user, action) => {
                 ...state,
                 name: action.payload.userName
             }
+        case editFirstname.UPDATE:
+            return {
+                ...state,
+                firstName: action.payload.firstName
+            }
+        case editLastname.UPDATE:
+            return {
+                ...state,
+                lastName: action.payload.lastName
+            }    
         case editGender.UPDATE:
             return {
                 ...state,

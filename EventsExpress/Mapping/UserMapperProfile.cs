@@ -66,7 +66,9 @@ namespace EventsExpress.Mapping
                 .ForMember(dest => dest.Gender, opts => opts.MapFrom(src => src.Gender))
                 .ForMember(dest => dest.CanChangePassword, opts => opts.MapFrom(src => src.CanChangePassword))
                 .ForMember(dest => dest.BookmarkedEvents, opts => opts.MapFrom(src => src.BookmarkedEvents))
-                .ForMember(dest => dest.Location, opts => opts.MapFrom(src => MapLocationUser(src)));
+                .ForMember(dest => dest.Location, opts => opts.MapFrom(src => MapLocationUser(src)))
+                .ForMember(dest => dest.FirstName, opts => opts.MapFrom(src => src.FirstName))
+                .ForMember(dest => dest.LastName, opts => opts.MapFrom(src => src.LastName));
 
             void MapUsername<T>(IMemberConfigurationExpression<UserDto, T, string> options)
             {
