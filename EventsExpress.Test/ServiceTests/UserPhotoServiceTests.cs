@@ -57,7 +57,7 @@ namespace EventsExpress.Core.Services
         [Test]
         public void AddUserPhoto_ValidFormFile_DoesNotThrows()
         {
-            string testFilePath = @"./Images/valid-event-image.jpg";
+            string testFilePath = @"./Images/valid-user-image.jpg";
             using var stream = new MemoryStream();
             var file = PhotoHelpers.GetPhoto(testFilePath, stream);
             Guid id = Guid.NewGuid();
