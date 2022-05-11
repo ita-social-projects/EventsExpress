@@ -6,6 +6,7 @@ using Azure;
 using EventsExpress.Controllers;
 using EventsExpress.Core.DTOs;
 using EventsExpress.Core.IServices;
+using EventsExpress.Db.Bridge;
 using EventsExpress.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -23,6 +24,7 @@ namespace EventsExpress.Test.ControllerTests
         private UserDto _userDto;
         private Guid _idUser = Guid.NewGuid();
         private string _userEmail = "user@gmail.com";
+        private Mock<ISecurityContext> mockSecurityContextService;
 
         [SetUp]
         protected void Initialize()
@@ -35,10 +37,8 @@ namespace EventsExpress.Test.ControllerTests
 
             photoService = new Mock<IUserPhotoService>();
             userService = new Mock<IUserService>();
+            mockSecurityContextService = new Mock<ISecurityContext>();
 
-            // photoService
-            //   .Setup(p => p.GetPhotoFromAzureBlob(It.IsAny<string>()))
-            //   .Returns(Task.FromResult(new byte[] { 0 }));
             photoService
                 .Setup(p => p.GetUserPhoto(It.IsAny<Guid>()))
                 .Returns(Task.FromResult(new byte[] { 0 }));
@@ -61,6 +61,7 @@ namespace EventsExpress.Test.ControllerTests
             var file = new FormFile(new MemoryStream(Encoding.UTF8.GetBytes("This is a dummy file")), 0, 0, "Data", "dummy.txt");
 
             UserPhotoViewModel photoModel = new UserPhotoViewModel() { Photo = file };
+            mockSecurityContextService.Setup(s => s.GetCurrentUserId()).Returns(_userDto.Id);
 
             var res = await controller.ChangeAvatar(_userDto.Id, photoModel);
 
@@ -69,7 +70,7 @@ namespace EventsExpress.Test.ControllerTests
             OkObjectResult okResult = res as OkObjectResult;
             Assert.IsNotNull(okResult);
             Assert.AreEqual(200, okResult.StatusCode);
-            userService.Verify(user => user.ChangeAvatar(_userDto.Id, It.IsAny<IFormFile>()), Times.Exactly(1));
+            userService.Verify(user => user.ChangeAvatar(It.IsAny<IFormFile>()), Times.Exactly(1));
         }
 
         [Test]

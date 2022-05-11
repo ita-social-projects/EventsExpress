@@ -188,8 +188,6 @@ namespace EventsExpress.Test.ControllerTests
             Assert.AreEqual(200, okResult.StatusCode);
         }
 
-       
-
         [Test]
         [Category("EditUserCategory")]
         public async Task EditUserCategory_UserDto_OkObjectResultAsync()
