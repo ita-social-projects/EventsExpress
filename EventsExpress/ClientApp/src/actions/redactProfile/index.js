@@ -5,3 +5,5 @@ export { editGender } from './gender-edit-action';
 export { editUsername } from './userName-edit-action';
 export { changeAvatar } from './avatar-change-action';
 export { editLocation}  from './userLocation-edit-action';
+export { editFirstname } from './userFirstname-edit-action';
+export { editLastname } from './userLastname-edit-action';

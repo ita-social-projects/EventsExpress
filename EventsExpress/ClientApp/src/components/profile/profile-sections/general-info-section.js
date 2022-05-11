@@ -8,6 +8,8 @@ import EditUsernameContainer from '../../../containers/editProfileContainers/edi
 import EditGenderContainer from '../../../containers/editProfileContainers/editGenderContainer';
 import EditBirthdayContainer from '../../../containers/editProfileContainers/editBirthdayContainer';
 import EditLocationContainer from "../../../containers/editProfileContainers/editLocationContainer";
+import EditFirstnameContainer  from "../../../containers/editProfileContainers/editFirstnameContainer";
+import EditLastnameContainer from "../../../containers/editProfileContainers/editLastnameContainer";
 
 const useStyles = makeStyles(theme => ({
     sectionContent: {
@@ -58,10 +60,10 @@ const GeneralInfoSection = (props) => {
                     <h3>General information</h3>
                 </div>
                 <div className={classes.blockStyle}>
-                    <InfoField fieldName={"Name"} info={props.name} editContainer={EditUsernameContainer} displayEditButton={true} showEdit ={true} />
+                    <InfoField fieldName={"First Name"} info={props.firstName} editContainer={EditFirstnameContainer} displayEditButton={true} showEdit ={true} />
                 </div>
                 <div className={classes.blockStyle}>
-                    <InfoField fieldName={"Surname"} info={props.name} />
+                    <InfoField fieldName={"Last Name"} info={props.lastName} editContainer ={EditLastnameContainer} displayEditButton ={true} showEdit ={true}/>
                 </div>
                 <div className={classes.blockStyle}>
                     <InfoField fieldName={"Date of birth"} info={birthday} editContainer={EditBirthdayContainer} displayEditButton={true} showEdit ={true}/>

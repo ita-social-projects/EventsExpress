@@ -18,6 +18,8 @@ const initialState = {
     user: {
         id: null,
         name: null,
+        firstname: null,
+        lastname: null,
         email: null,
         phone: null,
         birthday: null,

@@ -1,20 +1,19 @@
-﻿import React from 'react';
+import React from 'react';
 import { Field, reduxForm } from 'redux-form';
 import IconButton from "@material-ui/core/IconButton";
-import Button from "@material-ui/core/Button";
 import ErrorMessages from '../../shared/errorMessage';
 import { renderTextField } from '../../helpers/form-helpers';
 import './editFieldsStyles.css';
 
-const EditUsername = props => {
+const EditFirstname = props => {
     const { handleSubmit, pristine, reset, submitting, onClose } = props;
     return (
         <form onSubmit={handleSubmit} className='field'>
             <div className='content'>
                 <Field
-                    name="userName"
+                    name="firstName"
                     component={renderTextField}
-                    label="UserName"
+                    label="FirstName"
                 />
                 {
                     props.error &&
@@ -34,6 +33,6 @@ const EditUsername = props => {
 };
 
 export default reduxForm({
-    form: 'EditUsername',
+    form: 'EditFirstname',
     
-})(EditUsername);
+})(EditFirstname);

@@ -57,4 +57,12 @@ export default class UserService {
         type: 0,
         onlineMeeting : null
     });
+
+    setFirstname = data => baseService.setResource('Users/EditFirstName',{
+        firstName : data.firstName
+    });
+
+    setLastname = data => baseService.setResource('Users/EditLastName',{
+        lastName: data.lastName
+    });
 }
