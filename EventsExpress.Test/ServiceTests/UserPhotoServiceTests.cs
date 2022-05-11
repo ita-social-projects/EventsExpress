@@ -73,13 +73,5 @@ namespace EventsExpress.Core.Services
 
             Assert.IsInstanceOf<byte[]>(result.Result);
         }
-
-        [Test]
-        public async Task GetUserPhoto_PassEmptyGuid_MustReturnArrayWithZeroSize()
-        {
-            var res = await UserPhotoService.GetUserPhoto(Guid.Empty);
-
-            Assert.That(res.Length == 0);
-        }
     }
 }

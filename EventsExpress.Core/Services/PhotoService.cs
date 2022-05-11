@@ -33,7 +33,7 @@ namespace EventsExpress.Core.Services
             return ms.ToArray();
         }
 
-        protected byte[] GetResizedBytesFromFile(IFormFile file, int newWidth)
+        protected static byte[] GetResizedBytesFromFile(IFormFile file, int newWidth)
         {
             using var memoryStream = file.ToMemoryStream();
             var oldBitMap = new FreeImageBitmap(memoryStream);
@@ -45,7 +45,7 @@ namespace EventsExpress.Core.Services
             return ImageToByteArray(newBitmap);
         }
 
-        protected byte[] GetBytesFromFile(IFormFile file)
+        protected static byte[] GetBytesFromFile(IFormFile file)
         {
             using var memoryStream = file.ToMemoryStream();
             var bitMap = new FreeImageBitmap(memoryStream);
