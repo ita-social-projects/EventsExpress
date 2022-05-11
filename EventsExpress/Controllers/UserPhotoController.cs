@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using EventsExpress.Core.IServices;
+using EventsExpress.ExtensionMethods;
 using EventsExpress.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
@@ -34,9 +35,15 @@ namespace EventsExpress.Controllers
         [HttpPost("[action]/{id:Guid}")]
         public async Task<IActionResult> DeleteUserPhoto(Guid id)
         {
-            await _userPhotoService.DeleteUserPhoto(id);
-
-            return Ok();
+            try
+            {
+                await _userPhotoService.DeleteUserPhoto(id);
+                return Ok();
+            }
+            catch (Azure.RequestFailedException)
+            {
+                return BadRequest();
+            }
         }
 
         /// <summary>
@@ -50,18 +57,13 @@ namespace EventsExpress.Controllers
         [HttpPost("[action]/{userId:Guid}")]
         public async Task<IActionResult> ChangeAvatar(Guid userId, [FromForm] UserPhotoViewModel avatar)
         {
-            if (ModelState.IsValid)
-            {
-                await _userService.ChangeAvatar(avatar.Photo);
+            ModelState.ThrowIfInvalid("Photo is invalid");
 
-                var updatedPhoto = await _userPhotoService.GetUserPhoto(userId);
+            await _userService.ChangeAvatar(avatar.Photo);
 
-                return Ok(updatedPhoto);
-            }
-            else
-            {
-                return BadRequest();
-            }
+            var updatedPhoto = await _userPhotoService.GetUserPhoto(userId);
+
+            return Ok(updatedPhoto);
         }
     }
 }

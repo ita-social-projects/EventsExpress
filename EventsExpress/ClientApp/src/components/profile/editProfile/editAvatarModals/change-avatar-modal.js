@@ -46,7 +46,7 @@ export default function ChangeAvatarModal(props) {
           </IconButton>
         </DialogTitle>
         <DialogContent>
-          <ChangeAvatarWrapper></ChangeAvatarWrapper>
+          <ChangeAvatarWrapper/>
         </DialogContent>
       </Dialog>
     </>

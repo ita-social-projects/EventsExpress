@@ -110,6 +110,7 @@ export default function EditAvatarModal(props) {
               height="200px"
               name={props.name}
               userId={props.id}
+              variant="square"
             />
             <div>
               <Button

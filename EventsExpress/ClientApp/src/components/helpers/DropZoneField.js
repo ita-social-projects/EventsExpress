@@ -1,13 +1,13 @@
-import React, { Component, Fragment } from 'react';
-import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
-import DropZone from 'react-dropzone';
-import Button from '@material-ui/core/Button';
-import ImagePreview from './ImagePreview';
-import Placeholder from './Placeholder';
-import renderFieldError from './form-helpers/render-field-error';
-import ValidateImage from '../helpers/validators/ValidateImage';
-import { setErrorAlert } from '../../actions/alert-action';
+import React, { Component, Fragment } from "react";
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
+import DropZone from "react-dropzone";
+import Button from "@material-ui/core/Button";
+import ImagePreview from "./ImagePreview";
+import Placeholder from "./Placeholder";
+import renderFieldError from "./form-helpers/render-field-error";
+import ValidateImage from "../helpers/validators/ValidateImage";
+import { setErrorAlert } from "../../actions/alert-action";
 
 class DropZoneField extends Component {
   state = {
@@ -46,7 +46,7 @@ class DropZoneField extends Component {
       }
     }
   };
-       
+
   handleOnCrop = async (croppedImage) => {
     URL.revokeObjectURL(this.state.imagefile[0].preview);
     const file = new File(croppedImage, "image.jpg", { type: "image/jpeg" });
@@ -107,7 +107,10 @@ class DropZoneField extends Component {
               </DropZone>
             </div>
           )}
-          <Button
+          
+        </div>
+        {renderFieldError({ touched, error })}
+        <Button
             className="mt-3"
             type="button"
             color="primary"
@@ -117,8 +120,6 @@ class DropZoneField extends Component {
           >
             Clear
           </Button>
-        </div>
-        {renderFieldError({ touched, error })}
       </div>
     );
   }

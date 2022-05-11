@@ -2,7 +2,6 @@ import React from "react";
 import DropZoneField from "../../helpers/DropZoneField";
 import { reduxForm, Field } from "redux-form";
 import Button from "@material-ui/core/Button";
-import ErrorMessages from "../../shared/errorMessage";
 import PhotoService from "../../../services/PhotoService";
 import { UserImageResizer } from "../../helpers/image-resizer";
 
@@ -31,13 +30,11 @@ let ChangeAvatar = (props) => {
         loadImage={() => photoService.getUserPhoto(props.initialValues.userId)}
         imageResizer={UserImageResizer}
       />
-      {props.error && (
-        <ErrorMessages error={props.error} className="text-center" />
-      )}
       <div>
         <Button
           color="primary"
           type="submit"
+          style={{top: "2px"}}
           disabled={pristine || submitting || invalid}
         >
           Submit

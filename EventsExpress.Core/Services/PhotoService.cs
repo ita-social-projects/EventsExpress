@@ -88,7 +88,14 @@ namespace EventsExpress.Core.Services
 
         protected async Task DeletePhotoFromAzureBlob(string url)
         {
-            await _blobContainerClient.DeleteBlobIfExistsAsync(url);
+            try
+            {
+                await _blobContainerClient.DeleteBlobAsync(url);
+            }
+            catch (Azure.RequestFailedException)
+            {
+                throw;
+            }
         }
     }
 }
