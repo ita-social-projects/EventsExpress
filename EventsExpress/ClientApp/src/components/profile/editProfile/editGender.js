@@ -28,9 +28,6 @@ let EditGender = props => {
             </div>
             
             <div className='editFieldButtons'>
-                {/* <Button type="submit" color="primary" disabled={pristine || submitting}>
-                    Submit
-                </Button> */}
                 <IconButton className="text-success" size="small" type="submit" disabled={pristine || submitting} >
                         <i className="fas fa-check" />
                 </IconButton>

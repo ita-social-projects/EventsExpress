@@ -60,21 +60,6 @@ const EditBirthday = ({ handleSubmit, pristine, reset, submitting, error, onClos
                 <IconButton className="text-danger" size="small" onClick={reset && onClose}>
                     <i className="fas fa-times" />
                 </IconButton>
-                {/* <Button
-                    type="submit"
-                    color="primary"
-                    disabled={pristine || submitting}
-                >
-                    Submit
-                </Button>
-                <Button
-                    type="button"
-                    color="primary"
-                    disabled={pristine || submitting}
-                    onClick={reset}
-                >
-                    Clear
-                </Button> */}
             </div>
         </form>
     );
