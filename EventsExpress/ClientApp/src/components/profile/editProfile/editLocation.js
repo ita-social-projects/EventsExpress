@@ -5,7 +5,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { reduxForm, Field} from 'redux-form';
 import { useMediaQuery, useTheme } from '@material-ui/core';
-import LocationByMap from '../../../location/location_map';
+import LocationByMap from '../../location/location_map';
 
 
 const EditLocation = (props) => {

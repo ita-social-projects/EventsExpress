@@ -8,7 +8,6 @@ import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import EditUsernameContainer from '../../containers/editProfileContainers/editUsernameContainer';
 import EditGenderContainer from '../../containers/editProfileContainers/editGenderContainer';
 import EditBirthdayContainer from '../../containers/editProfileContainers/editBirthdayContainer';
 import ChangePasswordContainer from '../../containers/editProfileContainers/changePasswordContainer';

@@ -21,12 +21,7 @@ let EditGender = props => {
                     <option value="2">Female</option>
                     <option value="3">Other</option>
                 </Field>
-                {
-                    props.error &&
-                    <ErrorMessages error={props.error} className="text-center" />
-                }
             </div>
-            
             <div className='editFieldButtons'>
                 <IconButton className="text-success" size="small" type="submit" disabled={pristine || submitting} >
                         <i className="fas fa-check" />
@@ -40,5 +35,5 @@ let EditGender = props => {
 };
 
 export default reduxForm({
-    form: "EditGender"    
+    form: "EditGender"
 })(EditGender);

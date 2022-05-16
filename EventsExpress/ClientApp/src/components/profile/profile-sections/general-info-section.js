@@ -4,7 +4,6 @@ import { Button } from '@material-ui/core';
 import { InfoField } from "./info-field";
 import { connect } from 'react-redux';
 import DisplayLocation from '../../event/map/display-location';
-import EditUsernameContainer from '../../../containers/editProfileContainers/editUsernameContainer';
 import EditGenderContainer from '../../../containers/editProfileContainers/editGenderContainer';
 import EditBirthdayContainer from '../../../containers/editProfileContainers/editBirthdayContainer';
 import EditLocationContainer from "../../../containers/editProfileContainers/editLocationContainer";

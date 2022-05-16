@@ -3,6 +3,9 @@ import { Component } from 'react';
 import { connect } from 'react-redux';
 import EditLastname from '../../components/profile/editProfile/editLastname';
 import edit_Lastname from '../../actions/redactProfile/userLastname-edit-action';
+import EditProfilePropertyWrapper from '../../components/profile/editProfile/editProfilePropertyWrapper';
+import { renderTextField } from '../../components/helpers/form-helpers';
+import { Field } from 'redux-form';
 
 
 class EditLastnameContainer extends Component{
@@ -11,7 +14,13 @@ class EditLastnameContainer extends Component{
     }
 
     render(){
-        return <EditLastname onSubmit ={this.submit} onClose = {this.props.close}/>
+        return <EditProfilePropertyWrapper onSubmit ={this.submit} onClose = {this.props.close}>
+            <Field
+                    name="lastName"
+                    component={renderTextField}
+                    label="LastName"
+                />
+        </EditProfilePropertyWrapper>
     }
 }
 const mapStateToProps = state => {

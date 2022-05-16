@@ -6,67 +6,29 @@ import moment from 'moment';
 import ErrorMessages from '../../shared/errorMessage';
 import { renderDatePicker, parseEuDate } from '../../helpers/form-helpers';
 import { fieldIsRequired } from '../../helpers/validators/required-fields-validator';
+import './editFieldsStyles.css'
+import EditBaseProfile from './editProfilePropertyWrapper';
 
-const today = () => moment().startOf('day');
+// //EditProfilePropertyWrapper
+// const EditBirthday = (props) => {
+//     const { handleSubmit, pristine, reset, submitting, onClose } = props;
 
-const MIN_AGE = 14;
-const MAX_AGE = 115;
-const MIN_DATE = today().subtract(MAX_AGE, 'years');
-const MAX_DATE = today().subtract(MIN_AGE, 'years');
+//     return (
+//         <EditBaseProfile handleSubmit= {handleSubmit} pristine ={pristine} reset = {reset} submitting ={submitting} onClose ={onClose}>     
+//                 <Field
+//                     name="birthday"
+//                     label="Birthday"
+//                     minValue={MIN_DATE}
+//                     maxValue={MAX_DATE}
+//                     component={renderDatePicker}
+//                     parse={parseEuDate}
+//                 />
+//          </EditBaseProfile>
+//     )
+// };
 
-const validate = values => {
-    const errors = {};
-    const requiredFields = ['birthday'];
-
-    if (values.birthday === undefined) {
-        return fieldIsRequired(values, requiredFields);
-    }
-
-    const dateOfBirth = moment(values.birthday);
-    if (values.birthday === null || dateOfBirth > today()) {
-        errors.birthday = 'It is possible to use only valid date of birth';
-    } else if (dateOfBirth > MAX_DATE) {
-        errors.birthday = 'You must be 14 years old or over to use the website';
-    } else if (dateOfBirth <= MIN_DATE) {
-        errors.birthday = 'You must be less than 115 years old to use the website';
-    }
-    
-    return errors;
-};
-
-const EditBirthday = ({ handleSubmit, pristine, reset, submitting, error, onClose }) => {
-    return (
-        <form onSubmit={handleSubmit}>
-            <div>
-                <Field
-                    name="birthday"
-                    label="Birthday"
-                    minValue={MIN_DATE}
-                    maxValue={MAX_DATE}
-                    component={renderDatePicker}
-                    parse={parseEuDate}
-                />
-                {error && (
-                    <ErrorMessages
-                        error={error}
-                        className="text-center"
-                    />
-                )}
-            </div>
-            <div className='editFieldButtons'>
-                <IconButton className="text-success" size="small" type="submit" disabled={pristine || submitting} >
-                        <i className="fas fa-check" />
-                </IconButton>
-                <IconButton className="text-danger" size="small" onClick={reset && onClose}>
-                    <i className="fas fa-times" />
-                </IconButton>
-            </div>
-        </form>
-    );
-};
-
-export default reduxForm({
-    form: 'EditBirthday',
-    touchOnChange: true,
-    validate,
-})(EditBirthday);
+// export default reduxForm({
+//     form: 'EditBirthday',
+//     touchOnChange: true,
+//     validate,
+// })(EditBirthday);

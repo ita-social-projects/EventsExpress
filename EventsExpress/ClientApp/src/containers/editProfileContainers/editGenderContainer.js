@@ -2,13 +2,27 @@
 import EditGender from "../../components/profile/editProfile/editGender";
 import { connect } from "react-redux";
 import edit_Gender from "../../actions/redactProfile/gender-edit-action";
-
+import EditProfilePropertyWrapper from "../../components/profile/editProfile/editProfilePropertyWrapper";
+import { Field } from "redux-form";
+import { renderSelectField } from "../../components/helpers/form-helpers";
 class EditGenderContainer extends React.Component {
     submit = value => {
        return this.props.editGender(value).then(this.props.close);
     }
     render() {
-        return <EditGender onSubmit={this.submit} onClose = {this.props.close} />;
+        return <EditProfilePropertyWrapper onSubmit={this.submit} onClose = {this.props.close}>
+            <Field
+                    minWidth={210}
+                    name="gender"
+                    component={renderSelectField}
+                    label="Gender"
+                >
+                    <option aria-label="None" value="" />
+                    <option value="1">Male</option>
+                    <option value="2">Female</option>
+                    <option value="3">Other</option>
+            </Field>
+        </EditProfilePropertyWrapper>;
     }
 }
 

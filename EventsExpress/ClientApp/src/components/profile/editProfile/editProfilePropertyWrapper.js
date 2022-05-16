@@ -1,15 +1,18 @@
 import React from 'react';
-import { Field, reduxForm } from 'redux-form';
-import IconButton from "@material-ui/core/IconButton";
-import ErrorMessages from '../../shared/errorMessage';
-import { renderTextField } from '../../helpers/form-helpers';
 import './editFieldsStyles.css';
-
-const EditFirstname = props => {
+import { IconButton } from '@material-ui/core';
+import { reduxForm } from 'redux-form';
+import {validate} from '../../../containers/editProfileContainers/validateBirthday'
+const EditProfilePropertyWrapper = (props) => {
     const { handleSubmit, pristine, reset, submitting, onClose } = props;
+
     return (
-        <form onSubmit={handleSubmit} className='field'>
-            
+        <form onSubmit ={handleSubmit} >
+            <div className="content">
+                {
+                    props.children
+                }
+            </div>
             <div className='editFieldButtons'>
                 <IconButton className="text-success" size="small" type="submit" disabled={pristine || submitting} >
                         <i className="fas fa-check" />
@@ -19,10 +22,10 @@ const EditFirstname = props => {
                 </IconButton>
             </div>
         </form>
-    );
-};
+    )
+}
 
 export default reduxForm({
-    form: 'EditFirstname',
-    
-})(EditFirstname);
+    form: 'EditProfile',
+    validate
+})(EditProfilePropertyWrapper)
