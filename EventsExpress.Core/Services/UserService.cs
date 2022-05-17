@@ -242,6 +242,26 @@ namespace EventsExpress.Core.Services
             await Context.SaveChangesAsync();
         }
 
+        public async Task EditFirstName(string firstName)
+        {
+            var user = CurrentUser();
+
+            user.FirstName = firstName;
+
+            Context.Update(user);
+            await Context.SaveChangesAsync();
+        }
+
+        public async Task EditLastName(string lastName)
+        {
+            var user = CurrentUser();
+
+            user.LastName = lastName;
+
+            Context.Update(user);
+            await Context.SaveChangesAsync();
+        }
+
         public async Task EditLocation(LocationDto location)
         {
             var user = CurrentUser();

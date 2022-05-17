@@ -349,5 +349,33 @@ namespace EventsExpress.Controllers
             await _userService.EditLocation(_mapper.Map<LocationViewModel, LocationDto>(location));
             return Ok(location);
         }
+
+        /// <summary>
+        /// This method edit FirstName User.
+        /// </summary>
+        /// <param name="firstNameViewModel">New FirstName.</param>
+        /// <response code = "200">Edit is successful.</response>
+        /// <response code = "400">Edit is not successful.</response>
+        /// <returns>The method returns Ok status.</returns>
+        [HttpPost("[action]")]
+        public async Task<IActionResult> EditFirstName(EditFirstNameViewModel firstNameViewModel)
+        {
+            await _userService.EditFirstName(firstNameViewModel.FirstName);
+            return Ok();
+        }
+
+        /// <summary>
+        /// This method edit LastName User.
+        /// </summary>
+        /// <param name="lastNameViewModel">New LastName.</param>
+        /// <response code = "200">Edit is successful.</response>
+        /// <response code = "400">Edit is not successful.</response>
+        /// <returns>The method returns Ok status.</returns>
+        [HttpPost("[action]")]
+        public async Task<IActionResult> EditLastName(EditLastNameViewModel lastNameViewModel)
+        {
+            await _userService.EditLastName(lastNameViewModel.LastName);
+            return Ok();
+        }
     }
 }

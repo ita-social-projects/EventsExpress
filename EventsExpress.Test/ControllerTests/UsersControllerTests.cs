@@ -17,6 +17,7 @@ using EventsExpress.ViewModels;
 using EventsExpress.ViewModels.Base;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.Differencing;
 using Microsoft.Extensions.Primitives;
 using Moq;
 using NUnit.Framework;
@@ -45,8 +46,12 @@ namespace EventsExpress.Test.ControllerTests
         private EditUserBirthViewModel _editUserBirthViewModel;
         private DateTime _birthdeay = new DateTime(2000, 9, 6);
         private EditUserNameViewModel _editUserNameViewModel;
+        private EditFirstNameViewModel _editFirstNameViewModel;
+        private EditLastNameViewModel _editLastNameViewModel;
         private LocationViewModel _editLocationViewModel;
         private string _userName = "some name of user";
+        private string _firstName = "some firstName of user";
+        private string _lastName = "some lastName of user";
         private UsersFilterViewModel _usersFilterViewModel;
         private int _pageSize = 5;
         private int _page = 8;
@@ -108,6 +113,8 @@ namespace EventsExpress.Test.ControllerTests
             _editUserGenderViewModel = new EditUserGenderViewModel { Gender = _gender };
             _editUserBirthViewModel = new EditUserBirthViewModel { Birthday = _birthdeay };
             _editUserNameViewModel = new EditUserNameViewModel { Name = _userName };
+            _editFirstNameViewModel = new EditFirstNameViewModel { FirstName = _firstName };
+            _editLastNameViewModel = new EditLastNameViewModel { LastName = _lastName };
             _editLocationViewModel = new LocationViewModel { Latitude = 0.0, Longitude = 0.0, Type = LocationType.Map, };
             _usersFilterViewModel = new UsersFilterViewModel { Page = _page, PageSize = _pageSize };
             var user = new ClaimsPrincipal(new ClaimsIdentity());
@@ -257,6 +264,32 @@ namespace EventsExpress.Test.ControllerTests
             Assert.DoesNotThrowAsync(() => Task.FromResult(res));
             Assert.IsInstanceOf<OkResult>(res);
             _userService.Verify(us => us.EditUserName(It.IsAny<string>()), Times.Exactly(1));
+        }
+
+        [Test]
+        [Category("EditUserFirstName")]
+        public async Task EditFirstName_UserDto_OkObjectResultAsync()
+        {
+            _userService.Setup(user => user.EditFirstName(It.IsAny<string>()));
+
+            var res = await _usersController.EditFirstName(_editFirstNameViewModel);
+
+            Assert.DoesNotThrowAsync(() => Task.FromResult(res));
+            Assert.IsInstanceOf<OkResult>(res);
+            _userService.Verify(us => us.EditFirstName(It.IsAny<string>()), Times.Exactly(1));
+        }
+
+        [Test]
+        [Category("EditUserLastName")]
+        public async Task EditLastName_UserDto_OkObjectResultAsync()
+        {
+            _userService.Setup(user => user.EditLastName(It.IsAny<string>()));
+
+            var res = await _usersController.EditLastName(_editLastNameViewModel);
+
+            Assert.DoesNotThrowAsync(() => Task.FromResult(res));
+            Assert.IsInstanceOf<OkResult>(res);
+            _userService.Verify(us => us.EditLastName(It.IsAny<string>()), Times.Exactly(1));
         }
 
         [Test]
