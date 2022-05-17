@@ -19,7 +19,6 @@ class EditBirthdayContainer extends React.Component {
     }
     render() {
         let Element = EditProfileHOC("EditBirthday");
-        console.log(this.props)
         return <Element onSubmit ={this.submit} onClose ={this.props.close} initialValues ={this.props}>
                 <Field
                         name="birthday"
