@@ -1,12 +1,10 @@
 import React from 'react'
 import { Component } from 'react';
 import { connect } from 'react-redux';
-import EditLastname from '../../components/profile/editProfile/editLastname';
 import edit_Lastname from '../../actions/redactProfile/userLastname-edit-action';
 import { renderTextField } from '../../components/helpers/form-helpers';
 import { Field } from 'redux-form';
 import EditProfileHOC from '../../components/profile/editProfile/editProfilePropertyWrapper';
-import {EditProfilePropertyWrapper} from '../../components/profile/editProfile/editProfilePropertyWrapper'
 
 class EditLastnameContainer extends Component{
     submit = value =>{

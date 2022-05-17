@@ -2,7 +2,6 @@ import React from 'react'
 import { Component } from 'react'
 import { connect } from 'react-redux'
 import edit_Firstname from '../../actions/redactProfile/userFirstname-edit-action'
-import EditProfilePropertyWrapper from '../../components/profile/editProfile/editProfilePropertyWrapper';
 import { Field } from 'redux-form';
 import { renderTextField } from '../../components/helpers/form-helpers';
 import EditProfileHOC from '../../components/profile/editProfile/editProfilePropertyWrapper';
