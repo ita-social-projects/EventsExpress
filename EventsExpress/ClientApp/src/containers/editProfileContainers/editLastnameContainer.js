@@ -3,10 +3,10 @@ import { Component } from 'react';
 import { connect } from 'react-redux';
 import EditLastname from '../../components/profile/editProfile/editLastname';
 import edit_Lastname from '../../actions/redactProfile/userLastname-edit-action';
-import EditProfilePropertyWrapper from '../../components/profile/editProfile/editProfilePropertyWrapper';
 import { renderTextField } from '../../components/helpers/form-helpers';
 import { Field } from 'redux-form';
-
+import EditProfileHOC from '../../components/profile/editProfile/editProfilePropertyWrapper';
+import {EditProfilePropertyWrapper} from '../../components/profile/editProfile/editProfilePropertyWrapper'
 
 class EditLastnameContainer extends Component{
     submit = value =>{
@@ -14,18 +14,20 @@ class EditLastnameContainer extends Component{
     }
 
     render(){
-        return <EditProfilePropertyWrapper onSubmit ={this.submit} onClose = {this.props.close}>
+        let Element = EditProfileHOC("EditLastname");
+        return <Element onSubmit ={this.submit} onClose = {this.props.close} initialValues ={this.props}>
             <Field
                     name="lastName"
                     component={renderTextField}
                     label="LastName"
                 />
-        </EditProfilePropertyWrapper>
+        </Element>
     }
 }
-const mapStateToProps = state => {
-    return state.editLastname;
-}
+const mapStateToProps = state => ( {
+    lastName : state.user.lastName
+})
+
   
 const mapDispatchToProps = dispatch =>{
     return{

@@ -3,11 +3,14 @@ import './editFieldsStyles.css';
 import { IconButton } from '@material-ui/core';
 import { reduxForm } from 'redux-form';
 import {validate} from '../../../containers/editProfileContainers/validateBirthday'
+
+
 const EditProfilePropertyWrapper = (props) => {
+     
     const { handleSubmit, pristine, reset, submitting, onClose } = props;
 
     return (
-        <form onSubmit ={handleSubmit} >
+        <form onSubmit ={handleSubmit}>
             <div className="content">
                 {
                     props.children
@@ -25,7 +28,11 @@ const EditProfilePropertyWrapper = (props) => {
     )
 }
 
-export default reduxForm({
-    form: 'EditProfile',
-    validate
-})(EditProfilePropertyWrapper)
+
+export default function EditProfileHOC(name){
+    return reduxForm({
+        form : name,
+        validate
+    })(EditProfilePropertyWrapper)
+}
+

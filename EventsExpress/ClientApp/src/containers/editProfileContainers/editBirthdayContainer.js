@@ -1,11 +1,11 @@
 ﻿import React from "react";
 import { connect } from "react-redux";
 import editBirthday from "../../actions/redactProfile/birthday-edit-action";
-import EditProfilePropertyWrapper from "../../components/profile/editProfile/editProfilePropertyWrapper";
 import moment from 'moment';
 import { Field } from "redux-form";
 import { renderDatePicker } from "../../components/helpers/form-helpers";
 import { parseEuDate } from "../../components/helpers/form-helpers";
+import EditProfileHOC from "../../components/profile/editProfile/editProfilePropertyWrapper";
 const today = () => moment().startOf('day');
 
 const MIN_AGE = 14;
@@ -18,7 +18,9 @@ class EditBirthdayContainer extends React.Component {
         return this.props.editBirthday(value).then(this.props.close);
     }
     render() {
-        return <EditProfilePropertyWrapper onSubmit ={this.submit} onClose ={this.props.close}>
+        let Element = EditProfileHOC("EditBirthday");
+        console.log(this.props)
+        return <Element onSubmit ={this.submit} onClose ={this.props.close} initialValues ={this.props}>
                 <Field
                         name="birthday"
                         label="Birthday"
@@ -27,13 +29,13 @@ class EditBirthdayContainer extends React.Component {
                         component={renderDatePicker}
                         parse={parseEuDate}
                     />
-            </EditProfilePropertyWrapper>;
+            </Element>;
     }
 }
 
-const mapStateToProps = state => {
-    return state.editBirthday;
-};
+const mapStateToProps = state => ({
+    birthday : state.user.birthday
+})
 
 const mapDispatchToProps = dispatch => {
     return {
