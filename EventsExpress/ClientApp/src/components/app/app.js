@@ -39,6 +39,7 @@ import MainLayout from '../MainLayout';
 import privacy from '../privacy/privacy.js';
 import About from "../about/about.js";
 import Terms from '../terms/terms.js';
+import Scroller from "../scroller"
 
 
 class App extends Component {
@@ -55,6 +56,7 @@ class App extends Component {
     render() {
         return (
             <BrowserRouter>
+            <Scroller>
             <MainLayout>
                 <Switch>
                     <Route path="/landing" component={LandingWrapper} />
@@ -105,6 +107,7 @@ class App extends Component {
                     </Route>
                 </Switch>
                 </MainLayout>
+                </Scroller>
             </BrowserRouter>
         );
     }
