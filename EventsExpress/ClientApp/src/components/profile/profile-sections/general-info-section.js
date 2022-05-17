@@ -13,30 +13,30 @@ import EditLastnameContainer from "../../../containers/editProfileContainers/edi
 import ProfileAvatar from "./profile-avatar"
 
 const useStyles = makeStyles((theme) => ({
-  sectionContent: {
-    position: "relative",
-    display: "grid",
-    gridTemplateRows: "1.8fr 2fr",
-    height: "100%",
-    width: "100%",
-  },
-  firstBlockContent: {
-    display: "grid",
-    gridTemplateRows: "7fr 1fr",
-    gridGap: "10px",
-  },
-  secondBlockContent: {
-    display: "grid",
-    backgroundColor: "gray",
-  },
-  blockStyle: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    border: "1px solid black",
-  },
-  editButton: {
-    backgroundColor: "lightgray",
+    sectionContent: {
+        position: "relative",
+        display: "grid",
+        gridTemplateRows: "1.8fr 2fr",
+        height: "100%",
+        width: "100%",
+    },
+    firstBlockContent: {
+        display: "grid",
+        gridTemplateRows: "7fr 1fr",
+        gridGap: "10px",
+    },
+    secondBlockContent: {
+        display: "grid",
+        backgroundColor: "gray",
+    },
+    blockStyle: {
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        border: "1px solid black"
+    },
+    editButton: {
+        backgroundColor: "lightgray",
   },
   avatar: {
     border: "4px solid black",
@@ -93,8 +93,8 @@ const GeneralInfoSection = (props) => {
     );
 }
 
-const mapStateToProps = (state) => {
-  return state.user;
+const mapStateToProps = state => {
+    return state.user;
 };
 
 export default connect(mapStateToProps)(GeneralInfoSection);

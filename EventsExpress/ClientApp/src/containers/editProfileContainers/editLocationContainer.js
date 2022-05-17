@@ -1,6 +1,6 @@
 import React, { Component, useEffect} from 'react'
 import { connect } from 'react-redux'
-import EditLocation from '../../components/profile/editProfile/EditLocationModals/editLocation'
+import EditLocation from '../../components/profile/editProfile/editLocation'
 import edit_Location from '../../actions/redactProfile/userLocation-edit-action'
 
 class EditLocationContainer extends Component{

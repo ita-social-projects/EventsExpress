@@ -1,22 +1,30 @@
 import React from 'react'
 import { Component } from 'react'
 import { connect } from 'react-redux'
-import EditFirstname from '../../components/profile/editProfile/editFirstname';
 import edit_Firstname from '../../actions/redactProfile/userFirstname-edit-action'
-
+import { Field } from 'redux-form';
+import { renderTextField } from '../../components/helpers/form-helpers';
+import EditProfileHOC from '../../components/profile/editProfile/editProfilePropertyWrapper';
 class EditFirstnameContainer extends Component {
   submit = (value) =>{
     return this.props.editFirstname(value).then(this.props.close);
   }
 
   render(){
-    return <EditFirstname onSubmit ={this.submit} onClose = {this.props.close}/>
+    let Element = EditProfileHOC("EditFirstname");
+    return <Element onSubmit ={this.submit} onClose ={this.props.close} initialValues={this.props}>
+                <Field
+                    name="firstName"
+                    component={renderTextField}
+                    label="FirstName"
+                />
+      </Element>
   }
 }
 
-const mapStateToProps = state => {
-  return state.editFirstname;
-}
+const mapStateToProps = state => ({
+  firstName : state.user.firstName
+})
 
 const mapDispatchToProps = dispatch =>{
   return{

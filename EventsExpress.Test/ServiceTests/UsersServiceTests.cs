@@ -438,28 +438,28 @@ namespace EventsExpress.Test.ServiceTests
                 await service.EditUserName(It.IsAny<string>()));
         }
 
-        [Test]
-        public void EditLastName_ExistingUser_DoesNotThrow()
-        {
-            mockSecurityContext.Setup(s => s.GetCurrentUserId()).Returns(existingUserDTO.Id);
+    [Test]
+    public void EditLastName_ExistingUser_DoesNotThrow()
+    {
+        mockSecurityContext.Setup(s => s.GetCurrentUserId()).Returns(existingUserDTO.Id);
 
-            Assert.DoesNotThrowAsync(async () =>
-                    await service.EditLastName(It.IsAny<string>()));
-        }
-
-        [Test]
-        public void EditFirstName_ExistingUser_DoesNotThrow()
-        {
-            mockSecurityContext.Setup(s => s.GetCurrentUserId()).Returns(existingUserDTO.Id);
-
-            Assert.DoesNotThrowAsync(async () =>
-                    await service.EditFirstName(It.IsAny<string>()));
+        Assert.DoesNotThrowAsync(async () =>
+            await service.EditLastName(It.IsAny<string>()));
     }
 
-        [Test]
-        public void EditBirthday_ExistingUser_DoesNotThrow()
-        {
-            mockSecurityContext.Setup(s => s.GetCurrentUserId()).Returns(existingUserDTO.Id);
+    [Test]
+    public void EditFirstName_ExistingUser_DoesNotThrow()
+    {
+        mockSecurityContext.Setup(s => s.GetCurrentUserId()).Returns(existingUserDTO.Id);
+
+        Assert.DoesNotThrowAsync(async () =>
+            await service.EditFirstName(It.IsAny<string>()));
+    }
+
+    [Test]
+    public void EditBirthday_ExistingUser_DoesNotThrow()
+    {
+        mockSecurityContext.Setup(s => s.GetCurrentUserId()).Returns(existingUserDTO.Id);
 
             Assert.DoesNotThrowAsync(async () =>
                     await service.EditBirthday(It.IsAny<DateTime>()));

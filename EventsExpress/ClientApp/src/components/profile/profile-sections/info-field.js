@@ -61,51 +61,37 @@ export const InfoField = ({fieldName, info, editContainer, displayEditButton = f
         }
     }
 
+    const FieldInfoAndName = () =>{
+        return (<>
+                <div className={classes.fieldNameStyle}>
+                    <p className={classes.fontStyle}>{fieldName}</p>
+                </div>
+                <div className={classes.infoBlockStyle}>
+                    <p className={classes.fontStyle}>{info}</p>
+                </div>
+            </>
+        )
+    }
 
     let Element = editContainer;
+
     return(
         <div className={classes.fieldStyle} onClick={openField}>
             {
-                showEdit ? <>
-                    {!isOpen &&
-                        <div className={classes.fieldNameStyle}>
-                            <p className={classes.fontStyle}>{fieldName}</p>
-                        </div>
-                    }
-                    {!isOpen &&
-                        <div className={classes.infoBlockStyle}>
-                            <p className={classes.fontStyle}>{info}</p>
-                        </div>
-                    }
-                    {isOpen &&
-                        <div className={classes.editFieldStyle}>
-                            <Element close = {closeField} isOpen = {isOpen}/>
-                        </div>
-                    }
-                </>:
-                <>
-                    {<>
-                        <div className={classes.fieldNameStyle}>
-                            <p className={classes.fontStyle}>{fieldName}</p>
-                        </div>
-                        <div className={classes.infoBlockStyle}>
-                            <p className={classes.fontStyle}>{info}</p>
-                        </div>
-                    </>
-                    }
-                    {isOpen &&
-                        <div className={classes.editFieldStyle}>
-                            <Element close = {closeField} isOpen = {isOpen}/>
-                        </div>
-                    }
-                </>
+                (showEdit && !isOpen || !showEdit) && <FieldInfoAndName/>
             }
-                {
-                    displayEditButton && !isOpen &&
-                    <IconButton className={classes.editButtonStyle} onClick={() => {setIsOpen(true)}}>
-                        <EditIcon />
-                    </IconButton>
+                {isOpen &&
+                    <div className={classes.editFieldStyle}>
+                        <Element close = {closeField} isOpen = {isOpen}/>
+                    </div>
                 }
+            {
+                displayEditButton && !isOpen &&
+                <IconButton className={classes.editButtonStyle} onClick={() => {setIsOpen(true)}}>
+                    <EditIcon />
+                </IconButton>
+            }
         </div>
     );
 };
+
