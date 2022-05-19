@@ -2,7 +2,7 @@
 {
     using Microsoft.AspNetCore.Http;
 
-    public class PhotoViewModel
+    public class PhotoViewModelBase
     {
         public IFormFile Photo { get; set; }
     }

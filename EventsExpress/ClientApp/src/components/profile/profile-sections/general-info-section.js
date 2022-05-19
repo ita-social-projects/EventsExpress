@@ -1,6 +1,5 @@
 import { makeStyles } from "@material-ui/core";
 import React  from "react";
-import { Button } from '@material-ui/core';
 import { InfoField } from "./info-field";
 import { connect } from 'react-redux';
 import DisplayLocation from '../../event/map/display-location';
@@ -9,15 +8,15 @@ import EditBirthdayContainer from '../../../containers/editProfileContainers/edi
 import EditLocationContainer from "../../../containers/editProfileContainers/editLocationContainer";
 import EditFirstnameContainer  from "../../../containers/editProfileContainers/editFirstnameContainer";
 import EditLastnameContainer from "../../../containers/editProfileContainers/editLastnameContainer";
+import ProfileAvatar from "./profile-avatar"
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
     sectionContent: {
         position: "relative",
         display: "grid",
         gridTemplateRows: "1.8fr 2fr",
         height: "100%",
         width: "100%",
-        gridGap: "20px",
     },
     firstBlockContent: {
         display: "grid",
@@ -36,7 +35,10 @@ const useStyles = makeStyles(theme => ({
     },
     editButton: {
         backgroundColor: "lightgray",
-    }
+  },
+  avatar: {
+    border: "4px solid black",
+  },
 }));
 
 const GeneralInfoSection = (props) => {
@@ -49,10 +51,11 @@ const GeneralInfoSection = (props) => {
     return (
         <div className={classes.sectionContent}>
             <div className={classes.firstBlockContent}>
-                <div className={classes.blockStyle}>
-                    <h1>Picture</h1>
+                <div className={`${classes.blockStyle} ${classes.avatar}`}>
+                    <div>
+                        <ProfileAvatar name={props.name} userId={props.id}></ProfileAvatar>
+                    </div>
                 </div>
-                <Button className={classes.editButton}>Change your photo</Button>
             </div>
             <div className={classes.secondBlockContent}>
                 <div className={classes.blockStyle}>

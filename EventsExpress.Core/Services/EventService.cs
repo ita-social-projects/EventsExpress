@@ -21,7 +21,7 @@ namespace EventsExpress.Core.Services
 {
     public class EventService : BaseService<Event>, IEventService
     {
-        private readonly IPhotoService _photoService;
+        private readonly IEventPhotoService _eventPhotoService;
         private readonly ILocationManager _locationManager;
         private readonly IMediator _mediator;
         private readonly IEventScheduleManager _eventScheduleManager;
@@ -31,13 +31,13 @@ namespace EventsExpress.Core.Services
             AppDbContext context,
             IMapper mapper,
             IMediator mediator,
-            IPhotoService photoService,
+            IEventPhotoService eventPhotoService,
             ILocationManager locationManager,
             IEventScheduleManager eventScheduleManager,
             ISecurityContext securityContextService)
             : base(context, mapper)
         {
-            _photoService = photoService;
+            _eventPhotoService = eventPhotoService;
             _locationManager = locationManager;
             _mediator = mediator;
             _eventScheduleManager = eventScheduleManager;
@@ -207,7 +207,8 @@ namespace EventsExpress.Core.Services
             eventDto.Id = result.Id;
 
             await Context.SaveChangesAsync();
-            await _photoService.ChangeTempToImagePhoto(eventDto.Id);
+
+            await _eventPhotoService.ChangeTempToImagePhoto(eventDto.Id);
 
             return result.Id;
         }
@@ -304,7 +305,7 @@ namespace EventsExpress.Core.Services
             ev.Categories = eventCategories;
 
             await Context.SaveChangesAsync();
-            await _photoService.ChangeTempToImagePhoto(eventDto.Id);
+            await _eventPhotoService.ChangeTempToImagePhoto(eventDto.Id);
             await _mediator.Publish(new OwnEventMessage(eventDto.Id));
             await _mediator.Publish(new JoinedEventMessage(eventDto.Id));
 

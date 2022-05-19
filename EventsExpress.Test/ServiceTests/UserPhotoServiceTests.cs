@@ -1,18 +1,25 @@
-﻿using System.IO;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Net.Http;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using Azure.Storage.Blobs;
-using EventsExpress.Core.Extensions;
-using EventsExpress.Core.Services;
+using Azure.Storage.Blobs.Models;
+using EventsExpress.Test;
 using EventsExpress.Test.ServiceTests.TestClasses.Photo;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.StaticFiles;
 using Moq;
 using NUnit.Framework;
 
-namespace EventsExpress.Test.ServiceTests
+namespace EventsExpress.Core.Services
 {
-    [TestFixture]
-    internal class PhotoServiceTests : TestInitializer
+    internal class UserPhotoServiceTests : TestInitializer
     {
-        public PhotoService PhotoService { get; set; }
+        public UserPhotoService UserPhotoService { get; set; }
 
         private Mock<BlobClient> BlobClientMock { get; set; }
 
@@ -43,25 +50,28 @@ namespace EventsExpress.Test.ServiceTests
             mockBlobContainer
                 .Setup(c => c.GetBlobClient(It.IsAny<string>()))
                 .Returns(BlobClientMock.Object);
+
+            UserPhotoService = new UserPhotoService(mockBlobServiceClient.Object);
         }
 
         [Test]
-        [TestCase(@"./Images/invalidFile.txt")]
-        [TestCase(@"./Images/invalidFile.html")]
-        public void IsImage_FalseValidation(string testFilePath)
+        public void AddUserPhoto_ValidFormFile_DoesNotThrows()
         {
+            string testFilePath = @"./Images/valid-user-image.jpg";
             using var stream = new MemoryStream();
             var file = PhotoHelpers.GetPhoto(testFilePath, stream);
-            Assert.IsFalse(file.IsImage());
+            Guid id = Guid.NewGuid();
+
+            Assert.DoesNotThrowAsync(async () => await UserPhotoService.AddUserPhoto(file, id));
+            BlobClientMock.Verify(x => x.UploadAsync(It.IsAny<MemoryStream>(), It.IsAny<BlobUploadOptions>(), It.IsAny<CancellationToken>()), Times.Once);
         }
 
         [Test]
-        [TestCase(@"./Images/valid-event-image.jpg")]
-        public void IsImage_TrueValidation(string testFilePath)
+        public void GetUserPhoto_GetBytes()
         {
-            using var stream = new MemoryStream();
-            var file = PhotoHelpers.GetPhoto(testFilePath, stream);
-            Assert.IsTrue(file.IsImage());
+            var result = UserPhotoService.GetUserPhoto(Guid.NewGuid());
+
+            Assert.IsInstanceOf<byte[]>(result.Result);
         }
     }
 }

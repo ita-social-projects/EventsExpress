@@ -150,10 +150,11 @@ namespace EventsExpress
 
             services.AddScoped<ILocationManager, LocationManager>();
             services.AddSingleton<ICacheHelper, CacheHelper>();
-            services.AddScoped<IPhotoService, PhotoService>();
+            services.AddScoped<IUserPhotoService, UserPhotoService>();
+            services.AddScoped<IEventPhotoService, EventPhotoService>();
             services.AddScoped<IPasswordHasher, PasswordHasherService>();
             services.AddScoped<INotificationTypeService, NotificationTypeService>();
-            services.Configure<ImageOptionsModel>(Configuration.GetSection("ImageWidths"));
+            services.Configure<EventImageOptionsModel>(Configuration.GetSection("EventPhotoWidths"));
 
             services.AddSingleton<IEmailService, EmailService>();
             services.Configure<EmailOptionsModel>(Configuration.GetSection("EmailSenderOptions"));

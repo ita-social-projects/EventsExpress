@@ -22,15 +22,12 @@ namespace EventsExpress.Controllers
     {
         private readonly IUserService _userService;
         private readonly IMapper _mapper;
-        private readonly IPhotoService _photoService;
 
         public UsersController(
             IUserService userSrv,
-            IMapper mapper,
-            IPhotoService photoService)
+            IMapper mapper)
         {
             _userService = userSrv;
-            _photoService = photoService;
             _mapper = mapper;
         }
 
@@ -220,21 +217,6 @@ namespace EventsExpress.Controllers
             await _userService.EditFavoriteCategories(newCategories);
 
             return Ok();
-        }
-
-        /// <summary>
-        /// This method is to change user avatar.
-        /// </summary>
-        /// <param name="avatar">Param avatar defines the PhotoViewModel model.</param>
-        /// <returns>The method returns edited profile photo.</returns>
-        /// <response code="200">Changing is successful.</response>
-        /// <response code="400">Changing process failed.</response>
-        [HttpPost("[action]")]
-        public async Task<IActionResult> ChangeAvatar([FromForm] PhotoViewModel avatar)
-        {
-            Guid userId = await _userService.ChangeAvatar(avatar.Photo);
-            var updatedPhoto = await _photoService.GetPhotoFromAzureBlob($"users/{userId}/photo.png");
-            return Ok(updatedPhoto);
         }
 
         /// <summary>

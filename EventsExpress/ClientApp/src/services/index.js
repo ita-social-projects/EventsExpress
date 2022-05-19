@@ -16,6 +16,7 @@ import TrackService from './TrackService';
 import ConfigService from './ConfigService'
 import UnitOfMeasuringService from './unitOfMeasuringService'
 import CategoryOfMeasuringService from './CategoryOfMeasuringService'
+import PhotoService from './PhotoService'
 
 export {
     AuthenticationService,
@@ -36,4 +37,5 @@ export {
     UnitOfMeasuringService,
     CategoryOfMeasuringService,
     ConfigService,
+    PhotoService,
 };
