@@ -22,7 +22,7 @@ namespace EventsExpress.Test.MapperTests
         private static User user = new User
         {
             Id = userId,
-            Name = "user",
+            FirstName = "user",
             Birthday = new DateTime(2001, 01, 01),
         };
 
@@ -79,7 +79,7 @@ namespace EventsExpress.Test.MapperTests
                 .All(u =>
                     x.Id == u.UserId &&
                     x.Birthday == u.User.Birthday &&
-                    x.Username == u.User.Name)));
+                    x.FirstName == u.User.FirstName)));
             Assert.That(res.Id, Is.EqualTo(chatRoom.Id));
         }
 
@@ -103,7 +103,7 @@ namespace EventsExpress.Test.MapperTests
                 .All(u =>
                     x.Id == u.UserId &&
                     x.Birthday == u.User.Birthday &&
-                    x.Username == u.User.Name)));
+                    x.FirstName == u.User.FirstName)));
             Assert.That(res.Id, Is.EqualTo(chatRoom.Id));
         }
     }

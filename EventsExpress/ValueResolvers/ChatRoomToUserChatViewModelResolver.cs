@@ -22,7 +22,7 @@ namespace EventsExpress.ValueResolvers
                 {
                     Id = u.UserId,
                     Birthday = u.User.Birthday,
-                    Username = u.User.Name ?? u.User.Email.Substring(0, u.User.Email.IndexOf("@")),
+                    FirstName = u.User.FirstName ?? u.User.Email.Substring(0, u.User.Email.IndexOf("@")),
                 });
             }
 

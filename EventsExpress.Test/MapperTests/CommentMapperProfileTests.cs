@@ -25,7 +25,7 @@ namespace EventsExpress.Test.MapperTests
             User = new Db.Entities.User
             {
                 Id = Guid.NewGuid(),
-                Name = "user",
+                FirstName = "user",
             },
             CommentsId = Guid.NewGuid(),
         };
@@ -48,7 +48,7 @@ namespace EventsExpress.Test.MapperTests
             var commentViewModel = Mapper.Map<CommentDto, CommentViewModel>(commentDto);
 
             Assert.That(commentViewModel.Id, Is.EqualTo(commentDto.Id));
-            Assert.That(commentViewModel.UserName, Is.EqualTo(commentDto.User.Name ??
+            Assert.That(commentViewModel.UserFirstName, Is.EqualTo(commentDto.User.FirstName ??
                 commentDto.User.Email.Substring(0, commentDto.User.Email.IndexOf("@", StringComparison.Ordinal))));
             Assert.That(commentViewModel.Text, Is.EqualTo(commentDto.Text));
             Assert.That(commentViewModel.UserId, Is.EqualTo(commentDto.UserId));

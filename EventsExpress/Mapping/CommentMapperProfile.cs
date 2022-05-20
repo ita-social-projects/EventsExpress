@@ -21,8 +21,8 @@ namespace EventsExpress.Mapping
 
             CreateMap<CommentDto, CommentViewModel>()
                 .ForMember(
-                    dest => dest.UserName,
-                    opts => opts.MapFrom(src => src.User.Name ?? src.User.Email.Substring(0, src.User.Email.IndexOf("@", StringComparison.Ordinal))));
+                    dest => dest.UserFirstName,
+                    opts => opts.MapFrom(src => src.User.FirstName ?? src.User.Email.Substring(0, src.User.Email.IndexOf("@", StringComparison.Ordinal))));
 
             CreateMap<CommentViewModel, CommentDto>()
                 .ForMember(dest => dest.User, opts => opts.Ignore());

@@ -25,7 +25,7 @@ internal class UserMoreInfoServiceTests : TestInitializer
         var user = new User
         {
             Id = Guid.NewGuid(),
-            Name = "Name",
+            FirstName = "FirstName",
             Email = "Email",
         };
 

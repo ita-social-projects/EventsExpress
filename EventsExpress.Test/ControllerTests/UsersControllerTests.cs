@@ -45,11 +45,9 @@ namespace EventsExpress.Test.ControllerTests
         private short _gender = 8;
         private EditUserBirthViewModel _editUserBirthViewModel;
         private DateTime _birthdeay = new DateTime(2000, 9, 6);
-        private EditUserNameViewModel _editUserNameViewModel;
         private EditFirstNameViewModel _editFirstNameViewModel;
         private EditLastNameViewModel _editLastNameViewModel;
         private LocationViewModel _editLocationViewModel;
-        private string _userName = "some name of user";
         private string _firstName = "some firstName of user";
         private string _lastName = "some lastName of user";
         private UsersFilterViewModel _usersFilterViewModel;
@@ -112,7 +110,6 @@ namespace EventsExpress.Test.ControllerTests
             _editUserCategoriesViewModel = new EditUserCategoriesViewModel { Categories = new CategoryDto[] { _firstCategoryDto } };
             _editUserGenderViewModel = new EditUserGenderViewModel { Gender = _gender };
             _editUserBirthViewModel = new EditUserBirthViewModel { Birthday = _birthdeay };
-            _editUserNameViewModel = new EditUserNameViewModel { Name = _userName };
             _editFirstNameViewModel = new EditFirstNameViewModel { FirstName = _firstName };
             _editLastNameViewModel = new EditLastNameViewModel { LastName = _lastName };
             _editLocationViewModel = new LocationViewModel { Latitude = 0.0, Longitude = 0.0, Type = LocationType.Map, };
@@ -251,19 +248,6 @@ namespace EventsExpress.Test.ControllerTests
             Assert.DoesNotThrowAsync(() => Task.FromResult(res));
             Assert.IsInstanceOf<OkResult>(res);
             _userService.Verify(us => us.EditBirthday(It.IsAny<DateTime>()), Times.Exactly(1));
-        }
-
-        [Test]
-        [Category("EditUserName")]
-        public async Task EditUserName_UserDto_OkObjectResultAsync()
-        {
-            _userService.Setup(user => user.EditUserName(It.IsAny<string>()));
-
-            var res = await _usersController.EditUsername(_editUserNameViewModel);
-
-            Assert.DoesNotThrowAsync(() => Task.FromResult(res));
-            Assert.IsInstanceOf<OkResult>(res);
-            _userService.Verify(us => us.EditUserName(It.IsAny<string>()), Times.Exactly(1));
         }
 
         [Test]

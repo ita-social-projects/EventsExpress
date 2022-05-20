@@ -74,7 +74,7 @@ class UserItemViewWrapper extends Component {
 
     render() {
         const { data } = this.props.profile;
-
+        console.log(this.props)
 
         return <SpinnerWrapper showContent={data !== null}>
             <Profile

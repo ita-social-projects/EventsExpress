@@ -75,7 +75,7 @@ class EventDraftWrapper extends Component {
                     <hr className="gradient mt-0 mb-3"/>
                 </header>
                 <EventForm
-                    user_name={this.props.user_name}
+                    user_firstName={this.props.user_firstName}
                     all_categories={this.props.all_categories}
                     onSubmit={this.onPublish}
                     onError={this.onError}
@@ -118,7 +118,7 @@ class EventDraftWrapper extends Component {
 
 const mapStateToProps = (state) => ({
     user_id: state.user.id,
-    user_name: state.user.name,
+    user_firstName: state.user.firstName,
     add_event_status: state.add_event,
     all_categories: state.categories,
     form_values: getFormValues('event-form')(state),

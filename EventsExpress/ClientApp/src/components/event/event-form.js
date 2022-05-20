@@ -57,7 +57,7 @@ class EventForm extends Component {
   ));
 
   render() {
-    const { form_values, all_categories, user_name, error } = this.props;
+    const { form_values, all_categories, user_firstName, error } = this.props;
     const { checked } = this.state;
 
     return (
@@ -83,7 +83,7 @@ class EventForm extends Component {
               type="input"
               label="Organizer"
               InputLabelProps={{ shrink: true }}
-              inputProps={{ value: user_name }}
+              inputProps={{ value: user_firstName }}
               readOnly
             />
           </div>

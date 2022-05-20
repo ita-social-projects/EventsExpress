@@ -16,8 +16,7 @@ class Header extends Component {
   };
 
   render() {
-    const { id, name } = this.props.user.id !== null ? this.props.user : {};
-
+    const { id, firstName, lastName } = this.props.user.id !== null ? this.props.user : {};
     return (
       <nav
         className="navbar navbar-expand-lg navbar-light extraHeaderStyles"
@@ -66,8 +65,8 @@ class Header extends Component {
                   aria-haspopup="true"
                   aria-expanded="false"
                 >
-                  <p id="userNameAlign">{name}</p>
-                  <CustomAvatar size="small" userId={id} name={name} />
+                  <p id="userNameAlign">{firstName} {lastName}</p>
+                  <CustomAvatar size="small" userId={id} name={firstName} />
                 </div>
                 <div className="dropdown-menu dropdown-menu-right bgcolorwhite">
                   <AuthComponent rolesMatch={Roles.User}>

@@ -13,13 +13,13 @@ namespace EventsExpress.Mapping
                 .ForMember(dest => dest.User, opt => opt.MapFrom(src => new UserDto
                 {
                     Id = src.UserId,
-                    Name = src.UserEvent.User.Name,
+                    FirstName = src.UserEvent.User.FirstName,
                 }));
             CreateMap<UserEventInventoryDto, UserEventInventoryViewModel>()
                 .ForMember(dest => dest.User, opt => opt.MapFrom(src => new UserPreviewViewModel
                 {
                     Id = src.User.Id,
-                    Username = src.User.Name,
+                    FirstName = src.User.FirstName,
                 }));
             CreateMap<UserEventInventoryViewModel, UserEventInventoryDto>()
                 .ForMember(dest => dest.User, opt => opt.Ignore());

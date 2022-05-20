@@ -132,7 +132,7 @@ namespace EventsExpress.Core.Services
 
             users = !string.IsNullOrEmpty(model.KeyWord)
                 ? users.Where(x => x.Email.Contains(model.KeyWord) ||
-                    (x.Name != null && x.Name.Contains(model.KeyWord)))
+                    (x.FirstName != null && x.FirstName.Contains(model.KeyWord)))
                 : users;
 
             users = !string.IsNullOrEmpty(model.Role)
@@ -210,16 +210,6 @@ namespace EventsExpress.Core.Services
             {
                 throw new EventsExpressException("Bad image file");
             }
-        }
-
-        public async Task EditUserName(string name)
-        {
-            var user = CurrentUser();
-
-            user.Name = name;
-
-            Context.Update(user);
-            await Context.SaveChangesAsync();
         }
 
         public async Task EditBirthday(DateTime birthday)

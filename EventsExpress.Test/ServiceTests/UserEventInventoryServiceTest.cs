@@ -59,14 +59,14 @@ namespace EventsExpress.Test.ServiceTests
             user = new User
             {
                 Id = userId,
-                Name = "Name",
+                FirstName = "FirstName",
                 Email = "Email",
             };
 
             validUserButNotVisitor = new User
             {
                 Id = validUserId,
-                Name = "Name",
+                FirstName = "FirstName",
                 Email = "Email",
             };
 

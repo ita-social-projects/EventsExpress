@@ -43,7 +43,7 @@ namespace EventsExpress.Test.MapperTests
             return new User
             {
                 Id = idUser,
-                Name = "first user",
+                FirstName = "first user",
                 Email = "admin@gmail.com",
                 Phone = "+38066666666",
                 Birthday = new DateTime(2001, 01, 01),
@@ -96,7 +96,7 @@ namespace EventsExpress.Test.MapperTests
             return new UserDto
             {
                 Id = idUser,
-                Name = "first user",
+                FirstName = "first user",
                 Email = "admin@gmail.com",
                 Phone = "+38066666666",
                 Birthday = new DateTime(2001, 01, 01),
@@ -210,7 +210,7 @@ namespace EventsExpress.Test.MapperTests
             var resEven = Mapper.Map<UserDto, UserPreviewViewModel>(firstUserDto);
 
             Assert.That(resEven.Id, Is.EqualTo(firstUserDto.Id));
-            Assert.That(resEven.Username, Is.EqualTo(firstUserDto.Name ?? firstUserDto.Email.Substring(0, firstUserDto.Email.IndexOf("@", StringComparison.Ordinal))));
+            Assert.That(resEven.FirstName, Is.EqualTo(firstUserDto.FirstName ?? firstUserDto.Email.Substring(0, firstUserDto.Email.IndexOf("@", StringComparison.Ordinal))));
             Assert.That(resEven.Email, Is.EqualTo(firstUserDto.Email));
             Assert.That(resEven.Birthday, Is.EqualTo(firstUserDto.Birthday));
             Assert.That(resEven.Rating, Is.EqualTo(firstUserDto.Rating));
@@ -223,7 +223,7 @@ namespace EventsExpress.Test.MapperTests
             var resEven = Mapper.Map<UserDto, UserInfoViewModel>(firstUserDto);
 
             Assert.That(resEven.Id, Is.EqualTo(firstUserDto.Id));
-            Assert.That(resEven.Name, Is.EqualTo(firstUserDto.Name));
+            Assert.That(resEven.FirstName, Is.EqualTo(firstUserDto.FirstName));
             Assert.That(resEven.Email, Is.EqualTo(firstUserDto.Email));
             Assert.That(resEven.Birthday, Is.EqualTo(firstUserDto.Birthday));
             Assert.That(resEven.Rating, Is.EqualTo(firstUserDto.Rating));
@@ -248,7 +248,7 @@ namespace EventsExpress.Test.MapperTests
             var resEven = Mapper.Map<UserDto, UserManageViewModel>(firstUserDto);
 
             Assert.That(resEven.Id, Is.EqualTo(firstUserDto.Id));
-            Assert.That(resEven.Username, Is.EqualTo(firstUserDto.Name ?? firstUserDto.Email.Substring(0, firstUserDto.Email.IndexOf("@", StringComparison.Ordinal))));
+            Assert.That(resEven.FirstName, Is.EqualTo(firstUserDto.FirstName ?? firstUserDto.Email.Substring(0, firstUserDto.Email.IndexOf("@", StringComparison.Ordinal))));
             Assert.That(resEven.Email, Is.EqualTo(firstUserDto.Email));
             Assert.That(resEven.Birthday, Is.EqualTo(firstUserDto.Birthday));
             Assert.That(resEven.Rating, Is.EqualTo(firstUserDto.Rating));

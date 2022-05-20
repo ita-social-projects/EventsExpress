@@ -11,7 +11,7 @@ class Tracks extends Component {
     componentDidMount = () => {
         this.props.getAllTracks({
             page: 1,
-            userName: "",
+            firstName: "",
             changesType: [],
             dateFrom: null,
             dateTo: null,

@@ -7,7 +7,7 @@ namespace EventsExpress.Core.GraphQL.Types
     {
         protected override void Configure(IObjectTypeDescriptor<User> descriptor)
         {
-            descriptor.Field(f => f.Name);
+            descriptor.Field(f => f.FirstName);
             descriptor.Ignore(f => f.Account);
             descriptor.Ignore(f => f.Birthday);
             descriptor.Ignore(f => f.Categories);

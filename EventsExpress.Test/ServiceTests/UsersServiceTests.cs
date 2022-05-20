@@ -42,8 +42,8 @@ internal class UsersServiceTests : TestInitializer
     private Guid secondUserId = Guid.NewGuid();
     private NotificationChange notificationTypeId = NotificationChange.OwnEvent;
 
-    private string name = "existingName";
-    private string secondName = "secondName";
+    private string firstName = "existingFirstName";
+    private string secondFirstName = "secondFirstName";
     private string existingEmail = "existingEmail@gmail.com";
     private string secondEmail = "secondEmail@gmail.com";
 
@@ -86,7 +86,7 @@ internal class UsersServiceTests : TestInitializer
         existingUser = new User
         {
             Id = userId,
-            Name = name,
+            FirstName = firstName,
             Email = existingEmail,
             LocationId = Guid.NewGuid(),
             NotificationTypes = new List<UserNotificationType>
@@ -130,7 +130,7 @@ internal class UsersServiceTests : TestInitializer
         secondUser = new User
         {
             Id = secondUserId,
-            Name = secondName,
+            FirstName = secondFirstName,
             Email = secondEmail,
             NotificationTypes = new List<UserNotificationType>
             {
@@ -163,7 +163,7 @@ internal class UsersServiceTests : TestInitializer
         existingUserDTO = new UserDto
         {
             Id = userId,
-            Name = name,
+            FirstName = firstName,
             Email = existingEmail,
             NotificationTypes = new List<UserNotificationType>
             {
@@ -202,7 +202,7 @@ internal class UsersServiceTests : TestInitializer
         secondUserDTO = new UserDto
         {
             Id = secondUserId,
-            Name = secondName,
+            FirstName = secondFirstName,
             Email = secondEmail,
             NotificationTypes = new List<UserNotificationType>
             {
@@ -309,7 +309,7 @@ internal class UsersServiceTests : TestInitializer
         var res = service.GetUsersByNotificationTypes(notificationTypeId, idsUsers);
         var resUsers = res.Where(x => idsUsers.Contains(x.Id)).Select(x => x);
 
-        Assert.That(resUsers.Where(x => x.Name.Contains(name) && x.Email.Contains(existingEmail)), Is.Not.Null);
+        Assert.That(resUsers.Where(x => x.FirstName.Contains(firstName) && x.Email.Contains(existingEmail)), Is.Not.Null);
     }
 
     [Test]
@@ -426,15 +426,6 @@ internal class UsersServiceTests : TestInitializer
 
         Assert.ThrowsAsync<EventsExpressException>(async () =>
             await service.Create(existingUserDTO));
-    }
-
-    [Test]
-    public void EditUserName_ExistingUser_DoesNotThrow()
-    {
-        mockSecurityContext.Setup(s => s.GetCurrentUserId()).Returns(existingUserDTO.Id);
-
-        Assert.DoesNotThrowAsync(async () =>
-            await service.EditUserName(It.IsAny<string>()));
     }
 
     [Test]

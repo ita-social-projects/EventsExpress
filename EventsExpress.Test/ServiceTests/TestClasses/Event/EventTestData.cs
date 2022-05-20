@@ -33,14 +33,14 @@ namespace EventsExpress.Test.ServiceTests.TestClasses.Event
             new User
             {
                 Id = FirstUserId,
-                Name = "NameIsExist",
+                FirstName = "FirstNameIsExist",
                 Email = "stas@gmail.com",
                 Birthday = DateTime.Today.AddYears(-20),
             },
             new User
             {
                 Id = SecondUserId,
-                Name = "UnderageUser",
+                FirstName = "UnderageUser",
                 Email = "younguser@gmail.com",
                 Birthday = DateTime.Today.AddYears(-16),
             },

@@ -36,7 +36,7 @@ namespace EventsExpress.Db.DbInitialize
             {
                 new User
                 {
-                    Name = "Admin",
+                    FirstName = "Admin",
                     Email = "admin@gmail.com",
                     Phone = "+380974293583",
                     Birthday = DateTime.Parse("2000-01-01"),
@@ -63,7 +63,7 @@ namespace EventsExpress.Db.DbInitialize
 
                 new User
                 {
-                    Name = "User",
+                    FirstName = "User",
                     Email = "user@gmail.com",
                     Phone = "+380974293580",
                     Birthday = DateTime.Parse("2000-01-01"),
