@@ -173,12 +173,6 @@ namespace EventsExpress.Test.MapperTests
         }
 
         [Test]
-        public void UserMapperProfile_Should_HaveValidConfig()
-        {
-            Configuration.AssertConfigurationIsValid();
-        }
-
-        [Test]
         public void UserMapperProfile_UserToUserDto()
         {
             firstUser = context.Users.FirstOrDefault(x => x.Id == GetUser().Id);

@@ -29,7 +29,6 @@ namespace EventsExpress.Test.ControllerTests
     internal class UsersControllerTests
     {
         private Mock<IUserService> _userService;
-        private Mock<IPhotoService> _photoService;
         private Mock<IMapper> _mapper;
         private UsersController _usersController;
         private UserDto _userDto;
@@ -63,10 +62,9 @@ namespace EventsExpress.Test.ControllerTests
         public void Initialize()
         {
             _userService = new Mock<IUserService>();
-            _photoService = new Mock<IPhotoService>();
             _mapper = new Mock<IMapper>();
 
-            _usersController = new UsersController(_userService.Object, _mapper.Object, _photoService.Object);
+            _usersController = new UsersController(_userService.Object, _mapper.Object);
             _userDto = new UserDto
             {
                 Id = _idUser,
@@ -192,24 +190,6 @@ namespace EventsExpress.Test.ControllerTests
 
             Assert.IsNotNull(okResult);
             Assert.AreEqual(200, okResult.StatusCode);
-        }
-
-        [Test]
-        [Category("ChangeAvatar")]
-        public async Task ChangeAvatar_CorrectUser_OkObjectResult()
-        {
-            var file = new FormFile(new MemoryStream(Encoding.UTF8.GetBytes("This is a dummy file")), 0, 0, "Data", "dummy.txt");
-
-            PhotoViewModel photoModel = new PhotoViewModel() { Photo = file };
-
-            var res = await _usersController.ChangeAvatar(photoModel);
-
-            Assert.IsInstanceOf<OkObjectResult>(res);
-            Assert.DoesNotThrowAsync(() => Task.FromResult(res));
-            OkObjectResult okResult = res as OkObjectResult;
-            Assert.IsNotNull(okResult);
-            Assert.AreEqual(200, okResult.StatusCode);
-            _userService.Verify(user => user.ChangeAvatar(It.IsAny<IFormFile>()), Times.Exactly(1));
         }
 
         [Test]

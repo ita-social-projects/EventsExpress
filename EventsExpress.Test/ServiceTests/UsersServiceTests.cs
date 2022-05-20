@@ -13,6 +13,7 @@ using EventsExpress.Db.Entities;
 using EventsExpress.Db.Enums;
 using EventsExpress.Test.ServiceTests.TestClasses.Comparers;
 using EventsExpress.Test.ServiceTests.TestClasses.Location;
+using EventsExpress.Test.ServiceTests.TestClasses.Photo;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.StaticFiles;
@@ -22,74 +23,74 @@ using NetTopologySuite.Geometries;
 using NUnit.Framework;
 using Location = EventsExpress.Db.Entities.Location;
 
-namespace EventsExpress.Test.ServiceTests;
-
-[TestFixture]
-internal class UsersServiceTests : TestInitializer
+namespace EventsExpress.Test.ServiceTests
 {
-    private UserService service;
-    private Mock<IPhotoService> mockPhotoService;
-    private Mock<ISecurityContext> mockSecurityContext;
-    private Mock<IMediator> mockMediator;
-    private Mock<ILocationManager> mockLocationService;
-
-    private UserDto existingUserDTO;
-    private UserDto secondUserDTO;
-    private User existingUser;
-    private User secondUser;
-
-    private Guid userId = Guid.NewGuid();
-    private Guid secondUserId = Guid.NewGuid();
-    private NotificationChange notificationTypeId = NotificationChange.OwnEvent;
-
-    private string firstName = "existingFirstName";
-    private string secondFirstName = "secondFirstName";
-    private string existingEmail = "existingEmail@gmail.com";
-    private string secondEmail = "secondEmail@gmail.com";
-
-    private UserDtoComparer userDtoComparer;
-
-    [SetUp]
-    protected override void Initialize()
+    [TestFixture]
+    internal class UsersServiceTests : TestInitializer
     {
-        base.Initialize();
-        Clear(Context.UserCategory);
+        private static Mock<IUserPhotoService> mockUserPhotoService;
+        private Mock<ISecurityContext> mockSecurityContext;
+        private UserService service;
+        private Mock<IMediator> mockMediator;
+        private Mock<ILocationManager> mockLocationService;
 
-        MockMapper.Setup(opts => opts.Map<IEnumerable<CategoryDto>>(It.IsAny<IEnumerable<UserCategory>>()))
-            .Returns((IEnumerable<UserCategory> u) => u.Select(x => new CategoryDto { Id = x.Category.Id, Name = x.Category.Name }));
+        private UserDto existingUserDTO;
+        private UserDto secondUserDTO;
+        private User existingUser;
+        private User secondUser;
 
-        MockMapper.Setup(opts => opts.Map<IEnumerable<NotificationTypeDto>>(It.IsAny<IEnumerable<UserNotificationType>>()))
-            .Returns((IEnumerable<UserNotificationType> u) => u.Select(x => new NotificationTypeDto { Id = x.NotificationType.Id, Name = x.NotificationType.Name }));
+        private Guid userId = Guid.NewGuid();
+        private Guid secondUserId = Guid.NewGuid();
+        private NotificationChange notificationTypeId = NotificationChange.OwnEvent;
 
-        MockMapper.Setup(opts => opts.Map<User>(It.IsAny<UserDto>()))
-            .Returns((UserDto u) => new User());
+        private string firstName = "existingFirstName";
+        private string secondFirstName = "secondFirstName";
+        private string existingEmail = "existingEmail@gmail.com";
+        private string secondEmail = "secondEmail@gmail.com";
 
-        MockMapper.Setup(opts => opts.Map<UserDto>(It.IsAny<User>()))
-            .Returns((User u) => new UserDto { Id = u.Id });
+        private UserDtoComparer userDtoComparer;
 
-        MockMapper.Setup(opts => opts.Map<IEnumerable<UserDto>>(It.IsAny<IEnumerable<User>>()))
-            .Returns((IEnumerable<User> users) => users.Select(user => new UserDto { Id = user.Id }));
-
-        mockPhotoService = new Mock<IPhotoService>();
-        mockMediator = new Mock<IMediator>();
-        mockSecurityContext = new Mock<ISecurityContext>();
-        mockLocationService = new Mock<ILocationManager>();
-
-        service = new UserService(
-            Context,
-            MockMapper.Object,
-            mockMediator.Object,
-            mockPhotoService.Object,
-            mockLocationService.Object,
-            mockSecurityContext.Object);
-
-        existingUser = new User
+        [SetUp]
+        protected override void Initialize()
         {
-            Id = userId,
-            FirstName = firstName,
-            Email = existingEmail,
-            LocationId = Guid.NewGuid(),
-            NotificationTypes = new List<UserNotificationType>
+            base.Initialize();
+            Clear(Context.UserCategory);
+            mockUserPhotoService = new Mock<IUserPhotoService>();
+            mockMediator = new Mock<IMediator>();
+            mockSecurityContext = new Mock<ISecurityContext>();
+            MockMapper.Setup(opts => opts.Map<IEnumerable<CategoryDto>>(It.IsAny<IEnumerable<UserCategory>>()))
+                .Returns((IEnumerable<UserCategory> u) => u.Select(x => new CategoryDto { Id = x.Category.Id, Name = x.Category.Name }));
+            MockMapper.Setup(opts => opts.Map<IEnumerable<NotificationTypeDto>>(It.IsAny<IEnumerable<UserNotificationType>>()))
+                .Returns((IEnumerable<UserNotificationType> u) => u.Select(x => new NotificationTypeDto { Id = x.NotificationType.Id, Name = x.NotificationType.Name }));
+            MockMapper.Setup(opts => opts.Map<User>(It.IsAny<UserDto>()))
+                .Returns((UserDto u) => new User()
+                {
+                });
+            MockMapper.Setup(opts => opts.Map<UserDto>(It.IsAny<User>()))
+                .Returns((User u) => new UserDto()
+                {
+                    Id = u.Id,
+                });
+            MockMapper.Setup(opts => opts.Map<IEnumerable<UserDto>>(It.IsAny<IEnumerable<User>>()))
+                      .Returns((IEnumerable<User> users) =>
+                          users.Select(user => new UserDto { Id = user.Id }));
+            mockLocationService = new Mock<ILocationManager>();
+
+            service = new UserService(
+                Context,
+                MockMapper.Object,
+                mockMediator.Object,
+                mockUserPhotoService.Object,
+                mockLocationService.Object,
+                mockSecurityContext.Object);
+
+            existingUser = new User
+            {
+                Id = userId,
+                FirstName = firstName,
+                Email = existingEmail,
+                LocationId = Guid.NewGuid(),
+                NotificationTypes = new List<UserNotificationType>
             {
                 new UserNotificationType
                 {
@@ -102,7 +103,7 @@ internal class UsersServiceTests : TestInitializer
                     NotificationTypeId = NotificationChange.Profile,
                 },
             },
-            Categories = new List<UserCategory>
+                Categories = new List<UserCategory>
             {
                 new UserCategory
                 {
@@ -114,416 +115,398 @@ internal class UsersServiceTests : TestInitializer
                     },
                 },
             },
-            Account = new Account
-            {
-                UserId = userId,
-                IsBlocked = true,
-            },
-            Location = new Location
-            {
-                Point = Point.Empty,
-                OnlineMeeting = null,
-                Type = LocationType.Map,
-            },
-        };
-
-        secondUser = new User
-        {
-            Id = secondUserId,
-            FirstName = secondFirstName,
-            Email = secondEmail,
-            NotificationTypes = new List<UserNotificationType>
-            {
-                new UserNotificationType
-                {
-                    UserId = secondUserId,
-                    NotificationTypeId = NotificationChange.Profile,
-                },
-            },
-            Categories = new List<UserCategory>
-            {
-                new UserCategory
-                {
-                    UserId = secondUserId,
-                    Category = new Category
-                    {
-                        Id = Guid.NewGuid(),
-                        Name = "Mount",
-                    },
-                },
-            },
-            Account = new Account
-            {
-                UserId = secondUserId,
-                IsBlocked = false,
-            },
-            LocationId = null,
-        };
-
-        existingUserDTO = new UserDto
-        {
-            Id = userId,
-            FirstName = firstName,
-            Email = existingEmail,
-            NotificationTypes = new List<UserNotificationType>
-            {
-                new UserNotificationType
+                Account = new Account
                 {
                     UserId = userId,
-                    NotificationTypeId = NotificationChange.OwnEvent,
+                    IsBlocked = true,
                 },
-                new UserNotificationType
+                Location = new Location
                 {
-                    UserId = userId,
-                    NotificationTypeId = NotificationChange.Profile,
+                    Point = Point.Empty,
+                    OnlineMeeting = null,
+                    Type = LocationType.Map,
                 },
-            },
-            Categories = new List<UserCategory>
+            };
+
+            secondUser = new User
             {
-                new UserCategory
+                Id = secondUserId,
+                FirstName = secondFirstName,
+                Email = secondEmail,
+                NotificationTypes = new List<UserNotificationType>
                 {
-                    UserId = userId,
-                    Category = new Category
+                    new UserNotificationType
                     {
-                        Id = Guid.NewGuid(),
-                        Name = "Sea",
+                        UserId = secondUserId,
+                        NotificationTypeId = NotificationChange.Profile,
                     },
                 },
-            },
-            Location = new LocationDto
-            {
-                Point = Point.Empty,
-                OnlineMeeting = null,
-                Type = LocationType.Map,
-                Id = Guid.NewGuid(),
-            },
-        };
-
-        secondUserDTO = new UserDto
-        {
-            Id = secondUserId,
-            FirstName = secondFirstName,
-            Email = secondEmail,
-            NotificationTypes = new List<UserNotificationType>
-            {
-                new UserNotificationType
+                Categories = new List<UserCategory>
                 {
-                    UserId = secondUserId,
-                    NotificationTypeId = NotificationChange.Profile,
-                },
-            },
-            Categories = new List<UserCategory>
-            {
-                new UserCategory
-                {
-                    UserId = secondUserId,
-                    Category = new Category
+                    new UserCategory
                     {
-                        Id = Guid.NewGuid(),
-                        Name = "Mount",
+                        UserId = secondUserId,
+                        Category = new Category
+                        {
+                            Id = Guid.NewGuid(),
+                            Name = "Mount",
+                        },
+                    },
+                }, Account = new Account
+                    {
+                        UserId = secondUserId,
+                        IsBlocked = false,
+                    },
+                LocationId = null,
+            };
+
+            existingUserDTO = new UserDto
+            {
+                Id = userId,
+                FirstName = firstName,
+                Email = existingEmail,
+                NotificationTypes = new List<UserNotificationType>
+                {
+                    new UserNotificationType
+                    {
+                        UserId = userId,
+                        NotificationTypeId = NotificationChange.OwnEvent,
+                    },
+                    new UserNotificationType
+                    {
+                        UserId = userId,
+                        NotificationTypeId = NotificationChange.Profile,
                     },
                 },
-            },
-            Account = new Account
+                Categories = new List<UserCategory>
+                {
+                    new UserCategory
+                    {
+                        UserId = userId,
+                        Category = new Category
+                        {
+                            Id = Guid.NewGuid(),
+                            Name = "Sea",
+                        },
+                    },
+                },
+                Location = new LocationDto
+                {
+                    Point = Point.Empty,
+                    OnlineMeeting = null,
+                    Type = LocationType.Map,
+                    Id = Guid.NewGuid(),
+                },
+            };
+
+            secondUserDTO = new UserDto
             {
-                UserId = secondUserId,
-                IsBlocked = false,
-            },
-            Location = null,
-        };
+                Id = secondUserId,
+                FirstName = secondFirstName,
+                Email = secondEmail,
+                NotificationTypes = new List<UserNotificationType>
+                {
+                    new UserNotificationType
+                    {
+                        UserId = secondUserId,
+                        NotificationTypeId = NotificationChange.Profile,
+                    },
+                },
+                Categories = new List<UserCategory>
+                {
+                    new UserCategory
+                    {
+                        UserId = secondUserId,
+                        Category = new Category
+                        {
+                            Id = Guid.NewGuid(),
+                            Name = "Mount",
+                        },
+                    },
+                },
+                Account = new Account
+                {
+                    UserId = secondUserId,
+                    IsBlocked = false,
+                },
+                Location = null,
+            };
 
-        userDtoComparer = new UserDtoComparer();
+            userDtoComparer = new UserDtoComparer();
 
-        Context.Users.Add(existingUser);
-        Context.Users.Add(secondUser);
+            Context.Users.Add(existingUser);
+            Context.Users.Add(secondUser);
 
-        Context.SaveChanges();
-    }
-
-    [Test]
-    public void GetUsersInformationByIds_WhenIdsArePassed_ReturnsListWithFoundUsers()
-    {
-        var ids = new[] { existingUser.Id, secondUser.Id };
-        var expected = new[] { existingUserDTO, secondUserDTO };
-
-        var actual = service.GetUsersInformationByIds(ids);
-
-        Assert.That(actual, Is.EquivalentTo(expected).Using(userDtoComparer));
-    }
-
-    [Test]
-    public void GetUsersInformationByIds_WhenNoIdsPassed_ReturnsEmptyList()
-    {
-        const int expectedLength = 0;
-        var emptyIds = Array.Empty<Guid>();
-
-        var actual = service.GetUsersInformationByIds(emptyIds);
-        var actualLength = actual.Count();
-
-        Assert.AreEqual(expectedLength, actualLength);
-    }
-
-    [TestCase(AccountStatus.All)]
-    [TestCase(AccountStatus.Activated)]
-    [TestCase(AccountStatus.Blocked)]
-    public async Task CountUsersAsync_GivenAccountStatus_ReturnsCorrectCount(AccountStatus status)
-    {
-        var expected = status switch
-        {
-            AccountStatus.Activated => await Context.Users.CountAsync(u => !u.Account.IsBlocked),
-            AccountStatus.Blocked => await Context.Users.CountAsync(u => u.Account.IsBlocked),
-            _ => await Context.Users.CountAsync(),
-        };
-
-        var actual = await service.CountUsersAsync(status);
-
-        Assert.AreEqual(expected, actual);
-    }
-
-    [Test]
-    public void Create_InvalidAccount_Throws()
-    {
-        existingUserDTO.Email = "test";
-        existingUserDTO.AccountId = Guid.Empty;
-
-        var ex = Assert.ThrowsAsync<EventsExpressException>(async () => await service.Create(existingUserDTO));
-        Assert.That(ex.Message, Contains.Substring("Account not found"));
-    }
-
-    [Test]
-    public void GetCurrentUserInfo_ExistingUser_ReturnsCorrectId()
-    {
-        mockSecurityContext.Setup(s => s.GetCurrentUserId()).Returns(existingUser.Id);
-        var expected = existingUserDTO;
-
-        var actual = service.GetCurrentUserInfo();
-
-        Assert.AreEqual(expected.Id, actual.Id);
-    }
-
-    [Test]
-    public void GetUsersByNotificationTypes_ExistingUser_Success()
-    {
-        var idsUsers = new[] { userId };
-
-        var res = service.GetUsersByNotificationTypes(notificationTypeId, idsUsers);
-        var resUsers = res.Where(x => idsUsers.Contains(x.Id)).Select(x => x);
-
-        Assert.That(resUsers.Where(x => x.FirstName.Contains(firstName) && x.Email.Contains(existingEmail)), Is.Not.Null);
-    }
-
-    [Test]
-    public void GetUsersByNotificationTypes_InvalidUser_ReturnsEmptyResult()
-    {
-        var idsUsers = new[] { Guid.NewGuid() };
-
-        var res = service.GetUsersByNotificationTypes(notificationTypeId, idsUsers);
-
-        Assert.That(res, Is.Empty);
-    }
-
-    [Test]
-    public void EditFavoriteNotificationTypes_CorrectChangeAndUser_DoesNotThrow()
-    {
-        mockSecurityContext.Setup(s => s.GetCurrentUserId()).Returns(existingUserDTO.Id);
-        var notificationTypes = new[] { new NotificationType { Id = NotificationChange.Profile } };
-
-        Assert.DoesNotThrowAsync(async () =>
-            await service.EditFavoriteNotificationTypes(notificationTypes));
-    }
-
-    [Test]
-    public void EditFavoriteNotificationTypes_CorrectChangeWithInvalidUser_Throws()
-    {
-        var notificationTypes = new[] { new NotificationType { Id = NotificationChange.Profile } };
-        var notExistingUserId = Guid.NewGuid();
-        mockSecurityContext.Setup(s => s.GetCurrentUserId()).Returns(notExistingUserId);
-
-        Assert.ThrowsAsync<InvalidOperationException>(async () =>
-            await service.EditFavoriteNotificationTypes(notificationTypes));
-    }
-
-    [Test]
-    public void EditFavoriteNotificationTypes_IncorrectChangeWithExistingUser_Throws()
-    {
-        mockSecurityContext.Setup(s => s.GetCurrentUserId()).Returns(existingUserDTO.Id);
-        var notificationTypes = new[] { new NotificationType { Id = (NotificationChange)(-888) } };
-
-        Assert.DoesNotThrowAsync(async () =>
-            await service.EditFavoriteNotificationTypes(notificationTypes));
-    }
-
-    [Test]
-    public void EditFavoriteNotificationTypes_IncorrectChangeAndUser_Throws()
-    {
-        var notificationTypes = new[] { new NotificationType { Id = (NotificationChange)(-888) } };
-        var notExistingUserId = Guid.NewGuid();
-        mockSecurityContext.Setup(s => s.GetCurrentUserId()).Returns(notExistingUserId);
-
-        Assert.ThrowsAsync<InvalidOperationException>(async () =>
-            await service.EditFavoriteNotificationTypes(notificationTypes));
-    }
-
-    [Test]
-    public void GetUserNotificationTypes_ExistingUser_Success()
-    {
-        mockSecurityContext.Setup(s => s.GetCurrentUserId()).Returns(existingUserDTO.Id);
-
-        var res = service.GetUserNotificationTypes();
-
-        Assert.AreEqual(2, res.Count());
-    }
-
-    [Test]
-    public void GetUserCategories_ExistingUser_Success()
-    {
-        mockSecurityContext.Setup(s => s.GetCurrentUserId()).Returns(existingUserDTO.Id);
-
-        var res = service.GetUserCategories();
-
-        Assert.AreEqual(1, res.Count());
-    }
-
-    [Test]
-    public void Create_RepeatEmail_Throws()
-    {
-        var newUser = new UserDto
-        {
-            Id = Guid.NewGuid(),
-            Email = existingUserDTO.Email,
-        };
-
-        Assert.ThrowsAsync<EventsExpressException>(async () => await service.Create(newUser));
-    }
-
-    [Test]
-    public void Create_ValidDto_DoesNotThrow()
-    {
-        var correctAccountId = Guid.NewGuid();
-        var newUserDto = new UserDto
-        {
-            Email = "correctemail@example.com",
-            AccountId = correctAccountId,
-        };
-        var newUser = new User
-        {
-            Email = "correctemail@example.com",
-            Account = new Account
-            {
-                Id = correctAccountId,
-            },
-        };
-
-        MockMapper.Setup(m => m.Map<User>(newUserDto)).Returns(newUser);
-
-        Assert.DoesNotThrowAsync(async () => await service.Create(newUserDto));
-    }
-
-    [Test]
-    public void Create_InsertFailed_Throws()
-    {
-        MockMapper.Setup(m => m.Map<User>(existingUserDTO)).Returns(existingUser);
-
-        Assert.ThrowsAsync<EventsExpressException>(async () =>
-            await service.Create(existingUserDTO));
-    }
-
-    [Test]
-    public void EditLastName_ExistingUser_DoesNotThrow()
-    {
-        mockSecurityContext.Setup(s => s.GetCurrentUserId()).Returns(existingUserDTO.Id);
-
-        Assert.DoesNotThrowAsync(async () =>
-            await service.EditLastName(It.IsAny<string>()));
-    }
-
-    [Test]
-    public void EditFirstName_ExistingUser_DoesNotThrow()
-    {
-        mockSecurityContext.Setup(s => s.GetCurrentUserId()).Returns(existingUserDTO.Id);
-
-        Assert.DoesNotThrowAsync(async () =>
-            await service.EditFirstName(It.IsAny<string>()));
-    }
-
-    [Test]
-    public void EditBirthday_ExistingUser_DoesNotThrow()
-    {
-        mockSecurityContext.Setup(s => s.GetCurrentUserId()).Returns(existingUserDTO.Id);
-
-        Assert.DoesNotThrowAsync(async () =>
-            await service.EditBirthday(It.IsAny<DateTime>()));
-    }
-
-    [Test]
-    [TestCaseSource(typeof(CreatingNotExistingUserLocation))]
-    public void EditLocation_LocationTypeOnline_Throws(LocationDto locationDto)
-    {
-        mockSecurityContext.Setup(s => s.GetCurrentUserId()).Returns(existingUserDTO.Id);
-
-        Assert.ThrowsAsync<EventsExpressException>(async () =>
-            await service.EditLocation(locationDto));
-    }
-
-    [Test]
-    public void EditLocation_UserLocationIdIsNull_DoesNotThrow()
-    {
-        mockSecurityContext.Setup(s => s.GetCurrentUserId()).Returns(secondUser.Id);
-
-        Assert.DoesNotThrowAsync(async () => await service.EditLocation(existingUserDTO.Location));
-    }
-
-    [Test]
-    public void EditGender_ExistingUser_DoesNotThrow()
-    {
-        mockSecurityContext.Setup(s => s.GetCurrentUserId()).Returns(existingUserDTO.Id);
-
-        Assert.DoesNotThrowAsync(async () => await service.EditGender(It.IsAny<Gender>()));
-    }
-
-    [Test]
-    public void ChangeAvatar_UserInDbFound_Success()
-    {
-        const string testFilePath = @"./Images/valid-image.jpg";
-        byte[] bytes = File.ReadAllBytes(testFilePath);
-        string base64 = Convert.ToBase64String(bytes);
-        string fileName = Path.GetFileName(testFilePath);
-        using var stream = new MemoryStream(Encoding.UTF8.GetBytes(base64));
-        var file = new FormFile(stream, 0, stream.Length, string.Empty, fileName)
-        {
-            Headers = new HeaderDictionary(),
-            ContentType = GetContentType(fileName),
-        };
-        mockSecurityContext.Setup(s => s.GetCurrentUserId()).Returns(existingUserDTO.Id);
-
-        Assert.DoesNotThrowAsync(async () => await service.ChangeAvatar(file));
-        mockPhotoService.Verify(x => x.AddUserPhoto(file, existingUserDTO.Id));
-    }
-
-    [Test]
-    public void ChangeAvatar_InvalidFile_Throws()
-    {
-        mockPhotoService.Setup(ps => ps.AddUserPhoto(It.IsAny<IFormFile>(), It.IsAny<Guid>())).Throws<ArgumentException>();
-        var formFile = new FormFile(new MemoryStream(), 0, 0, string.Empty, "test");
-
-        var ex = Assert.ThrowsAsync<EventsExpressException>(async () => await service.ChangeAvatar(formFile));
-        Assert.That(ex.Message, Contains.Substring("Bad image file"));
-    }
-
-    private static string GetContentType(string fileName)
-    {
-        var provider = new FileExtensionContentTypeProvider();
-        if (!provider.TryGetContentType(fileName, out var contentType))
-        {
-            contentType = "application/octet-stream";
+            Context.SaveChanges();
         }
 
-        return contentType;
+        [Test]
+        public void GetUsersInformationByIds_WhenIdsArePassed_ReturnsListWithFoundUsers()
+        {
+            var ids = new[] { existingUser.Id, secondUser.Id };
+            var expected = new[] { existingUserDTO, secondUserDTO };
+
+            var actual = service.GetUsersInformationByIds(ids);
+
+            Assert.That(actual, Is.EquivalentTo(expected).Using(userDtoComparer));
+        }
+
+        [Test]
+        public void GetUsersInformationByIds_WhenNoIdsPassed_ReturnsEmptyList()
+        {
+            const int expectedLength = 0;
+            var emptyIds = Array.Empty<Guid>();
+
+            var actual = service.GetUsersInformationByIds(emptyIds);
+            var actualLength = actual.Count();
+
+            Assert.AreEqual(expectedLength, actualLength);
+        }
+
+        [TestCase(AccountStatus.All)]
+        [TestCase(AccountStatus.Activated)]
+        [TestCase(AccountStatus.Blocked)]
+        public async Task CountUsersAsync_GivenAccountStatus_ReturnsCorrectCount(AccountStatus status)
+        {
+            var expected = status switch
+            {
+                AccountStatus.Activated => await Context.Users.CountAsync(u => !u.Account.IsBlocked),
+                AccountStatus.Blocked => await Context.Users.CountAsync(u => u.Account.IsBlocked),
+                _ => await Context.Users.CountAsync(),
+            };
+
+            var actual = await service.CountUsersAsync(status);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        [Test]
+        public void Create_InvalidAccount_Throws()
+        {
+            existingUserDTO.Email = "test";
+            existingUserDTO.AccountId = Guid.Empty;
+
+            var ex = Assert.ThrowsAsync<EventsExpressException>(async () => await service.Create(existingUserDTO));
+            Assert.That(ex.Message, Contains.Substring("Account not found"));
+        }
+
+        [Test]
+        public void GetCurrentUserInfo_ExistingUser_ReturnsCorrectId()
+        {
+            mockSecurityContext.Setup(s => s.GetCurrentUserId()).Returns(existingUser.Id);
+            var expected = existingUserDTO;
+
+            var actual = service.GetCurrentUserInfo();
+
+            Assert.AreEqual(expected.Id, actual.Id);
+        }
+
+        [Test]
+        public void GetUsersByNotificationTypes_ExistingUser_Success()
+        {
+            var idsUsers = new[] { userId };
+
+            var res = service.GetUsersByNotificationTypes(notificationTypeId, idsUsers);
+            var resUsers = res.Where(x => idsUsers.Contains(x.Id)).Select(x => x);
+
+            Assert.That(resUsers.Where(x => x.FirstName.Contains(firstName) && x.Email.Contains(existingEmail)), Is.Not.Null);
     }
 
-    private static void Clear<T>(DbSet<T> dbSet)
-        where T : class
-    {
-        dbSet.RemoveRange(dbSet);
+        [Test]
+        public void GetUsersByNotificationTypes_InvalidUser_ReturnsEmptyResult()
+        {
+            var idsUsers = new[] { Guid.NewGuid() };
+
+            var res = service.GetUsersByNotificationTypes(notificationTypeId, idsUsers);
+
+            Assert.That(res, Is.Empty);
+        }
+
+        [Test]
+        public void EditFavoriteNotificationTypes_CorrectChangeAndUser_DoesNotThrow()
+        {
+            mockSecurityContext.Setup(s => s.GetCurrentUserId()).Returns(existingUserDTO.Id);
+            var notificationTypes = new[] { new NotificationType { Id = NotificationChange.Profile } };
+
+            Assert.DoesNotThrowAsync(async () =>
+                await service.EditFavoriteNotificationTypes(notificationTypes));
+        }
+
+        [Test]
+        public void EditFavoriteNotificationTypes_CorrectChangeWithInvalidUser_Throws()
+        {
+            var notificationTypes = new[] { new NotificationType { Id = NotificationChange.Profile } };
+            var notExistingUserId = Guid.NewGuid();
+            mockSecurityContext.Setup(s => s.GetCurrentUserId()).Returns(notExistingUserId);
+
+            Assert.ThrowsAsync<InvalidOperationException>(async () =>
+                await service.EditFavoriteNotificationTypes(notificationTypes));
+        }
+
+        [Test]
+        public void EditFavoriteNotificationTypes_IncorrectChangeWithExistingUser_Throws()
+        {
+            mockSecurityContext.Setup(s => s.GetCurrentUserId()).Returns(existingUserDTO.Id);
+            var notificationTypes = new[] { new NotificationType { Id = (NotificationChange)(-888) } };
+
+            Assert.DoesNotThrowAsync(async () =>
+                await service.EditFavoriteNotificationTypes(notificationTypes));
+        }
+
+        [Test]
+        public void EditFavoriteNotificationTypes_IncorrectChangeAndUser_Throws()
+        {
+            var notificationTypes = new[] { new NotificationType { Id = (NotificationChange)(-888) } };
+            var notExistingUserId = Guid.NewGuid();
+            mockSecurityContext.Setup(s => s.GetCurrentUserId()).Returns(notExistingUserId);
+
+            Assert.ThrowsAsync<InvalidOperationException>(async () =>
+                await service.EditFavoriteNotificationTypes(notificationTypes));
+        }
+
+        [Test]
+        public void GetUserNotificationTypes_ExistingUser_Success()
+        {
+            mockSecurityContext.Setup(s => s.GetCurrentUserId()).Returns(existingUserDTO.Id);
+
+            var res = service.GetUserNotificationTypes();
+
+            Assert.AreEqual(2, res.Count());
+        }
+
+        [Test]
+        public void GetUserCategories_ExistingUser_Success()
+        {
+            mockSecurityContext.Setup(s => s.GetCurrentUserId()).Returns(existingUserDTO.Id);
+
+            var res = service.GetUserCategories();
+
+            Assert.AreEqual(1, res.Count());
+        }
+
+        [Test]
+        public void Create_RepeatEmail_Throws()
+        {
+            var newUser = new UserDto
+            {
+                Id = Guid.NewGuid(),
+                Email = existingUserDTO.Email,
+            };
+
+            Assert.ThrowsAsync<EventsExpressException>(async () => await service.Create(newUser));
+        }
+
+        [Test]
+        public void Create_ValidDto_DoesNotThrow()
+        {
+            var correctAccountId = Guid.NewGuid();
+            var newUserDto = new UserDto
+            {
+                Email = "correctemail@example.com",
+                AccountId = correctAccountId,
+            };
+            var newUser = new User
+            {
+                Email = "correctemail@example.com",
+                Account = new Account
+                {
+                    Id = correctAccountId,
+                },
+            };
+
+            MockMapper.Setup(m => m.Map<User>(newUserDto)).Returns(newUser);
+
+            Assert.DoesNotThrowAsync(async () => await service.Create(newUserDto));
+        }
+
+        [Test]
+        public void Create_InsertFailed_Throws()
+        {
+            MockMapper.Setup(m => m.Map<User>(existingUserDTO)).Returns(existingUser);
+
+            Assert.ThrowsAsync<EventsExpressException>(async () =>
+                await service.Create(existingUserDTO));
+        }
+
+        [Test]
+        public void EditLastName_ExistingUser_DoesNotThrow()
+        {
+            mockSecurityContext.Setup(s => s.GetCurrentUserId()).Returns(existingUserDTO.Id);
+            Assert.DoesNotThrowAsync(async () =>
+                await service.EditLastName(It.IsAny<string>()));
+        }
+
+        [Test]
+        public void EditFirstName_ExistingUser_DoesNotThrow()
+        {
+            mockSecurityContext.Setup(s => s.GetCurrentUserId()).Returns(existingUserDTO.Id);
+
+            Assert.DoesNotThrowAsync(async () =>
+                await service.EditFirstName(It.IsAny<string>()));
+        }
+
+        [Test]
+        public void EditBirthday_ExistingUser_DoesNotThrow()
+        {
+            mockSecurityContext.Setup(s => s.GetCurrentUserId()).Returns(existingUserDTO.Id);
+
+            Assert.DoesNotThrowAsync(async () =>
+                    await service.EditBirthday(It.IsAny<DateTime>()));
+        }
+
+        [Test]
+        [TestCaseSource(typeof(CreatingNotExistingUserLocation))]
+        public void EditLocation_LocationTypeOnline_Throws(LocationDto locationDto)
+        {
+            mockSecurityContext.Setup(s => s.GetCurrentUserId()).Returns(existingUserDTO.Id);
+
+            Assert.ThrowsAsync<EventsExpressException>(async () =>
+                await service.EditLocation(locationDto));
+        }
+
+        [Test]
+        public void EditLocation_UserLocationIdIsNull_DoesNotThrow()
+        {
+            mockSecurityContext.Setup(s => s.GetCurrentUserId()).Returns(secondUser.Id);
+
+            Assert.DoesNotThrowAsync(async () => await service.EditLocation(existingUserDTO.Location));
+        }
+
+        [Test]
+        public void EditGender_ExistingUser_DoesNotThrow()
+        {
+            mockSecurityContext.Setup(s => s.GetCurrentUserId()).Returns(existingUserDTO.Id);
+
+            Assert.DoesNotThrowAsync(async () => await service.EditGender(It.IsAny<Gender>()));
+        }
+
+        [Test]
+        public void ChangeAvatar_UserInDbFound_Success()
+        {
+            string testFilePath = @"./Images/valid-event-image.jpg";
+            using var stream = new MemoryStream();
+            var file = PhotoHelpers.GetPhoto(testFilePath, stream);
+
+            mockSecurityContext.Setup(s => s.GetCurrentUserId()).Returns(existingUserDTO.Id);
+
+            Assert.DoesNotThrowAsync(async () => await service.ChangeAvatar(file));
+            mockUserPhotoService.Verify(x => x.AddUserPhoto(file, existingUserDTO.Id));
+        }
+
+        [Test]
+        public void ChangeAvatar_InvalidFile_Throws()
+        {
+            mockUserPhotoService.Setup(ps => ps.AddUserPhoto(It.IsAny<IFormFile>(), It.IsAny<Guid>())).Throws<ArgumentException>();
+            var formFile = new FormFile(new MemoryStream(), 0, 0, string.Empty, "test");
+
+            var ex = Assert.ThrowsAsync<EventsExpressException>(async () => await service.ChangeAvatar(formFile));
+            Assert.That(ex.Message, Contains.Substring("Bad image file"));
+        }
+
+        private static void Clear<T>(DbSet<T> dbSet)
+            where T : class
+        {
+            dbSet.RemoveRange(dbSet);
+        }
     }
 }

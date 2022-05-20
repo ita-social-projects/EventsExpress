@@ -10,8 +10,6 @@ namespace EventsExpress.Core.Extensions
 {
     public static class FormFileExtensions
     {
-        public const int ImageMinimumBytes = 4096;
-
         public static bool IsImage(this IFormFile postedFile)
         {
             //-------------------------------------------
@@ -48,16 +46,8 @@ namespace EventsExpress.Core.Extensions
                     return false;
                 }
 
-                //------------------------------------------
-                // check whether the image size exceeding the limit or not
-                //------------------------------------------
-                if (postedFile.Length < ImageMinimumBytes)
-                {
-                    return false;
-                }
-
-                byte[] buffer = new byte[ImageMinimumBytes];
-                postedFile.OpenReadStream().Read(buffer, 0, ImageMinimumBytes);
+                byte[] buffer = new byte[postedFile.Length];
+                postedFile.OpenReadStream().Read(buffer);
                 string content = Encoding.UTF8.GetString(buffer);
                 if (Regex.IsMatch(content, @"<script|<html|<head|<title|<body|<pre|<table|<a\s+href|<img|<plaintext|<cross\-domain\-policy", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Multiline))
                 {

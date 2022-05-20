@@ -1,19 +1,20 @@
 ﻿using System;
-using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
-using EventsExpress.Db.Entities;
 using Microsoft.AspNetCore.Http;
 
 namespace EventsExpress.Core.IServices
 {
-    public interface IPhotoService
+    public interface IEventPhotoService
     {
         Task AddEventTempPhoto(IFormFile uploadedFile, Guid id);
 
-        Task AddUserPhoto(IFormFile uploadedFile, Guid id);
-
         Task ChangeTempToImagePhoto(Guid id);
 
-        Task<byte[]> GetPhotoFromAzureBlob(string url);
+        Task<byte[]> GetPreviewEventPhoto(Guid id);
+
+        Task<byte[]> GetFullEventPhoto(Guid id);
     }
 }

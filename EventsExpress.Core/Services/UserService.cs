@@ -21,7 +21,7 @@ namespace EventsExpress.Core.Services
     public class UserService : BaseService<User>, IUserService
     {
         private readonly IMediator _mediator;
-        private readonly IPhotoService _photoService;
+        private readonly IUserPhotoService _userPhotoService;
         private readonly ILocationManager _locationManager;
         private readonly ISecurityContext _securityContext;
 
@@ -29,13 +29,13 @@ namespace EventsExpress.Core.Services
             AppDbContext context,
             IMapper mapper,
             IMediator mediator,
-            IPhotoService photoSrv,
+            IUserPhotoService photoSrv,
             ILocationManager locationManager,
             ISecurityContext securityContext)
             : base(context, mapper)
         {
             _mediator = mediator;
-            _photoService = photoSrv;
+            _userPhotoService = photoSrv;
             _locationManager = locationManager;
             _securityContext = securityContext;
         }
@@ -203,7 +203,7 @@ namespace EventsExpress.Core.Services
             try
             {
                 var userId = _securityContext.GetCurrentUserId();
-                await _photoService.AddUserPhoto(avatar, userId);
+                await _userPhotoService.AddUserPhoto(avatar, userId);
                 return userId;
             }
             catch (ArgumentException)

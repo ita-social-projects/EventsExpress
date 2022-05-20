@@ -81,31 +81,6 @@ namespace EventsExpress.Test.ServiceTests.TestClasses.Event
             };
         }
 
-        public static FormFile GetPhoto(string filePath)
-        {
-            byte[] bytes = File.ReadAllBytes(filePath);
-            string base64 = Convert.ToBase64String(bytes);
-            string fileName = Path.GetFileName(filePath);
-            using var stream = new MemoryStream(Encoding.UTF8.GetBytes(base64));
-            var file = new FormFile(stream, 0, stream.Length, string.Empty, fileName)
-            {
-                Headers = new HeaderDictionary(),
-                ContentType = GetContentType(fileName),
-            };
-            return file;
-        }
-
-        public static string GetContentType(string fileName)
-        {
-            var provider = new FileExtensionContentTypeProvider();
-            if (!provider.TryGetContentType(fileName, out var contentType))
-            {
-                contentType = "application/octet-stream";
-            }
-
-            return contentType;
-        }
-
         public static EventDto DeepCopyDto(EventDto eventDto)
         {
             if (eventDto is null)

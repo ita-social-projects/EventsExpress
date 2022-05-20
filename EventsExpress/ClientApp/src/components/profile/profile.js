@@ -20,6 +20,7 @@ import LinkedAuthsWrapper from '../../containers/linked-auths-wrapper';
 import { InterestsSection } from './profile-sections/interests-section';
 import { MoreInfoSection } from './profile-sections/more-info-section';
 import GeneralInfoSection from './profile-sections/general-info-section';
+import SpinnerWrapper from "../../containers/spinner"
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -82,6 +83,9 @@ const Profile = (props) => {
     
     return (
         <div className={classes.root}>
+            <SpinnerWrapper
+            showContent={props.id != undefined}
+            >
             <div className={classes.profileHeader}>
                 <h1>Profile</h1>
             </div>
@@ -96,6 +100,8 @@ const Profile = (props) => {
                     <GeneralInfoSection />
                 </div>
             </div>
+            </SpinnerWrapper>
+            
         </div>
     );
 }

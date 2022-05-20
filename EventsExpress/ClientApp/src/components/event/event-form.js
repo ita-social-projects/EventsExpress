@@ -18,9 +18,10 @@ import {
 import { enumLocationType } from "../../constants/EventLocationType";
 import "./event-form.css";
 import asyncValidatePhoto from "../../containers/async-validate-photo";
-import ErrorMessages from '../shared/errorMessage';
+import ErrorMessages from "../shared/errorMessage";
 import Location from "../location";
 import eventStatusEnum from "../../constants/eventStatusEnum";
+import { EventImageResizer } from "../helpers/image-resizer";
 momentLocaliser(moment);
 
 const photoService = new PhotoService();
@@ -75,6 +76,7 @@ class EventForm extends Component {
             crop={true}
             cropShape="rect"
             loadImage={() => photoService.getFullEventPhoto(this.props.eventId)}
+            imageResizer={EventImageResizer}
           />
           <div className="mt-2">
             <Field
@@ -200,7 +202,7 @@ class EventForm extends Component {
               placeholder="#hashtags"
             />
           </div>
-          <Field name="location" component={Location}/>
+          <Field name="location" component={Location} />
         </div>
         <div className="row my-4">
           {error && <ErrorMessages error={error} className="text-center" />}
