@@ -1,5 +1,5 @@
 import ChangeAvatarModal from "./change-avatar-modal";
-import DeleteAvatarModal from "./delete-avatar-modal-confirm";
-import EditAvatarModal from "./edit-avatar-modal-with-options";
+import DeleteAvatarModal from "./delete-avatar-modal";
+import EditAvatarPreviewModal from "./edit-avatar-preview-modal";
 
-export { ChangeAvatarModal, DeleteAvatarModal, EditAvatarModal };
+export { ChangeAvatarModal, DeleteAvatarModal, EditAvatarPreviewModal };
