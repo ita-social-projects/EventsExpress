@@ -2,14 +2,14 @@ import React from "react";
 import CustomAvatar from "../../../avatar/custom-avatar";
 import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
-import ChangeAvatarModal from "./change-avatar-modal";
-import PhotoService from "../../../../services/PhotoService";
-import DeleteAvatarModal from "./delete-avatar-modal-confirm";
 import Dialog from "@material-ui/core/Dialog";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from "@material-ui/icons/Close";
+import { PhotoService } from "../../../../services";
+
+const photoService = new PhotoService();
 
 const useStyles = makeStyles({
   button: {
@@ -34,62 +34,29 @@ const useStyles = makeStyles({
   },
 });
 
-const photoService = new PhotoService();
-
 export default function EditAvatarModal(props) {
   const classes = useStyles();
-  const [showChangeAvatarModal, setShowChangeAvatarModal] =
-    React.useState(false);
-  const [showDeleteAvatarModal, setShowDeleteAvatarModal] =
-    React.useState(false);
   const [displayDeleteButton, setDisplayDeleteButton] = React.useState(false);
-
-  const handleChangeButtonClick = () => {
-    props.onHide();
-    setShowChangeAvatarModal(true);
-  };
-
-  const handleChangeAvatarModalClose = () => {
-    setShowChangeAvatarModal(false);
-  };
-
-  const handleReturnButtonInChangeModalClick = () => {
-    handleChangeAvatarModalClose();
-    props.Open();
-  };
-
-  const handleDeleteButtonClick = () => {
-    props.onHide();
-    setShowDeleteAvatarModal(true);
-  };
-
-  const handleDeleteAvatarModalClose = () => {
-    setShowDeleteAvatarModal(false);
-  };
-
-  const handleReturnButtonInDeleteModalClick = () => {
-    handleDeleteAvatarModalClose();
-    props.Open();
-  };
+  const { open, onClose, name, id, onChangeButtonClick, onDeleteButtonClick } =
+    props;
+  const header = (displayDeleteButton ? "Add" : "Edit") + " Avatar";
 
   React.useEffect(() => {
-    photoService.getUserPhoto(props.id).then((image) => {
+    photoService.getUserPhoto(id).then((image) => {
       if (image) {
         setDisplayDeleteButton(false);
       } else {
         setDisplayDeleteButton(true);
       }
     });
-  }, []);
-
-  const header = (displayDeleteButton ? "Add" : "Edit") + " Avatar";
+  });
   return (
     <React.Fragment>
       <Dialog
         fullWidth
         maxWidth="xs"
-        open={props.show}
-        onClose={props.onHide}
+        open={open}
+        onClose={onClose}
         aria-labelledby="dialog-with-options-title"
         scroll="body"
       >
@@ -98,7 +65,7 @@ export default function EditAvatarModal(props) {
           <IconButton
             aria-label="close"
             className={classes.closeButton}
-            onClick={props.onHide}
+            onClick={onClose}
           >
             <CloseIcon />
           </IconButton>
@@ -108,14 +75,14 @@ export default function EditAvatarModal(props) {
             <CustomAvatar
               width="200px"
               height="200px"
-              name={props.name}
-              userId={props.id}
+              name={name}
+              userId={id}
               variant="square"
             />
             <div>
               <Button
                 className={classes.button}
-                onClick={handleChangeButtonClick}
+                onClick={onChangeButtonClick}
                 variant="contained"
                 color="primary"
               >
@@ -125,7 +92,7 @@ export default function EditAvatarModal(props) {
                 className={
                   displayDeleteButton ? classes.deleteButton : classes.button
                 }
-                onClick={handleDeleteButtonClick}
+                onClick={onDeleteButtonClick}
                 variant="contained"
                 color="secondary"
               >
@@ -135,20 +102,6 @@ export default function EditAvatarModal(props) {
           </div>
         </DialogContent>
       </Dialog>
-
-      <ChangeAvatarModal
-        show={showChangeAvatarModal}
-        onHide={handleChangeAvatarModalClose}
-        onReturn={handleReturnButtonInChangeModalClick}
-        header={header}
-      />
-
-      <DeleteAvatarModal
-        show={showDeleteAvatarModal}
-        onHide={handleDeleteAvatarModalClose}
-        onReturn={handleReturnButtonInDeleteModalClick}
-        id={props.id}
-      />
     </React.Fragment>
   );
 }

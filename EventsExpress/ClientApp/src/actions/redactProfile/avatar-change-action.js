@@ -15,13 +15,10 @@ const photoService = new PhotoService();
 
 export default function change_avatar(data) {
     return async dispatch => {
-        
         let response = await userService.setAvatar(data);
         if (!response.ok) {
             throw new SubmissionError(await buildValidationState(response));
         }
-        dispatch(getRequestInc());
-        dispatch(getRequestDec());
         dispatch(updateAvatar());
         dispatch(setSuccessAllert('Avatar has been successfully updated'));
         return Promise.resolve();
@@ -30,17 +27,14 @@ export default function change_avatar(data) {
 
 export  function delete_avatar(data) {
     return async dispatch => {
-        dispatch(getRequestInc());
-
         let response = await photoService.deleteUserPhoto(data);
         if (!response.ok) {
             dispatch(setErrorAlert("Something went wrong"))
         }
         else{
+            dispatch(updateAvatar());
             dispatch(setSuccessAllert('Avatar has been successfully deleted'));
         }
-        dispatch(getRequestDec());
-        dispatch(updateAvatar());
         return Promise.resolve();
     }
 }

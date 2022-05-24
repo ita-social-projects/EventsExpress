@@ -2,7 +2,7 @@ import React from "react";
 import CustomAvatar from "../../avatar/custom-avatar";
 import IconButton from "@material-ui/core/IconButton";
 import { makeStyles } from "@material-ui/core/styles";
-import {EditAvatarModal} from "../editProfile/editAvatarModals";
+import ChangeAvatarModalContainer  from "../../../containers/editProfileContainers/changeAvatarModalContainer";
 
 const useStyles = makeStyles({
   editIcon: {
@@ -54,12 +54,10 @@ export default function ProfileAvatar(props) {
         variant="square"
       />
 
-      <EditAvatarModal
+      <ChangeAvatarModalContainer
         show={modalShow}
         onHide={handleClose}
-        Open={handleOpen}
-        name={props.name}
-        id={props.userId}
+        onOpen={handleOpen}
       />
     </div>
   );
