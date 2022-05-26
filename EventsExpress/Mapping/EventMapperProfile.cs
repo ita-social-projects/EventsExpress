@@ -168,9 +168,9 @@ namespace EventsExpress.Mapping
             };
         }
 
-        private static string UserName(User user)
+        private static string FirstName(User user)
         {
-            return user.Name ?? user.Email.Substring(0, user.Email.IndexOf("@", StringComparison.Ordinal));
+            return user.FirstName ?? user.Email.Substring(0, user.Email.IndexOf("@", StringComparison.Ordinal));
         }
 
         private static CategoryDto MapCategoryToCategoryDto(EventCategory eventCategory)
@@ -276,7 +276,7 @@ namespace EventsExpress.Mapping
             {
                 Birthday = user.Birthday,
                 Id = user.Id,
-                Username = UserName(user),
+                FirstName = FirstName(user),
             };
         }
     }

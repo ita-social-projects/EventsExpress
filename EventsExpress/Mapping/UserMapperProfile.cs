@@ -31,7 +31,6 @@ namespace EventsExpress.Mapping
 
             CreateMap<UserDto, User>()
                 .ForMember(dest => dest.Id, opts => opts.MapFrom(src => src.Id))
-                .ForMember(dest => dest.Name, opts => opts.MapFrom(src => src.Name))
                 .ForMember(dest => dest.FirstName, opts => opts.MapFrom(src => src.FirstName))
                 .ForMember(dest => dest.LastName, opts => opts.MapFrom(src => src.LastName))
                 .ForMember(dest => dest.Birthday, opts => opts.MapFrom(src => src.Birthday))
@@ -45,8 +44,8 @@ namespace EventsExpress.Mapping
                 .ForAllOtherMembers(x => x.Ignore());
 
             CreateMap<UserDto, UserInfoViewModel>()
-                .ForMember(dest => dest.Name, opts => opts.MapFrom(src =>
-                    src.Name ?? src.Email.Substring(0, src.Email.IndexOf("@", StringComparison.Ordinal))))
+                .ForMember(dest => dest.FirstName, opts => opts.MapFrom(src =>
+                    src.FirstName ?? src.Email.Substring(0, src.Email.IndexOf("@", StringComparison.Ordinal))))
                 .ForMember(dest => dest.Roles, opts => opts.MapFrom(src => src.Account.AccountRoles.Select(x => x.Role.Name)))
                 .ForMember(
                     dest => dest.Categories,
@@ -67,19 +66,18 @@ namespace EventsExpress.Mapping
                 .ForMember(dest => dest.CanChangePassword, opts => opts.MapFrom(src => src.CanChangePassword))
                 .ForMember(dest => dest.BookmarkedEvents, opts => opts.MapFrom(src => src.BookmarkedEvents))
                 .ForMember(dest => dest.Location, opts => opts.MapFrom(src => MapLocationUser(src)))
-                .ForMember(dest => dest.FirstName, opts => opts.MapFrom(src => src.FirstName))
                 .ForMember(dest => dest.LastName, opts => opts.MapFrom(src => src.LastName));
 
-            void MapUsername<T>(IMemberConfigurationExpression<UserDto, T, string> options)
+            void MapFirstName<T>(IMemberConfigurationExpression<UserDto, T, string> options)
             {
-                options.MapFrom(source => source.Name ?? source.Email.Substring(
+                options.MapFrom(source => source.FirstName ?? source.Email.Substring(
                     0, source.Email.IndexOf("@", StringComparison.Ordinal)));
             }
 
             CreateMap<UserDto, UserManageViewModel>()
                 .ForMember(dest => dest.Id, opts => opts.MapFrom(src => src.Id))
                 .ForMember(dest => dest.Email, opts => opts.MapFrom(src => src.Email))
-                .ForMember(dest => dest.Username, MapUsername)
+                .ForMember(dest => dest.FirstName, MapFirstName)
                 .ForMember(dest => dest.IsBlocked, opts => opts.MapFrom(src => src.Account.IsBlocked))
                 .ForMember(
                     dest => dest.Roles,
@@ -93,21 +91,21 @@ namespace EventsExpress.Mapping
                 .ForMember(
                     destination => destination.Id,
                     options => options.MapFrom(source => source.Id))
-                .ForMember(destination => destination.Username, MapUsername);
+                .ForMember(destination => destination.FirstName, MapFirstName);
 
             CreateMap<UserDto, UserPreviewViewModel>()
                 .ForMember(dest => dest.Id, opts => opts.MapFrom(src => src.Id))
                 .ForMember(dest => dest.Email, opts => opts.MapFrom(src => src.Email))
                 .ForMember(dest => dest.Birthday, opts => opts.MapFrom(src => src.Birthday))
                 .ForMember(
-                    dest => dest.Username,
-                    opts => opts.MapFrom(src => src.Name ?? src.Email.Substring(0, src.Email.IndexOf("@", StringComparison.Ordinal))))
+                    dest => dest.FirstName,
+                    opts => opts.MapFrom(src => src.FirstName ?? src.Email.Substring(0, src.Email.IndexOf("@", StringComparison.Ordinal))))
                 .ForMember(dest => dest.Rating, opts => opts.MapFrom(src => src.Rating))
                 .ForMember(dest => dest.UserStatusEvent, opts => opts.Ignore())
                 .ForMember(dest => dest.Attitude, opts => opts.Ignore());
 
             CreateMap<UserDto, ProfileDto>()
-                .ForMember(dest => dest.Name, opts => opts.MapFrom(src => src.Name ?? src.Email.Substring(0, src.Email.IndexOf("@", StringComparison.Ordinal))))
+                .ForMember(dest => dest.FirstName, opts => opts.MapFrom(src => src.FirstName ?? src.Email.Substring(0, src.Email.IndexOf("@", StringComparison.Ordinal))))
                 .ForMember(
                     dest => dest.Categories,
                     opts => opts.MapFrom(src =>
@@ -117,7 +115,8 @@ namespace EventsExpress.Mapping
                     opts => opts.MapFrom(src =>
                         src.NotificationTypes.Select(x => new NotificationTypeDto { Id = x.NotificationType.Id, Name = x.NotificationType.Name })))
                 .ForMember(
-                    dest => dest.IsBlocked, opts => opts.MapFrom(src => src.Account.IsBlocked));
+                    dest => dest.IsBlocked, opts => opts.MapFrom(src => src.Account.IsBlocked))
+                .ForMember(dest => dest.LastName, opts => opts.MapFrom(src => src.LastName));
 
             CreateMap<ProfileDto, ProfileViewModel>()
                 .ForMember(

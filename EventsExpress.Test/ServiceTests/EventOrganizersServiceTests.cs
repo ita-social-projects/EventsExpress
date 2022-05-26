@@ -27,7 +27,7 @@ public class EventOrganizersServiceTests : TestInitializer
         var organizer = new User
         {
             Id = _organizerId,
-            Name = "Organizer",
+            FirstName = "Organizer",
             Email = "organizer@gmail.com",
             Birthday = DateTime.Today.AddYears(-20),
         };
@@ -36,7 +36,7 @@ public class EventOrganizersServiceTests : TestInitializer
         var visitor = new User
         {
             Id = _visitorId,
-            Name = "Visitor",
+            FirstName = "Visitor",
             Email = "visitor@gmail.com",
             Birthday = DateTime.Today.AddYears(-20),
         };

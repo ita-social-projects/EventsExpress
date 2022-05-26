@@ -47,7 +47,7 @@ namespace EventsExpress.ValueResolvers
                 res.Add(new UserPreviewViewModel
                 {
                     Id = u.User.Id,
-                    Username = u.User.Name ?? u.User.Email.Substring(0, u.User.Email.IndexOf("@")),
+                    FirstName = u.User.FirstName ?? u.User.Email.Substring(0, u.User.Email.IndexOf("@")),
                     Birthday = u.User.Birthday,
                     UserStatusEvent = u.UserStatusEvent,
                     Rating = _userService.GetRating(u.User.Id),

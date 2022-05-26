@@ -40,7 +40,7 @@ namespace EventsExpress.Mapping
                 .ForMember(dest => dest.Organizers, opts => opts.MapFrom(src => src.Event.Organizers.Select(x => new UserPreviewViewModel
                 {
                     Id = x.Id,
-                    Username = x.Name,
+                    FirstName = x.FirstName,
                 })));
 
             CreateMap<PreviewEventScheduleViewModel, EventScheduleDto>()

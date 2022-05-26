@@ -43,8 +43,8 @@ namespace EventsExpress.Test.ServiceTests
         private Guid secondUserId = Guid.NewGuid();
         private NotificationChange notificationTypeId = NotificationChange.OwnEvent;
 
-        private string name = "existingName";
-        private string secondName = "secondName";
+        private string firstName = "existingFirstName";
+        private string secondFirstName = "secondFirstName";
         private string existingEmail = "existingEmail@gmail.com";
         private string secondEmail = "secondEmail@gmail.com";
 
@@ -87,7 +87,7 @@ namespace EventsExpress.Test.ServiceTests
             existingUser = new User
             {
                 Id = userId,
-                Name = name,
+                FirstName = firstName,
                 Email = existingEmail,
                 LocationId = Guid.NewGuid(),
                 NotificationTypes = new List<UserNotificationType>
@@ -131,66 +131,65 @@ namespace EventsExpress.Test.ServiceTests
             secondUser = new User
             {
                 Id = secondUserId,
-                Name = secondName,
+                FirstName = secondFirstName,
                 Email = secondEmail,
                 NotificationTypes = new List<UserNotificationType>
-            {
-                new UserNotificationType
                 {
-                    UserId = secondUserId,
-                    NotificationTypeId = NotificationChange.Profile,
-                },
-            },
-                Categories = new List<UserCategory>
-            {
-                new UserCategory
-                {
-                    UserId = secondUserId,
-                    Category = new Category
+                    new UserNotificationType
                     {
-                        Id = Guid.NewGuid(),
-                        Name = "Mount",
+                        UserId = secondUserId,
+                        NotificationTypeId = NotificationChange.Profile,
                     },
                 },
-            },
-                Account = new Account
+                Categories = new List<UserCategory>
                 {
-                    UserId = secondUserId,
-                    IsBlocked = false,
-                },
+                    new UserCategory
+                    {
+                        UserId = secondUserId,
+                        Category = new Category
+                        {
+                            Id = Guid.NewGuid(),
+                            Name = "Mount",
+                        },
+                    },
+                }, Account = new Account
+                    {
+                        UserId = secondUserId,
+                        IsBlocked = false,
+                    },
                 LocationId = null,
             };
 
             existingUserDTO = new UserDto
             {
                 Id = userId,
-                Name = name,
+                FirstName = firstName,
                 Email = existingEmail,
                 NotificationTypes = new List<UserNotificationType>
-            {
-                new UserNotificationType
                 {
-                    UserId = userId,
-                    NotificationTypeId = NotificationChange.OwnEvent,
-                },
-                new UserNotificationType
-                {
-                    UserId = userId,
-                    NotificationTypeId = NotificationChange.Profile,
-                },
-            },
-                Categories = new List<UserCategory>
-            {
-                new UserCategory
-                {
-                    UserId = userId,
-                    Category = new Category
+                    new UserNotificationType
                     {
-                        Id = Guid.NewGuid(),
-                        Name = "Sea",
+                        UserId = userId,
+                        NotificationTypeId = NotificationChange.OwnEvent,
+                    },
+                    new UserNotificationType
+                    {
+                        UserId = userId,
+                        NotificationTypeId = NotificationChange.Profile,
                     },
                 },
-            },
+                Categories = new List<UserCategory>
+                {
+                    new UserCategory
+                    {
+                        UserId = userId,
+                        Category = new Category
+                        {
+                            Id = Guid.NewGuid(),
+                            Name = "Sea",
+                        },
+                    },
+                },
                 Location = new LocationDto
                 {
                     Point = Point.Empty,
@@ -203,28 +202,28 @@ namespace EventsExpress.Test.ServiceTests
             secondUserDTO = new UserDto
             {
                 Id = secondUserId,
-                Name = secondName,
+                FirstName = secondFirstName,
                 Email = secondEmail,
                 NotificationTypes = new List<UserNotificationType>
-            {
-                new UserNotificationType
                 {
-                    UserId = secondUserId,
-                    NotificationTypeId = NotificationChange.Profile,
-                },
-            },
-                Categories = new List<UserCategory>
-            {
-                new UserCategory
-                {
-                    UserId = secondUserId,
-                    Category = new Category
+                    new UserNotificationType
                     {
-                        Id = Guid.NewGuid(),
-                        Name = "Mount",
+                        UserId = secondUserId,
+                        NotificationTypeId = NotificationChange.Profile,
                     },
                 },
-            },
+                Categories = new List<UserCategory>
+                {
+                    new UserCategory
+                    {
+                        UserId = secondUserId,
+                        Category = new Category
+                        {
+                            Id = Guid.NewGuid(),
+                            Name = "Mount",
+                        },
+                    },
+                },
                 Account = new Account
                 {
                     UserId = secondUserId,
@@ -310,8 +309,8 @@ namespace EventsExpress.Test.ServiceTests
             var res = service.GetUsersByNotificationTypes(notificationTypeId, idsUsers);
             var resUsers = res.Where(x => idsUsers.Contains(x.Id)).Select(x => x);
 
-            Assert.That(resUsers.Where(x => x.Name.Contains(name) && x.Email.Contains(existingEmail)), Is.Not.Null);
-        }
+            Assert.That(resUsers.Where(x => x.FirstName.Contains(firstName) && x.Email.Contains(existingEmail)), Is.Not.Null);
+    }
 
         [Test]
         public void GetUsersByNotificationTypes_InvalidUser_ReturnsEmptyResult()
@@ -430,19 +429,9 @@ namespace EventsExpress.Test.ServiceTests
         }
 
         [Test]
-        public void EditUserName_ExistingUser_DoesNotThrow()
-        {
-            mockSecurityContext.Setup(s => s.GetCurrentUserId()).Returns(existingUserDTO.Id);
-
-            Assert.DoesNotThrowAsync(async () =>
-                await service.EditUserName(It.IsAny<string>()));
-        }
-
-        [Test]
         public void EditLastName_ExistingUser_DoesNotThrow()
         {
             mockSecurityContext.Setup(s => s.GetCurrentUserId()).Returns(existingUserDTO.Id);
-
             Assert.DoesNotThrowAsync(async () =>
                 await service.EditLastName(It.IsAny<string>()));
         }

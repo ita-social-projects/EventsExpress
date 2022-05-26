@@ -153,21 +153,6 @@ namespace EventsExpress.Controllers
         }
 
         /// <summary>
-        /// This method is to edit username.
-        /// </summary>
-        /// <param name="userName">Param userName defines the username.</param>
-        /// <returns>The method returns edited username.</returns>
-        /// <response code="200">Edit is successful.</response>
-        /// <response code="400">Edit process failed.</response>
-        [HttpPost("[action]")]
-        public async Task<IActionResult> EditUsername(EditUserNameViewModel userName)
-        {
-            await _userService.EditUserName(userName.Name);
-
-            return Ok();
-        }
-
-        /// <summary>
         /// This method is to edit date of birthday.
         /// </summary>
         /// <param name="userBirthday">Param userBirthday defines the user Birthday.</param>

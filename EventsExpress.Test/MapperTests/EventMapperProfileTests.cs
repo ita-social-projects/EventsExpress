@@ -45,7 +45,7 @@ namespace EventsExpress.Test.MapperTests
                 new User
                 {
                     Id = idUser,
-                    Name = "User",
+                    FirstName = "User",
                     Email = "user@gmail.com",
                     Birthday = DateTime.Now,
                 },
@@ -232,7 +232,7 @@ namespace EventsExpress.Test.MapperTests
                     new UserPreviewViewModel
                     {
                         Id = idUser,
-                        Username = "name of user",
+                        FirstName = "name of user",
                         Email = "user@gmail.com",
                         Birthday = DateTime.Now,
                         Rating = 8,
@@ -271,7 +271,7 @@ namespace EventsExpress.Test.MapperTests
                     new UserPreviewViewModel
                     {
                         Id = idUser,
-                        Username = "name of user",
+                        FirstName = "name of user",
                         Email = "user@gmail.com",
                         Birthday = DateTime.Now,
                         Rating = 8,
@@ -426,7 +426,7 @@ namespace EventsExpress.Test.MapperTests
                                                       firstEventDto.Visitors
                                                       .All(f =>
                                                           ex.Id == f.User.Id &&
-                                                          ex.Username == f.User.Name &&
+                                                          ex.FirstName == f.User.FirstName &&
                                                           ex.Birthday == f.User.Birthday &&
                                                           ex.UserStatusEvent == f.UserStatusEvent)));
             Assert.That(resEven.Organizers, Has.All.Matches<UserPreviewViewModel>(ex =>
@@ -434,7 +434,7 @@ namespace EventsExpress.Test.MapperTests
                                                        .All(f =>
                                                            ex.Id == f.Id &&
                                                            ex.Birthday == f.Birthday &&
-                                                           ex.Username == f.Name)));
+                                                           ex.FirstName == f.FirstName)));
         }
 
         [Test]
@@ -465,7 +465,7 @@ namespace EventsExpress.Test.MapperTests
                                                       firstEventDto.Visitors
                                                       .All(f =>
                                                           ex.Id == f.User.Id &&
-                                                          ex.Username == f.User.Name &&
+                                                          ex.FirstName == f.User.FirstName &&
                                                           ex.Birthday == f.User.Birthday &&
                                                           ex.UserStatusEvent == f.UserStatusEvent)));
             Assert.That(resView.Organizers, Has.All.Matches<UserPreviewViewModel>(ex =>
@@ -473,7 +473,7 @@ namespace EventsExpress.Test.MapperTests
                                                       .All(f =>
                                                           ex.Id == f.Id &&
                                                           ex.Birthday == f.Birthday &&
-                                                          ex.Username == f.Name)));
+                                                          ex.FirstName == f.FirstName)));
             Assert.That(resView.Frequency, Is.EqualTo(firstEventDto.Frequency));
             Assert.That(resView.Periodicity, Is.EqualTo(firstEventDto.Periodicity));
             Assert.That(resView.IsReccurent, Is.EqualTo(firstEventDto.IsReccurent));

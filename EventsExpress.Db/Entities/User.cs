@@ -8,8 +8,6 @@ namespace EventsExpress.Db.Entities;
 [ExcludeFromCodeCoverage]
 public class User : BaseEntity
 {
-    public string Name { get; set; }
-
     public string FirstName { get; set; }
 
     public string LastName { get; set; }

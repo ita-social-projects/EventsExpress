@@ -55,7 +55,8 @@ class UserItemView extends Component {
 
     render() {
         const {
-            name,
+            firstName,
+            lastName,
             email,
             birthday,
             gender,
@@ -82,7 +83,7 @@ class UserItemView extends Component {
                         <div className='d-flex flex-column justify-content-center align-items-center'>
                             <div className="user-profile-avatar">
                                 <CustomAvatar size="big"
-                                              name={name}
+                                              name={firstName}
                                               userId={id}/>
                             </div>
                             <RatingAverage value={rating} direction='row'/>
@@ -116,7 +117,8 @@ class UserItemView extends Component {
                     </div>
                 </AuthComponent>
                 <div className='col-sm-12  col-md-6'>
-                    {render_prop('User Name', name)}
+                    {render_prop('First Name', firstName)}
+                    {render_prop('Last Name', lastName)}
                     {render_prop('Age', getAge(birthday))}
                     {render_prop('Gender', genders[gender])}
                     {render_prop('Email', email)}

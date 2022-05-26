@@ -7,7 +7,7 @@ import CustomAvatar from '../avatar/custom-avatar';
 export default class commentItem extends Component {
 
     render() {
-        const { text, date, userName, userId } = this.props.item;
+        const { text, date, firstName, userId } = this.props.item;
         const { user } = this.props;
         return (
             <div>
@@ -17,7 +17,7 @@ export default class commentItem extends Component {
                             <div className="photo-container">
                                 <CustomAvatar
                                     userId={userId}
-                                    name={userName}
+                                    name={firstName}
                                 />
                                 <h1 className="text-secondary comment-text"> {getTimeDifferenceFromNull(date)}</h1>
                             </div>

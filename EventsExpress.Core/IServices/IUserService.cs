@@ -43,8 +43,6 @@ namespace EventsExpress.Core.IServices
 
         Task<Guid> EditFavoriteNotificationTypes(IEnumerable<NotificationType> notificationTypes);
 
-        Task EditUserName(string name);
-
         Task EditBirthday(DateTime birthday);
 
         Task EditGender(Gender gender);

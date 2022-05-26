@@ -27,11 +27,11 @@ export default class UserInfoCard extends Component {
                             <CustomAvatar
                                 size="little"
                                 userId={user.id}
-                                name={user.username}
+                                name={user.firstName}
                             />
                         </Link>
                         <div className='d-flex flex-column'>
-                            <Link to={`/user/${user.id}`}>{user.username}</Link>
+                            <Link to={`/user/${user.id}`}>{user.firstName}</Link>
                             <div>{genders[user.gender]}</div>
                             <div>Age: {getAge(user.birthday)}</div>
                         </div>

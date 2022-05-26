@@ -57,7 +57,7 @@ namespace EventsExpress.Test.MapperTests
             Assert.That(eventScheduleViewModel.Title, Is.EqualTo(eventScheduleDto.Event.Title));
             Assert.That(eventScheduleViewModel.IsActive, Is.EqualTo(eventScheduleDto.IsActive));
             Assert.That(eventScheduleViewModel.Organizers, Has.All.Matches<UserPreviewViewModel>(x => eventScheduleDto.Event.Organizers
-                .All(o => x.Id == o.Id && x.Username == o.Name)));
+                .All(o => x.Id == o.Id && x.FirstName == o.FirstName)));
         }
 
         [Test]

@@ -30,7 +30,7 @@ namespace EventsExpress.Test.ServiceTests
             user = new User
             {
                 Id = userId,
-                Name = "NameIsExist",
+                FirstName = "NameIsExist",
                 Email = "user@gmail.com",
             };
 

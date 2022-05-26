@@ -17,7 +17,7 @@ namespace EventsExpress.Test.ServiceTests
     [TestFixture]
     internal class AuthServiceTests : TestInitializer
     {
-        private const string Name = "existingName";
+        private const string FirstName = "existingFirstName";
         private const string ExistingEmail = "existingEmail@gmail.com";
         private const string ValidPassword = "validPassword";
         private const string InvalidPassword = "invalidPassword";
@@ -62,14 +62,14 @@ namespace EventsExpress.Test.ServiceTests
             existingUser = new User
             {
                 Id = AuthLocalId,
-                Name = Name,
+                FirstName = FirstName,
                 Email = ExistingEmail,
             };
 
             existingUserDto = new UserDto
             {
                 Id = AuthLocalId,
-                Name = Name,
+                FirstName = FirstName,
                 Email = ExistingEmail,
             };
 

@@ -38,7 +38,7 @@ export default class TrackItem extends Component {
                     {name}
                 </td>
                 <td className="text-center">
-                    <Link to={`/user/${user.id}`}>{user.name}</Link>
+                    <Link to={`/user/${user.id}`}>{user.firstName}</Link>
                 </td>
                 <td className="text-center">
                     {new Date(time).toLocaleString()}

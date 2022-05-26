@@ -20,7 +20,7 @@ namespace EventsExpress.Test.ControllerTests
         private static User user = new User
         {
             Id = userId,
-            Name = "user",
+            FirstName = "user",
             Birthday = new DateTime(2001, 01, 01),
         };
 
