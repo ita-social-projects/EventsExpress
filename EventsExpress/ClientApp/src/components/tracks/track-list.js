@@ -22,7 +22,7 @@ class TrackList extends Component {
                         <thead>
                         <tr>
                             <th scope="col" className="text-center">Entity Name</th>
-                            <th scope="col" className="text-center">User name</th>
+                            <th scope="col" className="text-center">User first name</th>
                             <th scope="col" className="text-center">Date</th>
                             <th scope="col" className="text-center">Changes type</th>
                             <th/>
