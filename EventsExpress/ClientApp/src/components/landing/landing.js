@@ -1,21 +1,14 @@
 ﻿import React, { Component } from "react";
 import Carousel from "react-material-ui-carousel";
 import CarouselEventCard from "./CarouselEventCard";
-import ModalWind from "../modal-wind";
 import AuthComponent from "../../security/authComponent";
 import "./landing.css";
-import { get_upcoming_events } from "../../actions/event/event-list-action";
-import { connect } from "react-redux";
 import HeadArticle from "./HeadArticle";
 
 class Landing extends Component {
   constructor(props) {
     super(props);
   }
-
-  handleClick = () => {
-    this.props.onSubmit();
-  };
 
   splitDataIntoBlocks(itemsArray) {
     return itemsArray.reduce((acc, c, i) => {
@@ -26,7 +19,7 @@ class Landing extends Component {
   }
 
   componentDidMount() {
-    this.props.get_upcoming_events();
+    this.props.getUpcomingEvents();
   }
 
   renderCarouselBlock = (eventBlock) => (
@@ -40,14 +33,14 @@ class Landing extends Component {
   render() {
     const { items } = this.props.events.data;
     const events = this.splitDataIntoBlocks(items);
-
+    const id = this.props.user.id;
+    const { onOpenLoginModal, onCreateEvent } = this.props;
     const carouselNavIsVisible = events.length > 1;
 
     return (
       <>
         <div className="main">
-          <HeadArticle
-              onSubmit={this.props.onSubmit}/>
+          <HeadArticle onSubmit={!id ? onOpenLoginModal : onCreateEvent} />
           <article className="works-article text-center">
             <div className="works-title">
               <h2>How EventsExpress Works</h2>
@@ -76,16 +69,12 @@ class Landing extends Component {
             </div>
             <AuthComponent onlyAnonymous>
               <div className="text-center">
-                <ModalWind
-                  renderButton={(action) => (
-                    <button
-                      className="btn btn-warning"
-                      onClick={() => action()}
-                    >
-                      Join EventsExpress
-                    </button>
-                  )}
-                />
+                <button
+                  className="btn btn-warning"
+                  onClick={this.props.onOpenLoginModal}
+                >
+                  Join EventsExpress
+                </button>
               </div>
             </AuthComponent>
           </article>
@@ -131,17 +120,4 @@ class Landing extends Component {
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
-    events: state.events,
-    user: state.user,
-  };
-};
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    get_upcoming_events: () => dispatch(get_upcoming_events()),
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Landing);
+export default Landing;

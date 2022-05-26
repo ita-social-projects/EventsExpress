@@ -10,9 +10,9 @@ import LockOpen from "@material-ui/icons/LockOpen";
 import Typography from "@material-ui/core/Typography";
 import LoginWrapper from "../../containers/login";
 import RegisterWrapper from "../../containers/register";
-import { connect } from 'react-redux';
-import { TogleOpenWind } from '../../actions/modalWind-action';
-import Modalwind2 from '../recoverPassword/modalwind2';
+import { connect } from "react-redux";
+import { toggleLoginModalState } from "../../actions/login-modal";
+import RecoverPasswordModal from "../recoverPassword/recover-password-modal";
 
 function TabContainer(props) {
   return (
@@ -25,35 +25,22 @@ function TabContainer(props) {
 const useStyles = makeStyles({
   root: {
     flexGrow: 1,
-    maxWidth: 500
-  }
+    maxWidth: 500,
+  },
 });
 
-function ModalWind(props) {
+function LoginModal(props) {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
-    
-  const handleChange = (event, newValue) => { 
-    setValue(newValue); 
-  }
 
-  const handleClickOpen = () => { 
-    props.setStatus(true); 
-  }
-  
-  const handleClose = () => { 
-    props.setStatus(false); 
-  }
-
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
+  const { onClose } = props;
+  const open = props.status.isOpen;
   return (
-    <div className='d-inline-block'>
-      {
-          props.renderButton(handleClickOpen)
-      }
-      <Dialog
-        open={props.status.isOpen}
-        onClose={handleClose}
-      >
+    <div className="d-inline-block">
+      <Dialog open={open} onClose={onClose}>
         <Paper square className={classes.root}>
           <Tabs
             value={value}
@@ -65,35 +52,36 @@ function ModalWind(props) {
             <Tab icon={<LockOpen />} label="Login" />
             <Tab icon={<PersonPinIcon />} label="Register" />
           </Tabs>
-          
+
           {value === 0 && (
             <TabContainer>
-              <LoginWrapper  />
+              <LoginWrapper />
             </TabContainer>
           )}
           {value === 1 && (
             <TabContainer>
-              <RegisterWrapper handleClose={handleClose} />
+              <RegisterWrapper handleClose={onClose} />
             </TabContainer>
           )}
 
           <div className="text-center">
-            <Modalwind2 />
+            <RecoverPasswordModal />
           </div>
-          <Button fullWidth onClick={handleClose} color="primary">
+          <Button fullWidth onClick={onClose} color="primary">
             Cancel
           </Button>
         </Paper>
       </Dialog>
     </div>
-)}
+  );
+}
 
 const mapStateToProps = (state) => ({
-  status: state.modal
+  status: state.modal,
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  setStatus: (data) => dispatch(TogleOpenWind(data))
+  onClose: () => dispatch(toggleLoginModalState(false)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(ModalWind)
+export default connect(mapStateToProps, mapDispatchToProps)(LoginModal);

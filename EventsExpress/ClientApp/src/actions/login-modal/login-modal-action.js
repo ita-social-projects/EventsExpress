@@ -1,6 +1,6 @@
 ﻿export const SET_OPEN_STATUS = "IS_OPEN";
 
-export function TogleOpenWind(data) {
+export function toggleLoginModalState(data) {
     return dispatch => {
         dispatch(isOpen(data));
     }

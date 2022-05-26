@@ -22,7 +22,7 @@ import * as Inventory from './inventory-list';
 import * as UsersInventories from './usersInventories';
 import * as Chats from './chats';
 import * as Chat from './chat';
-import * as ModalWind from './ModalWind';
+import * as LoginModal from './login-modal';
 import * as Hub from './hub';
 import * as Alert from './alert';
 import * as ContactAdmin from './contactAdmin/contact-admin-reducer';
@@ -44,7 +44,7 @@ const rootReducers = {
     requestLocalCount: RequestLocalCount.reducer,
     requestCount: RequestCount.reducer,
     account : Account.reducer,
-    modal: ModalWind.reducer,
+    modal: LoginModal.reducer,
     user: User.reducer,
     routing: routerReducer,
     form: formReducer,

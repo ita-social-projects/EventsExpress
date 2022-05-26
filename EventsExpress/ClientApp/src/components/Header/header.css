@@ -6,8 +6,8 @@
   font-weight: bold;
 }
 
-#headbtn {
-  border-radius: 15px;
+.headbtn {
+  border-radius: 15px!important;
 }
 
 #userNameAlign {

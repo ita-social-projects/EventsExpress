@@ -1,5 +1,5 @@
 ﻿import initialState from '../store/initialState';
-import { SET_OPEN_STATUS } from '../actions/modalWind-action';
+import { SET_OPEN_STATUS } from '../actions/login-modal';
 import { SET_LOGIN_SUCCESS } from '../actions/login/login-action';
 export const reducer = (
     state = initialState.modalWind,

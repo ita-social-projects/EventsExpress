@@ -3,7 +3,7 @@ import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
 import RecoverPasswordContainer from "../../containers/editProfileContainers/recoverPasswordContainer";
 
-function Modalwind2(props) {
+function RecoverPasswordModal(props) {
     const [open, setOpen] = React.useState(false);
 
     function handleClickOpen() {
@@ -34,4 +34,4 @@ function Modalwind2(props) {
     )
 }
 
-export default Modalwind2;
+export default RecoverPasswordModal;
