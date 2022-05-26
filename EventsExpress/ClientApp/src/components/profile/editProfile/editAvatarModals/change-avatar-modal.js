@@ -22,31 +22,32 @@ const useStyles = makeStyles({
 
 export default function ChangeAvatarModal(props) {
   const classes = useStyles();
+  const {onClose, onReturn, open} = props;
   return (
     <>
       <Dialog
         fullWidth
         maxWidth="sm"
-        open={props.show}
-        onClose={props.onHide}
+        open={open}
+        onClose={onClose}
         aria-labelledby="dialog-delete-confirm-title"
         scroll="body"
       >
         <DialogTitle id="dialog-delete-confirm-title" className={classes.title}>
-          <IconButton onClick={props.onReturn}>
+          <IconButton onClick={onReturn}>
             <KeyboardBackspaceIcon />
           </IconButton>
-          {props.header}
+          Change Avatar
           <IconButton
             aria-label="close"
             className={classes.closeButton}
-            onClick={props.onHide}
+            onClick={onClose}
           >
             <CloseIcon />
           </IconButton>
         </DialogTitle>
         <DialogContent>
-          <ChangeAvatarWrapper/>
+          <ChangeAvatarWrapper onHide= {onClose}/>
         </DialogContent>
       </Dialog>
     </>

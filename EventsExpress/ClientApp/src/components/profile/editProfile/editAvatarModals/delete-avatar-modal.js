@@ -2,8 +2,6 @@ import React from "react";
 import Button from "@material-ui/core/Button";
 import KeyboardBackspaceIcon from "@material-ui/icons/KeyboardBackspace";
 import IconButton from "@material-ui/core/IconButton";
-import { connect } from "react-redux";
-import { delete_avatar } from "../../../../actions/redactProfile/avatar-change-action";
 import Dialog from "@material-ui/core/Dialog";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
@@ -29,32 +27,27 @@ const useStyles = makeStyles({
 
 function DeleteAvatarModal(props) {
   const classes = useStyles();
-  const CancelButtonClick = () => {
-    props.onHide();
-  };
-  const ConfirmButtonClick = () => {
-    props.delete_avatar(props.id);
-  };
 
+  const { open, onClose, onReturn, onSubmit } = props;
   return (
     <>
       <Dialog
         fullWidth
         maxWidth="xs"
-        open={props.show}
-        onClose={props.onHide}
+        open={open}
+        onClose={onClose}
         aria-labelledby="dialog-delete-confirm-title"
         scroll="body"
       >
         <DialogTitle id="dialog-delete-confirm-title" className={classes.title}>
-          <IconButton onClick={props.onReturn}>
+          <IconButton onClick={onReturn}>
             <KeyboardBackspaceIcon />
           </IconButton>
           Delete Avatar
           <IconButton
             aria-label="close"
             className={classes.closeButton}
-            onClick={props.onHide}
+            onClick={onClose}
           >
             <CloseIcon />
           </IconButton>
@@ -64,18 +57,10 @@ function DeleteAvatarModal(props) {
             Are you sure?
           </DialogContentText>
           <DialogActions>
-            <Button
-              variant="contained"
-              color="secondary"
-              onClick={CancelButtonClick}
-            >
+            <Button variant="contained" color="secondary" onClick={onClose}>
               Cancel
             </Button>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={ConfirmButtonClick}
-            >
+            <Button variant="contained" color="primary" onClick={onSubmit}>
               Confirm
             </Button>
           </DialogActions>
@@ -85,10 +70,4 @@ function DeleteAvatarModal(props) {
   );
 }
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    delete_avatar: (data) => dispatch(delete_avatar(data)),
-  };
-};
-
-export default connect(null, mapDispatchToProps)(DeleteAvatarModal);
+export default DeleteAvatarModal;
