@@ -1,5 +1,6 @@
 import React from "react";
 import Dialog from "@material-ui/core/Dialog";
+import DialogTitle from '@material-ui/core/DialogTitle';
 import Button from "@material-ui/core/Button";
 import Paper from "@material-ui/core/Paper";
 import { makeStyles } from "@material-ui/core/styles";
@@ -41,6 +42,7 @@ function LoginModal(props) {
   return (
     <div className="d-inline-block">
       <Dialog open={open} onClose={onClose}>
+      <DialogTitle >{"Please Log in to the system or create an account"}</DialogTitle>
         <Paper square className={classes.root}>
           <Tabs
             value={value}
