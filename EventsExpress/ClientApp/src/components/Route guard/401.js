@@ -1,6 +1,6 @@
 ﻿import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { TogleOpenWind, isOpen } from '../../actions/modalWind-action';
+import { toggleLoginModalState, isOpen } from '../../actions/login-modal';
 import logout from '../../actions/login/logout-action';
 
 class Unauthorized extends Component {
@@ -27,7 +27,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => {
     return {
         logout: () => { dispatch(logout()) },
-        setStatus: (data) => dispatch(TogleOpenWind(data)),
+        setStatus: (data) => dispatch(toggleLoginModalState(data)),
         resetError: () => {
             dispatch(isOpen(false));
         }

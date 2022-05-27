@@ -9,6 +9,7 @@ import { initialConnection } from '../chat/chat-action';
 import { getUnreadMessages } from '../chat/chats-action';
 import { jwtStorageKey } from '../../constants/constants';
 import { getRequestInc, getRequestDec } from '../request-count-action';
+import {toggleLoginModalState} from "../login-modal"
 
 export const SET_LOGIN_PENDING = 'SET_LOGIN_PENDING';
 export const SET_LOGIN_SUCCESS = 'SET_LOGIN_SUCCESS';
@@ -142,6 +143,7 @@ function loginResponseHandler(call, profile) {
             localStorage.clear();
             throw new SubmissionError(await buildValidationState(response));
         }
+        dispatch(toggleLoginModalState(false));
         return setUserInfo(response, profile, dispatch);
     };
 }

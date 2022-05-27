@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import ModalWind from "../modal-wind";
 import AuthComponent from "../../security/authComponent";
 import "./header.css";
 import { Link } from "react-router-dom";
@@ -8,6 +7,8 @@ import logout from "./../../actions/login/logout-action";
 import CustomAvatar from "../avatar/custom-avatar";
 import { Roles } from "../../constants/userRoles";
 import add_event from "../../actions/event/event-add-action";
+import { toggleLoginModalState } from "../../actions/login-modal";
+import HeaderButton from "./header-button";
 
 class Header extends Component {
   logout_reset = () => {
@@ -17,6 +18,8 @@ class Header extends Component {
 
   render() {
     const { id, name } = this.props.user.id !== null ? this.props.user : {};
+
+    const {onLoginModalOpen, add_event} = this.props;
 
     return (
       <nav
@@ -30,29 +33,19 @@ class Header extends Component {
         </div>
         <ul className="navbar-nav mr-auto"></ul>
         <span className="form-inline my-2 my-lg-0">
-          <AuthComponent rolesMatch={Roles.User}>
-            <div className="my-2 my-sm-0">
-              <div className="btn btn-light" id="headbtn" onClick={this.props.add_event}>
-                Create Event
-              </div>
-            </div>
-          </AuthComponent>
+          <div className="my-2 my-sm-0 mr-3">
+            <HeaderButton
+              onClick={!id ? onLoginModalOpen : add_event}
+            >
+              Create Event
+            </HeaderButton>
+          </div>
           <AuthComponent onlyAnonymous>
             <div className="my-2 my-sm-0">
               {!id && (
-                <ModalWind
-                  renderButton={(action) => (
-                    <div
-                      className="btn btn-light"
-                      id="headbtn"
-                      className="btn btn-light navbtns"
-                      variant="contained"
-                      onClick={action}
-                    >
-                      Sign In/Up
-                    </div>
-                  )}
-                />
+                <HeaderButton onClick={onLoginModalOpen}>
+                  Sign In/Up
+                </HeaderButton>
               )}
             </div>
           </AuthComponent>
@@ -71,17 +64,17 @@ class Header extends Component {
                 </div>
                 <div className="dropdown-menu dropdown-menu-right bgcolorwhite">
                   <AuthComponent rolesMatch={Roles.User}>
-                    <Link className="removedecorations" to={'/user/' + id}>
-                    <button
-                      className="dropdown-item bgcolorwhite"
-                      type="button"
-                    >
-                      my events
-                    </button>
+                    <Link className="removedecorations" to={"/user/" + id}>
+                      <button
+                        className="dropdown-item bgcolorwhite"
+                        type="button"
+                      >
+                        my events
+                      </button>
                     </Link>
                   </AuthComponent>
                   <AuthComponent>
-                    <Link className="removedecorations" to={'/editProfile'}>
+                    <Link className="removedecorations" to={"/editProfile"}>
                       <button
                         className="dropdown-item bgcolorwhite"
                         type="button"
@@ -123,6 +116,7 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(logout());
     },
     add_event: () => dispatch(add_event()),
+    onLoginModalOpen: () => dispatch(toggleLoginModalState(true)),
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(Header);
